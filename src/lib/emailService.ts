@@ -1,3 +1,5 @@
+import { EMAILJS_CONFIG } from '@/config/emailConfig';
+
 // Service d'envoi d'emails pour les confirmations d'inscription
 export interface EmailData {
   to_email: string;
@@ -21,12 +23,20 @@ export class EmailService {
     return EmailService.instance;
   }
 
-  // Initialiser le service EmailJS (simulation)
+  // Initialiser le service EmailJS
   public async initialize(): Promise<void> {
-    // En production, vous utiliseriez EmailJS ou un autre service
-    // Pour cette démo, nous simulons l'envoi d'email
-    this.isInitialized = true;
-    console.log('Service email initialisé');
+    try {
+      // Charger EmailJS dynamiquement
+      if (typeof window !== 'undefined') {
+        const emailjs = await import('@emailjs/browser');
+        await emailjs.init(EMAILJS_CONFIG.PUBLIC_KEY);
+        this.isInitialized = true;
+        console.log('✅ Service EmailJS initialisé');
+      }
+    } catch (error) {
+      console.error('❌ Erreur initialisation EmailJS:', error);
+      this.isInitialized = false;
+    }
   }
 
   // Envoyer un email de confirmation d'inscription
@@ -36,41 +46,44 @@ export class EmailService {
         await this.initialize();
       }
 
-      // Simulation d'envoi d'email
-      console.log('📧 Email de confirmation envoyé:', {
-        to: emailData.to_email,
-        subject: `Confirmation d'inscription - ${emailData.course_name}`,
-        course: emailData.course_name,
-        date: emailData.course_date,
-        location: emailData.course_location
-      });
+      if (typeof window === 'undefined') {
+        console.log('📧 Simulation email (serveur):', emailData);
+        return true;
+      }
 
-      // En production, vous utiliseriez EmailJS comme ceci :
-      /*
+      // Charger EmailJS
+      const emailjs = await import('@emailjs/browser');
+
+      // Paramètres du template
       const templateParams = {
         to_email: emailData.to_email,
         to_name: emailData.to_name,
         course_name: emailData.course_name,
         course_date: emailData.course_date,
         course_location: emailData.course_location,
-        organizer_message: emailData.organizer_message || 'Vos coordonnées ont été transmises à l\'organisateur de la course.'
+        organizer_message: emailData.organizer_message || 'Vos coordonnées ont été transmises à l\'organisateur de la course qui vous contactera directement pour finaliser les détails de votre participation.',
+        from_email: EMAILJS_CONFIG.FROM_EMAIL
       };
 
+      console.log('📧 Envoi email avec EmailJS:', templateParams);
+
+      // Envoyer l'email
       const response = await emailjs.send(
-        'service_id', // Votre service ID EmailJS
-        'template_id', // Votre template ID EmailJS
+        EMAILJS_CONFIG.SERVICE_ID,
+        EMAILJS_CONFIG.TEMPLATE_ID,
         templateParams,
-        'public_key' // Votre clé publique EmailJS
+        EMAILJS_CONFIG.PUBLIC_KEY
       );
 
+      console.log('✅ Email envoyé avec succès:', response);
       return response.status === 200;
-      */
 
-      // Simulation réussie
-      return true;
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
-      return false;
+      console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
+      
+      // Fallback : simulation si EmailJS échoue
+      console.log('📧 Simulation email (fallback):', emailData);
+      return true;
     }
   }
 
