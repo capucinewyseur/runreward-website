@@ -1,12 +1,12 @@
 // Configuration EmailJS - MODIFIEZ CES VALEURS AVEC VOS VRAIES CLÉS
 export const EMAILJS_CONFIG = {
-  // Remplacez par vos vraies clés EmailJS
-  SERVICE_ID: 'service_abc123', // Votre Service ID depuis EmailJS
-  TEMPLATE_ID: 'template_xyz789', // Votre Template ID depuis EmailJS
-  PUBLIC_KEY: 'user_def456', // Votre Public Key depuis EmailJS
+  // Vos clés EmailJS
+  SERVICE_ID: 'service_runreward', // ✅ Votre Service ID actuel
+  TEMPLATE_ID: 'template_zwjjp6u', // ✅ Votre Template ID
+  PUBLIC_KEY: '7xK6b3y98IjEkIMfL', // ✅ Votre Public Key
   
   // Votre adresse email (celle qui enverra les emails)
-  FROM_EMAIL: 'votre.email@gmail.com',
+  FROM_EMAIL: 'capucine.runreward@gmail.com', // ✅ Votre email Gmail
   
   // Nom d'affichage pour l'expéditeur
   FROM_NAME: 'RunReward Team'
