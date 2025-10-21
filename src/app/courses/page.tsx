@@ -137,6 +137,8 @@ export default function CoursesPage() {
   const [selectedCity, setSelectedCity] = useState<string>('');
   const [radiusKm, setRadiusKm] = useState<number>(50);
   const [useGeoFilter, setUseGeoFilter] = useState<boolean>(false);
+  const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
+  const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(false);
 
   const filteredRaces = races.filter(race => {
     const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -155,13 +157,26 @@ export default function CoursesPage() {
     
     // Filtre géographique
     let matchesGeo = true;
-    if (useGeoFilter && selectedCity) {
+    if (useGeoFilter) {
       try {
-        const selectedCityData = majorCities.find(city => city.name === selectedCity);
-        if (selectedCityData && race.coordinates) {
+        let referenceLat: number | undefined, referenceLng: number | undefined;
+        
+        // Utiliser la géolocalisation de l'utilisateur si disponible, sinon la ville sélectionnée
+        if (userLocation) {
+          referenceLat = userLocation.lat;
+          referenceLng = userLocation.lng;
+        } else if (selectedCity) {
+          const selectedCityData = majorCities.find(city => city.name === selectedCity);
+          if (selectedCityData) {
+            referenceLat = selectedCityData.coordinates.lat;
+            referenceLng = selectedCityData.coordinates.lng;
+          }
+        }
+        
+        if (race.coordinates && referenceLat !== undefined && referenceLng !== undefined) {
           const distance = calculateDistance(
-            selectedCityData.coordinates.lat,
-            selectedCityData.coordinates.lng,
+            referenceLat,
+            referenceLng,
             race.coordinates.lat,
             race.coordinates.lng
           );
@@ -217,6 +232,50 @@ export default function CoursesPage() {
     { name: 'Chamonix', coordinates: { lat: 45.9237, lng: 6.8694 } },
     { name: 'Fontainebleau', coordinates: { lat: 48.4047, lng: 2.7012 } }
   ];
+
+  // Fonction pour obtenir la géolocalisation de l'utilisateur
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      alert('La géolocalisation n\'est pas supportée par ce navigateur.');
+      return;
+    }
+
+    setIsLoadingLocation(true);
+    
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        setUserLocation({ lat: latitude, lng: longitude });
+        setUseGeoFilter(true);
+        setSelectedCity(''); // Désactive la sélection de ville
+        setIsLoadingLocation(false);
+      },
+      (error) => {
+        console.error('Erreur de géolocalisation:', error);
+        let message = 'Impossible d\'obtenir votre position.';
+        
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            message = 'Permission de géolocalisation refusée.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            message = 'Position indisponible.';
+            break;
+          case error.TIMEOUT:
+            message = 'Délai d\'attente dépassé.';
+            break;
+        }
+        
+        alert(message);
+        setIsLoadingLocation(false);
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 300000 // 5 minutes
+      }
+    );
+  };
 
   // Fonction pour calculer la distance entre deux points (formule de Haversine)
   const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
@@ -281,16 +340,46 @@ export default function CoursesPage() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">Ville de référence</label>
-                  <select
-                    value={selectedCity}
-                    onChange={(e) => setSelectedCity(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                  >
-                    <option value="">Sélectionner une ville</option>
-                    {majorCities.map(city => (
-                      <option key={city.name} value={city.name}>{city.name}</option>
-                    ))}
-                  </select>
+                  <div className="flex gap-2">
+                    <select
+                      value={selectedCity}
+                      onChange={(e) => {
+                        setSelectedCity(e.target.value);
+                        setUserLocation(null); // Désactive la géolocalisation
+                      }}
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                      disabled={!!userLocation}
+                    >
+                      <option value="">Sélectionner une ville</option>
+                      {majorCities.map(city => (
+                        <option key={city.name} value={city.name}>{city.name}</option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={getUserLocation}
+                      disabled={isLoadingLocation}
+                      className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-400 text-white rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+                    >
+                      {isLoadingLocation ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          GPS...
+                        </>
+                      ) : (
+                        <>
+                          📍 GPS
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  {userLocation && (
+                    <div className="mt-2 text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
+                      ✅ Position détectée automatiquement
+                    </div>
+                  )}
                 </div>
                 
                 <div>
@@ -317,6 +406,7 @@ export default function CoursesPage() {
                     onClick={() => {
                       setUseGeoFilter(false);
                       setSelectedCity('');
+                      setUserLocation(null);
                       setRadiusKm(50);
                     }}
                     className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
@@ -429,6 +519,7 @@ export default function CoursesPage() {
                 setFilter('all');
                 setUseGeoFilter(false);
                 setSelectedCity('');
+                setUserLocation(null);
                 setRadiusKm(50);
               }}
               className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
