@@ -116,7 +116,7 @@ export default function Home() {
             Prêt à commencer votre aventure ?
           </h2>
           <p className="text-xl text-gray-600 mb-8">
-            Rejoignez notre communauté de coureurs motivés et commencez à gagner des récompenses dès aujourd'hui.
+            Rejoignez notre communauté de coureurs motivés et commencez à gagner des récompenses dès aujourd&apos;hui.
           </p>
           <Link 
             href="/courses" 

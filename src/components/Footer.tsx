@@ -49,9 +49,9 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
-              <li><Link href="/help" className="text-gray-300 hover:text-orange-500 transition-colors">Centre d'aide</Link></li>
+              <li><Link href="/help" className="text-gray-300 hover:text-orange-500 transition-colors">Centre d&apos;aide</Link></li>
               <li><Link href="/faq" className="text-gray-300 hover:text-orange-500 transition-colors">FAQ</Link></li>
-              <li><Link href="/terms" className="text-gray-300 hover:text-orange-500 transition-colors">Conditions d'utilisation</Link></li>
+              <li><Link href="/terms" className="text-gray-300 hover:text-orange-500 transition-colors">Conditions d&apos;utilisation</Link></li>
               <li><Link href="/privacy" className="text-gray-300 hover:text-orange-500 transition-colors">Politique de confidentialité</Link></li>
             </ul>
           </div>

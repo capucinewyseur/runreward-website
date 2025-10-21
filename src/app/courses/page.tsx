@@ -271,7 +271,7 @@ export default function CoursesPage() {
                 </div>
                 
                 <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                  S'inscrire
+                  S&apos;inscrire
                 </button>
               </div>
             </div>
