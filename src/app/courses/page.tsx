@@ -131,13 +131,21 @@ const races: Race[] = [
 
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [locationFilter, setLocationFilter] = useState<string>('');
+  const [dateFilter, setDateFilter] = useState<string>('');
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const filteredRaces = races.filter(race => {
     const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          race.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          race.description.toLowerCase().includes(searchTerm.toLowerCase());
     
-    return matchesSearch;
+    const matchesLocation = !locationFilter || 
+                           race.location.toLowerCase().includes(locationFilter.toLowerCase());
+    
+    const matchesDate = !dateFilter || race.date === dateFilter;
+    
+    return matchesSearch && matchesLocation && matchesDate;
   });
 
   const getDifficultyColor = (difficulty: string) => {
@@ -159,6 +167,21 @@ export default function CoursesPage() {
     });
   };
 
+  // Fonction pour déclencher la recherche
+  const handleSearch = () => {
+    setIsSearching(true);
+    // Simuler un délai de recherche pour l'effet visuel
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 500);
+  };
+
+  // Obtenir les lieux uniques pour le filtre
+  const uniqueLocations = Array.from(new Set(races.map(race => race.location.split(',')[0])));
+
+  // Obtenir les dates uniques pour le filtre
+  const uniqueDates = Array.from(new Set(races.map(race => race.date))).sort();
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -175,20 +198,89 @@ export default function CoursesPage() {
         </div>
       </div>
 
-      {/* Search Bar */}
+      {/* Filters */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="max-w-2xl mx-auto">
-            <label className="block text-sm font-medium text-gray-700 mb-2 text-center">
-              🔍 Rechercher une course
-            </label>
-            <input
-              type="text"
-              placeholder="Nom de la course, lieu, description..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent text-lg"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            {/* Search */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+              <input
+                type="text"
+                placeholder="Nom, lieu, description..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              />
+            </div>
+            
+            {/* Location Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
+              <select
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">Tous les lieux</option>
+                {uniqueLocations.map(location => (
+                  <option key={location} value={location}>{location}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Date Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
+              <select
+                value={dateFilter}
+                onChange={(e) => setDateFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">Toutes les dates</option>
+                {uniqueDates.map(date => (
+                  <option key={date} value={date}>{formatDate(date)}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+          
+          {/* Search Button */}
+          <div className="flex justify-center">
+            <button
+              onClick={handleSearch}
+              disabled={isSearching}
+              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+            >
+              {isSearching ? (
+                <>
+                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Recherche en cours...
+                </>
+              ) : (
+                <>
+                  🔍 Rechercher les courses
+                </>
+              )}
+            </button>
+          </div>
+          
+          {/* Reset Filters */}
+          <div className="flex justify-end mt-4">
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setLocationFilter('');
+                setDateFilter('');
+                setIsSearching(false);
+              }}
+              className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
+            >
+              Réinitialiser les filtres
+            </button>
           </div>
         </div>
 
