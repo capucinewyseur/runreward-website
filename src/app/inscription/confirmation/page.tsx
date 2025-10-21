@@ -96,11 +96,34 @@ Plateforme de bénévolat pour coureurs récompensés
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mt-4 mb-2">
-            Inscription validée !
+            Merci pour ton inscription ! 🎉
           </h1>
-          <p className="text-gray-600">
-            Votre inscription a été enregistrée avec succès
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            L&apos;organisateur de la course vous recontactera directement afin de valider votre inscription avec toutes les informations nécessaires.
           </p>
+        </div>
+
+        {/* Information Box */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mb-8">
+          <div className="flex items-start">
+            <div className="flex-shrink-0">
+              <svg className="h-6 w-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <h3 className="text-sm font-medium text-blue-800">
+                Prochaines étapes
+              </h3>
+              <div className="mt-2 text-sm text-blue-700">
+                <ul className="list-disc list-inside space-y-1">
+                  <li>Vérifiez votre boîte email pour recevoir un accusé de réception</li>
+                  <li>L&apos;organisateur vous contactera sous 48h pour finaliser votre inscription</li>
+                  <li>Préparez-vous à vivre une expérience unique de bénévolat sportif !</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div className="bg-white shadow sm:rounded-lg">
