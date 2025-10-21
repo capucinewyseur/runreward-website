@@ -226,12 +226,6 @@ export default function CoursesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredRaces.map((race) => (
             <div key={race.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
-              <div className="h-48 bg-gradient-to-br from-orange-200 to-blue-200 flex items-center justify-center">
-                <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-              
               <div className="p-6">
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
@@ -271,17 +265,7 @@ export default function CoursesPage() {
                   <div className="text-2xl md:text-3xl text-orange-600 font-extrabold tracking-tight">{race.reward}</div>
                 </div>
                 
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-600">
-                    {race.currentParticipants}/{race.maxParticipants} participants
-                  </div>
-                  <div className="w-full bg-gray-200 rounded-full h-2 ml-4">
-                    <div 
-                      className="bg-orange-500 h-2 rounded-full" 
-                      style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
-                    ></div>
-                  </div>
-                </div>
+                {/* Section participants retirée */}
                 
                 {race.id === 7 ? (
                   <a 
