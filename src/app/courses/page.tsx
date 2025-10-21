@@ -94,6 +94,19 @@ const races: Race[] = [
     currentParticipants: 32,
     difficulty: 'Difficile',
     image: "/api/placeholder/400/250"
+  },
+  {
+    id: 7,
+    name: "Generali Genève Marathon",
+    location: "Genève, Suisse",
+    date: "2025-05-11",
+    distance: "42.2 km",
+    reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
+    description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
+    maxParticipants: 1200,
+    currentParticipants: 856,
+    difficulty: 'Modéré',
+    image: "/api/placeholder/400/250"
   }
 ];
 
