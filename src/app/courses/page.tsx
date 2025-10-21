@@ -228,7 +228,9 @@ export default function CoursesPage() {
             <div key={race.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="p-6">
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
+                  <h3 className="text-xl font-bold text-gray-900">
+                    <span className="mr-2" aria-hidden>🏅</span>{race.name}
+                  </h3>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(race.difficulty)}`}>
                     {race.difficulty}
                   </span>
@@ -236,24 +238,17 @@ export default function CoursesPage() {
                 
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-gray-600">
-                    <svg className="w-4 h-4 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                    <span className="mr-2" aria-hidden>📍</span>
                     {race.location}
                   </div>
                   
                   <div className="flex items-center text-gray-600">
-                    <svg className="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
+                    <span className="mr-2" aria-hidden>📅</span>
                     {formatDate(race.date)}
                   </div>
                   
                   <div className="flex items-center text-gray-600">
-                    <svg className="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                    </svg>
+                    <span className="mr-2" aria-hidden>🏁</span>
                     {race.distance}
                   </div>
                 </div>
@@ -261,7 +256,7 @@ export default function CoursesPage() {
                 <p className="text-gray-600 text-sm mb-4">{race.description}</p>
                 
                 <div className="bg-orange-50 p-4 rounded-lg mb-4">
-                  <div className="text-base md:text-lg font-semibold text-orange-800 mb-1">Récompense</div>
+                  <div className="text-base md:text-lg font-semibold text-orange-800 mb-1"><span className="mr-2" aria-hidden>🎁</span>Récompense</div>
                   <div className="text-2xl md:text-3xl text-orange-600 font-extrabold tracking-tight">{race.reward}</div>
                 </div>
                 
