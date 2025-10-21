@@ -63,6 +63,7 @@ class UserDatabase {
     // Charger les utilisateurs et inscriptions depuis localStorage au démarrage
     this.loadUsers();
     this.loadCourseRegistrations();
+    this.loadCurrentUser();
   }
 
   private loadUsers() {
@@ -95,6 +96,15 @@ class UserDatabase {
     }
   }
 
+  private loadCurrentUser() {
+    if (typeof window !== 'undefined') {
+      const currentUserId = localStorage.getItem('runreward-current-user');
+      if (currentUserId) {
+        this.currentUser = this.users.find(user => user.id === currentUserId) || null;
+      }
+    }
+  }
+
   // Vérifier si un email existe déjà
   emailExists(email: string): boolean {
     return this.users.some(user => user.email.toLowerCase() === email.toLowerCase());
@@ -115,6 +125,13 @@ class UserDatabase {
 
     this.users.push(newUser);
     this.saveUsers();
+    
+    // Connecter automatiquement le nouvel utilisateur
+    this.currentUser = newUser;
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('runreward-current-user', newUser.id);
+    }
+    
     return newUser;
   }
 
@@ -127,6 +144,10 @@ class UserDatabase {
     
     if (user) {
       this.currentUser = user;
+      // Sauvegarder l'utilisateur connecté dans localStorage
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('runreward-current-user', user.id);
+      }
       return user;
     }
     
