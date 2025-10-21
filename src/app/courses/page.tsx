@@ -13,7 +13,6 @@ interface Race {
   description: string;
   maxParticipants: number;
   currentParticipants: number;
-  difficulty: string;
   type: 'Route' | 'Trail';
   image: string;
   coordinates: {
@@ -34,7 +33,6 @@ const races: Race[] = [
     description: "Course matinale dans le magnifique parc de la Villette. Parfait pour débuter la saison de course.",
     maxParticipants: 200,
     currentParticipants: 156,
-    difficulty: 'Facile',
     type: 'Route',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 48.8966, lng: 2.3833 } // Parc de la Villette, Paris
@@ -50,7 +48,6 @@ const races: Race[] = [
     description: "Trail en montagne avec vue panoramique sur le Mont-Blanc. Défi pour les coureurs expérimentés.",
     maxParticipants: 100,
     currentParticipants: 89,
-    difficulty: 'Difficile',
     type: 'Trail',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 45.9237, lng: 6.8694 } // Chamonix
@@ -66,7 +63,6 @@ const races: Race[] = [
     description: "Course caritative pour soutenir les associations locales. Ouverte à tous les niveaux.",
     maxParticipants: 300,
     currentParticipants: 234,
-    difficulty: 'Facile',
     type: 'Route',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 48.8833, lng: 2.3833 } // Buttes-Chaumont, Paris
@@ -82,7 +78,6 @@ const races: Race[] = [
     description: "Marathon urbain traversant les plus beaux quartiers de Lyon. Événement majeur de la région.",
     maxParticipants: 5000,
     currentParticipants: 4234,
-    difficulty: 'Difficile',
     type: 'Route',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 45.7640, lng: 4.8357 } // Lyon
@@ -98,7 +93,6 @@ const races: Race[] = [
     description: "Trail dans la magnifique forêt de Fontainebleau. Parcours varié entre rochers et sentiers forestiers.",
     maxParticipants: 150,
     currentParticipants: 98,
-    difficulty: 'Modéré',
     type: 'Trail',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 48.4047, lng: 2.7012 } // Fontainebleau
@@ -114,7 +108,6 @@ const races: Race[] = [
     description: "Course nocturne le long de la célèbre Promenade des Anglais. Ambiance festive garantie.",
     maxParticipants: 800,
     currentParticipants: 567,
-    difficulty: 'Modéré',
     type: 'Route',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 43.7102, lng: 7.2620 } // Nice
@@ -130,7 +123,6 @@ const races: Race[] = [
     description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
     maxParticipants: 1200,
     currentParticipants: 856,
-    difficulty: 'Modéré',
     type: 'Route',
     image: "/api/placeholder/400/250",
     coordinates: { lat: 46.2044, lng: 6.1432 } // Genève, Suisse
@@ -160,14 +152,6 @@ export default function CoursesPage() {
     return matchesSearch && matchesLocation && matchesDepartment && matchesDate;
   });
 
-  const getDifficultyColor = (difficulty: string) => {
-    switch (difficulty) {
-      case 'Facile': return 'bg-green-100 text-green-800';
-      case 'Modéré': return 'bg-yellow-100 text-yellow-800';
-      case 'Difficile': return 'bg-red-100 text-red-800';
-      default: return 'bg-gray-100 text-gray-800';
-    }
-  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -329,9 +313,6 @@ export default function CoursesPage() {
               <div className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getDifficultyColor(race.difficulty)}`}>
-                    {race.difficulty}
-                  </span>
                 </div>
                 
                 <div className="space-y-3 mb-4">

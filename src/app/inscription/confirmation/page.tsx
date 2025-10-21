@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { userDB } from '@/lib/userDatabase';
 
 export default function ConfirmationPage() {
   const router = useRouter();
@@ -10,19 +11,30 @@ export default function ConfirmationPage() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
-    // Récupérer les données complètes
-    const data = localStorage.getItem('inscription-complete');
-    if (data) {
-      setUserData(JSON.parse(data));
-    } else {
-      // Rediriger vers l'étape 1 si pas de données
-      router.push('/inscription/etape-1');
-    }
+    // Récupérer l'utilisateur actuel depuis la base de données
+    const currentUser = userDB.getCurrentUser();
+    if (currentUser) {
+      setUserData({
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        email: currentUser.email,
+        address: currentUser.address,
+        city: currentUser.city,
+        postalCode: currentUser.postalCode,
+        birthDate: currentUser.birthDate,
+        gender: currentUser.gender,
+        shoeSize: currentUser.shoeSize,
+        inscriptionDate: currentUser.inscriptionDate,
+        status: currentUser.status
+      });
 
-    // Récupérer la course sélectionnée
-    const raceData = localStorage.getItem('selected-race');
-    if (raceData) {
-      setSelectedRace(JSON.parse(raceData));
+      // Récupérer la course sélectionnée
+      if (currentUser.selectedRace) {
+        setSelectedRace(currentUser.selectedRace);
+      }
+    } else {
+      // Rediriger vers l'étape 1 si pas d'utilisateur connecté
+      router.push('/inscription/etape-1');
     }
   }, [router]);
 
@@ -125,7 +137,7 @@ Plateforme de bénévolat pour coureurs récompensés
               <div className="mt-2 text-sm text-blue-700">
                 <ul className="list-disc list-inside space-y-1">
                   <li>Vérifiez votre boîte email pour recevoir un accusé de réception</li>
-                  <li>L&apos;organisateur vous contactera sous 48h pour finaliser votre inscription</li>
+                  <li>L&apos;organisateur vous contactera sous peu pour finaliser votre inscription</li>
                   <li>Préparez-vous à vivre une expérience unique de bénévolat sportif !</li>
                 </ul>
               </div>

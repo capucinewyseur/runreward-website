@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { userDB } from '@/lib/userDatabase';
 
 export default function InscriptionEtape2() {
   const router = useRouter();
@@ -30,23 +31,42 @@ export default function InscriptionEtape2() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Combiner toutes les données
-    const completeData = {
-      ...etape1Data,
-      ...formData,
-      inscriptionDate: new Date().toISOString(),
-      status: 'completed'
-    };
-    
-    // Sauvegarder les données complètes
-    localStorage.setItem('inscription-complete', JSON.stringify(completeData));
-    
-    // Simuler un délai de traitement
-    setTimeout(() => {
-      router.push('/inscription/confirmation');
+
+    // Récupérer l'utilisateur actuel
+    const currentUser = userDB.getCurrentUser();
+    if (!currentUser) {
+      alert('Erreur: Utilisateur non connecté.');
       setIsLoading(false);
-    }, 1000);
+      return;
+    }
+
+    // Mettre à jour les informations de l'utilisateur
+    const updatedUser = userDB.updateUser(currentUser.id, {
+      address: formData.address,
+      city: formData.city,
+      postalCode: formData.postalCode,
+      birthDate: formData.birthDate,
+      gender: formData.gender,
+      shoeSize: formData.shoeSize
+    });
+
+    if (updatedUser) {
+      // Récupérer la course sélectionnée
+      const selectedRaceData = localStorage.getItem('selected-race');
+      if (selectedRaceData) {
+        const raceData = JSON.parse(selectedRaceData);
+        // Finaliser l'inscription avec la course
+        userDB.completeRegistration(currentUser.id, raceData);
+      }
+
+      setTimeout(() => {
+        setIsLoading(false);
+        router.push('/inscription/confirmation');
+      }, 500);
+    } else {
+      alert('Erreur lors de la mise à jour des informations.');
+      setIsLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {

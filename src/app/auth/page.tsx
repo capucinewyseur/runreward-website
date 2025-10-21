@@ -2,26 +2,62 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { userDB } from '@/lib/userDatabase';
 
 export default function AuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
     
-    // Simuler un délai de traitement
-    setTimeout(() => {
+    try {
       if (isLogin) {
-        // Redirection vers la page des courses après connexion
-        window.location.href = '/courses';
+        // Connexion
+        const user = userDB.authenticate(email, password);
+        if (user) {
+          // Redirection vers la page des courses après connexion
+          window.location.href = '/courses';
+        } else {
+          setError('Email ou mot de passe incorrect');
+        }
       } else {
+        // Inscription
+        if (password !== confirmPassword) {
+          setError('Les mots de passe ne correspondent pas');
+          setIsLoading(false);
+          return;
+        }
+
+        if (userDB.emailExists(email)) {
+          setError('Un compte avec cet email existe déjà');
+          setIsLoading(false);
+          return;
+        }
+
+        // Créer le compte
+        userDB.createUser({
+          firstName,
+          lastName,
+          email,
+          password,
+          address: '',
+          city: '',
+          postalCode: '',
+          birthDate: '',
+          gender: '',
+          shoeSize: ''
+        });
+
         // Redirection vers la page de détails de course après inscription
-        // Pour l'instant, on redirige vers les courses, mais on pourrait récupérer l'ID de la course depuis l'URL
         const urlParams = new URLSearchParams(window.location.search);
         const raceId = urlParams.get('raceId');
         if (raceId) {
@@ -30,8 +66,11 @@ export default function AuthPage() {
           window.location.href = '/courses';
         }
       }
-      setIsLoading(false);
-    }, 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    }
+    
+    setIsLoading(false);
   };
 
   return (
@@ -93,6 +132,48 @@ export default function AuthPage() {
               </div>
             </div>
 
+            {!isLogin && (
+              <>
+                <div>
+                  <label htmlFor="firstName" className="block text-sm font-medium text-gray-700">
+                    Prénom
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="firstName"
+                      name="firstName"
+                      type="text"
+                      autoComplete="given-name"
+                      required
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                      placeholder="Votre prénom"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="lastName" className="block text-sm font-medium text-gray-700">
+                    Nom
+                  </label>
+                  <div className="mt-1">
+                    <input
+                      id="lastName"
+                      name="lastName"
+                      type="text"
+                      autoComplete="family-name"
+                      required
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-orange-500 focus:border-orange-500 sm:text-sm"
+                      placeholder="Votre nom"
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                 Mot de passe
@@ -133,6 +214,12 @@ export default function AuthPage() {
                 {password && confirmPassword && password !== confirmPassword && (
                   <p className="mt-1 text-sm text-red-600">Les mots de passe ne correspondent pas</p>
                 )}
+              </div>
+            )}
+
+            {error && (
+              <div className="bg-red-50 border border-red-200 rounded-md p-4">
+                <p className="text-sm text-red-600">{error}</p>
               </div>
             )}
 

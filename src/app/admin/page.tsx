@@ -1,23 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { userDB, User } from '@/lib/userDatabase';
 
-interface UserData {
-  firstName: string;
-  lastName: string;
-  email: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  birthDate: string;
-  gender: string;
-  shoeSize: string;
-  inscriptionDate: string;
-  status: string;
-}
 
 export default function AdminPage() {
-  const [allUsers, setAllUsers] = useState<UserData[]>([]);
+  const [allUsers, setAllUsers] = useState<User[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -26,52 +14,10 @@ export default function AdminPage() {
   const ADMIN_PASSWORD = 'runreward2024';
 
   useEffect(() => {
-    // Simuler la récupération des données utilisateurs
-    // En réalité, cela viendrait d'une base de données
-    const mockUsers: UserData[] = [
-      {
-        firstName: 'Jean',
-        lastName: 'Dupont',
-        email: 'jean.dupont@email.com',
-        address: '123 rue de la Paix',
-        city: 'Paris',
-        postalCode: '75001',
-        birthDate: '1990-05-15',
-        gender: 'homme',
-        shoeSize: '42',
-        inscriptionDate: '2024-01-15T10:30:00Z',
-        status: 'completed'
-      },
-      {
-        firstName: 'Marie',
-        lastName: 'Martin',
-        email: 'marie.martin@email.com',
-        address: '456 avenue des Champs',
-        city: 'Lyon',
-        postalCode: '69001',
-        birthDate: '1985-08-22',
-        gender: 'femme',
-        shoeSize: '38',
-        inscriptionDate: '2024-01-16T14:20:00Z',
-        status: 'completed'
-      },
-      {
-        firstName: 'Pierre',
-        lastName: 'Durand',
-        email: 'pierre.durand@email.com',
-        address: '789 boulevard de la République',
-        city: 'Marseille',
-        postalCode: '13001',
-        birthDate: '1992-12-03',
-        gender: 'homme',
-        shoeSize: '44',
-        inscriptionDate: '2024-01-17T09:15:00Z',
-        status: 'completed'
-      }
-    ];
-    
-    setAllUsers(mockUsers);
-  }, []);
+    // Charger les utilisateurs depuis la base de données
+    const users = userDB.getAllUsers();
+    setAllUsers(users);
+  }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
