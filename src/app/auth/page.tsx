@@ -24,8 +24,14 @@ export default function AuthPage() {
         // Connexion
         const user = userDB.authenticate(email, password);
         if (user) {
-          // Redirection vers la page des courses après connexion
-          window.location.href = '/courses';
+          // Redirection vers la page d'inscription complète après connexion
+          const urlParams = new URLSearchParams(window.location.search);
+          const raceId = urlParams.get('raceId');
+          if (raceId) {
+            window.location.href = `/inscription-complete?raceId=${raceId}`;
+          } else {
+            window.location.href = '/courses';
+          }
         } else {
           setError('Email ou mot de passe incorrect');
         }
