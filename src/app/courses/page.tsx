@@ -378,7 +378,7 @@ export default function CoursesPage() {
                 
                 <div className="flex gap-2">
                   <a
-                    href="/auth"
+                    href={`/auth?raceId=${race.id}`}
                     className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
                   >
                     S&apos;inscrire

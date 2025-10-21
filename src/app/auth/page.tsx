@@ -20,8 +20,15 @@ export default function AuthPage() {
         // Redirection vers la page des courses après connexion
         window.location.href = '/courses';
       } else {
-        // Redirection vers l'inscription étape 1
-        window.location.href = '/inscription/etape-1';
+        // Redirection vers la page de détails de course après inscription
+        // Pour l'instant, on redirige vers les courses, mais on pourrait récupérer l'ID de la course depuis l'URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const raceId = urlParams.get('raceId');
+        if (raceId) {
+          window.location.href = `/course-details?raceId=${raceId}`;
+        } else {
+          window.location.href = '/courses';
+        }
       }
       setIsLoading(false);
     }, 1000);

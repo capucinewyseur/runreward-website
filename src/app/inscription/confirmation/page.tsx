@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 export default function ConfirmationPage() {
   const router = useRouter();
   const [userData, setUserData] = useState<{firstName: string; lastName: string; email: string; address: string; city: string; postalCode: string; birthDate: string; gender: string; shoeSize: string; inscriptionDate: string; status: string} | null>(null);
+  const [selectedRace, setSelectedRace] = useState<{id: number; name: string; location: string; date: string; distance: string; reward: string; type: string} | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
 
   useEffect(() => {
@@ -16,6 +17,12 @@ export default function ConfirmationPage() {
     } else {
       // Rediriger vers l'étape 1 si pas de données
       router.push('/inscription/etape-1');
+    }
+
+    // Récupérer la course sélectionnée
+    const raceData = localStorage.getItem('selected-race');
+    if (raceData) {
+      setSelectedRace(JSON.parse(raceData));
     }
   }, [router]);
 
@@ -131,6 +138,25 @@ Plateforme de bénévolat pour coureurs récompensés
             <h2 className="text-lg font-medium text-gray-900 mb-4">
               Récapitulatif de votre inscription
             </h2>
+
+            {/* Course Information */}
+            {selectedRace && (
+              <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-4 rounded-lg mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">Course sélectionnée</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-medium text-gray-900">{selectedRace.name}</p>
+                    <p className="text-gray-600">📍 {selectedRace.location}</p>
+                    <p className="text-gray-600">📅 {new Date(selectedRace.date).toLocaleDateString('fr-FR')}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-600">🏁 {selectedRace.distance}</p>
+                    <p className="text-gray-600">🏃 {selectedRace.type}</p>
+                    <p className="text-orange-700 font-medium">🎁 {selectedRace.reward}</p>
+                  </div>
+                </div>
+              </div>
+            )}
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
