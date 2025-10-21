@@ -60,11 +60,11 @@ export default function AuthPage() {
         // Se connecter automatiquement après l'inscription
         userDB.authenticate(email, password);
 
-        // Redirection vers la page de détails de course après inscription
+        // Redirection vers la page d'inscription complète après inscription
         const urlParams = new URLSearchParams(window.location.search);
         const raceId = urlParams.get('raceId');
         if (raceId) {
-          window.location.href = `/course-details?raceId=${raceId}`;
+          window.location.href = `/inscription-complete?raceId=${raceId}`;
         } else {
           window.location.href = '/courses';
         }

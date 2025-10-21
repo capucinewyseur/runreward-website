@@ -88,11 +88,6 @@ Plateforme de bénévolat pour coureurs récompensés
     }, 2000);
   };
 
-  const clearData = () => {
-    localStorage.removeItem('inscription-etape-1');
-    localStorage.removeItem('inscription-complete');
-    router.push('/courses');
-  };
 
   if (!userData) {
     return (
@@ -265,7 +260,7 @@ Plateforme de bénévolat pour coureurs récompensés
               </button>
 
               <button
-                onClick={clearData}
+                onClick={() => router.push('/courses')}
                 className="flex-1 inline-flex justify-center items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500"
               >
                 Retour aux courses
