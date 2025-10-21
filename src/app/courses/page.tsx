@@ -387,9 +387,12 @@ export default function CoursesPage() {
                       S&apos;inscrire
                     </a>
                   ) : (
-                    <button className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200">
+                    <a
+                      href="/auth"
+                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
+                    >
                       S&apos;inscrire
-                    </button>
+                    </a>
                   )}
                   <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
                     Détails
