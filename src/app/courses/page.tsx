@@ -156,15 +156,20 @@ export default function CoursesPage() {
     // Filtre géographique
     let matchesGeo = true;
     if (useGeoFilter && selectedCity) {
-      const selectedCityData = majorCities.find(city => city.name === selectedCity);
-      if (selectedCityData) {
-        const distance = calculateDistance(
-          selectedCityData.coordinates.lat,
-          selectedCityData.coordinates.lng,
-          race.coordinates.lat,
-          race.coordinates.lng
-        );
-        matchesGeo = distance <= radiusKm;
+      try {
+        const selectedCityData = majorCities.find(city => city.name === selectedCity);
+        if (selectedCityData && race.coordinates) {
+          const distance = calculateDistance(
+            selectedCityData.coordinates.lat,
+            selectedCityData.coordinates.lng,
+            race.coordinates.lat,
+            race.coordinates.lng
+          );
+          matchesGeo = distance <= radiusKm && distance !== Infinity;
+        }
+      } catch (error) {
+        console.error('Erreur dans le filtre géographique:', error);
+        matchesGeo = true; // En cas d'erreur, on affiche toutes les courses
       }
     }
     
@@ -215,14 +220,27 @@ export default function CoursesPage() {
 
   // Fonction pour calculer la distance entre deux points (formule de Haversine)
   const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-    const R = 6371; // Rayon de la Terre en km
-    const dLat = (lat2 - lat1) * Math.PI / 180;
-    const dLng = (lng2 - lng1) * Math.PI / 180;
-    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-              Math.sin(dLng/2) * Math.sin(dLng/2);
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-    return R * c;
+    try {
+      // Vérification des paramètres
+      if (!lat1 || !lng1 || !lat2 || !lng2 || 
+          isNaN(lat1) || isNaN(lng1) || isNaN(lat2) || isNaN(lng2)) {
+        return Infinity;
+      }
+
+      const R = 6371; // Rayon de la Terre en km
+      const dLat = (lat2 - lat1) * Math.PI / 180;
+      const dLng = (lng2 - lng1) * Math.PI / 180;
+      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLng/2) * Math.sin(dLng/2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      const distance = R * c;
+      
+      return isNaN(distance) ? Infinity : distance;
+    } catch (error) {
+      console.error('Erreur dans le calcul de distance:', error);
+      return Infinity;
+    }
   };
 
   return (
