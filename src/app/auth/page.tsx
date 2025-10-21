@@ -43,7 +43,7 @@ export default function AuthPage() {
           return;
         }
 
-        // Créer le compte
+        // Créer le compte et se connecter automatiquement
         userDB.createUser({
           firstName,
           lastName,
@@ -56,6 +56,9 @@ export default function AuthPage() {
           gender: '',
           shoeSize: ''
         });
+
+        // Se connecter automatiquement après l'inscription
+        userDB.authenticate(email, password);
 
         // Redirection vers la page de détails de course après inscription
         const urlParams = new URLSearchParams(window.location.search);

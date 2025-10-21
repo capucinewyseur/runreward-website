@@ -18,14 +18,20 @@ export default function InscriptionEtape2() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    // Récupérer les données de l'étape 1
-    const data = localStorage.getItem('inscription-etape-1');
-    if (data) {
-      setEtape1Data(JSON.parse(data));
-    } else {
-      // Rediriger vers l'étape 1 si pas de données
-      router.push('/inscription/etape-1');
+    // Vérifier si l'utilisateur est connecté
+    const currentUser = userDB.getCurrentUser();
+    if (!currentUser) {
+      // Rediriger vers l'authentification si pas connecté
+      router.push('/auth');
+      return;
     }
+    
+    // Récupérer les données de l'étape 1 depuis l'utilisateur connecté
+    setEtape1Data({
+      firstName: currentUser.firstName,
+      lastName: currentUser.lastName,
+      email: currentUser.email
+    });
   }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,8 +41,9 @@ export default function InscriptionEtape2() {
     // Récupérer l'utilisateur actuel
     const currentUser = userDB.getCurrentUser();
     if (!currentUser) {
-      alert('Erreur: Utilisateur non connecté.');
+      alert('Erreur: Utilisateur non connecté. Redirection vers la page de connexion...');
       setIsLoading(false);
+      router.push('/auth');
       return;
     }
 
