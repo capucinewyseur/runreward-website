@@ -2,12 +2,14 @@
 
 import { useState, useEffect } from 'react';
 import { userDB, User, CourseStats } from '@/lib/userDatabase';
+import { emailService, EmailData } from '@/lib/emailService';
 
 
 export default function AdminPage() {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [courseStats, setCourseStats] = useState<CourseStats[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [sendingEmails, setSendingEmails] = useState<Set<string>>(new Set());
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -28,6 +30,50 @@ export default function AdminPage() {
       setIsAuthenticated(true);
     } else {
       alert('Mot de passe incorrect');
+    }
+  };
+
+  const handleConfirmRegistration = async (registrationId: string, courseName: string, courseDate: string, courseLocation: string, userEmail: string, userName: string) => {
+    setSendingEmails(prev => new Set(prev).add(registrationId));
+    
+    try {
+      // Confirmer l'inscription dans la base de données
+      const success = userDB.confirmRegistration(registrationId);
+      
+      if (success) {
+        // Envoyer l'email de confirmation
+        const emailData: EmailData = {
+          to_email: userEmail,
+          to_name: userName,
+          course_name: courseName,
+          course_date: courseDate,
+          course_location: courseLocation,
+          organizer_message: 'Vos coordonnées ont été transmises à l\'organisateur de la course qui vous contactera directement pour finaliser les détails de votre participation.'
+        };
+
+        const emailSent = await emailService.sendConfirmationEmail(emailData);
+        
+        if (emailSent) {
+          alert(`✅ Inscription confirmée et email envoyé à ${userEmail}`);
+        } else {
+          alert(`⚠️ Inscription confirmée mais erreur lors de l'envoi de l'email à ${userEmail}`);
+        }
+        
+        // Recharger les données
+        const stats = userDB.getCourseStats();
+        setCourseStats(stats);
+      } else {
+        alert('❌ Erreur lors de la confirmation de l\'inscription');
+      }
+    } catch (error) {
+      console.error('Erreur lors de la confirmation:', error);
+      alert('❌ Erreur lors de la confirmation de l\'inscription');
+    } finally {
+      setSendingEmails(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(registrationId);
+        return newSet;
+      });
     }
   };
 
@@ -404,14 +450,23 @@ Plateforme de bénévolat pour coureurs récompensés
                             {registration.status === 'pending' && (
                               <button
                                 onClick={() => {
-                                  userDB.confirmRegistration(registration.id);
-                                  // Recharger les données
-                                  const stats = userDB.getCourseStats();
-                                  setCourseStats(stats);
+                                  handleConfirmRegistration(
+                                    registration.id,
+                                    course.courseName,
+                                    new Date().toLocaleDateString('fr-FR'),
+                                    'Lieu de la course',
+                                    registration.userInfo.email,
+                                    `${registration.userInfo.firstName} ${registration.userInfo.lastName}`
+                                  );
                                 }}
-                                className="text-green-600 hover:text-green-900 mr-2"
+                                disabled={sendingEmails.has(registration.id)}
+                                className={`mr-2 ${
+                                  sendingEmails.has(registration.id)
+                                    ? 'text-gray-400 cursor-not-allowed'
+                                    : 'text-green-600 hover:text-green-900'
+                                }`}
                               >
-                                Confirmer
+                                {sendingEmails.has(registration.id) ? 'Envoi...' : 'Confirmer'}
                               </button>
                             )}
                             {registration.status !== 'cancelled' && (
