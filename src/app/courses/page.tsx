@@ -15,6 +15,10 @@ interface Race {
   difficulty: 'Facile' | 'Modéré' | 'Difficile';
   type: 'Route' | 'Trail';
   image: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const races: Race[] = [
@@ -30,7 +34,8 @@ const races: Race[] = [
     currentParticipants: 156,
     difficulty: 'Facile',
     type: 'Route',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 48.8966, lng: 2.3833 } // Parc de la Villette, Paris
   },
   {
     id: 2,
@@ -44,7 +49,8 @@ const races: Race[] = [
     currentParticipants: 78,
     difficulty: 'Difficile',
     type: 'Route',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 48.8282, lng: 2.4395 } // Bois de Vincennes, Paris
   },
   {
     id: 3,
@@ -58,7 +64,8 @@ const races: Race[] = [
     currentParticipants: 89,
     difficulty: 'Facile',
     type: 'Route',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 48.8566, lng: 2.3522 } // Quai de Seine, Paris
   },
   {
     id: 4,
@@ -72,7 +79,8 @@ const races: Race[] = [
     currentParticipants: 45,
     difficulty: 'Modéré',
     type: 'Trail',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 48.4047, lng: 2.7012 } // Fontainebleau
   },
   {
     id: 5,
@@ -86,7 +94,8 @@ const races: Race[] = [
     currentParticipants: 234,
     difficulty: 'Facile',
     type: 'Route',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 48.8808, lng: 2.3833 } // Parc des Buttes-Chaumont, Paris
   },
   {
     id: 6,
@@ -100,7 +109,8 @@ const races: Race[] = [
     currentParticipants: 32,
     difficulty: 'Difficile',
     type: 'Trail',
-    image: "/api/placeholder/400/250"
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 45.9237, lng: 6.8694 } // Chamonix
   },
   {
     id: 7,
@@ -113,8 +123,9 @@ const races: Race[] = [
     maxParticipants: 1200,
     currentParticipants: 856,
     difficulty: 'Modéré',
-    type: 'Trail',
-    image: "/api/placeholder/400/250"
+    type: 'Route',
+    image: "/api/placeholder/400/250",
+    coordinates: { lat: 46.2044, lng: 6.1432 } // Genève, Suisse
   }
 ];
 
@@ -123,6 +134,9 @@ export default function CoursesPage() {
   const [locationFilter, setLocationFilter] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>('');
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCity, setSelectedCity] = useState<string>('');
+  const [radiusKm, setRadiusKm] = useState<number>(50);
+  const [useGeoFilter, setUseGeoFilter] = useState<boolean>(false);
 
   const filteredRaces = races.filter(race => {
     const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -139,7 +153,22 @@ export default function CoursesPage() {
     
     const matchesDate = !dateFilter || race.date === dateFilter;
     
-    return matchesSearch && matchesDifficulty && matchesLocation && matchesDate;
+    // Filtre géographique
+    let matchesGeo = true;
+    if (useGeoFilter && selectedCity) {
+      const selectedCityData = majorCities.find(city => city.name === selectedCity);
+      if (selectedCityData) {
+        const distance = calculateDistance(
+          selectedCityData.coordinates.lat,
+          selectedCityData.coordinates.lng,
+          race.coordinates.lat,
+          race.coordinates.lng
+        );
+        matchesGeo = distance <= radiusKm;
+      }
+    }
+    
+    return matchesSearch && matchesDifficulty && matchesLocation && matchesDate && matchesGeo;
   });
 
   const getDifficultyColor = (difficulty: string) => {
@@ -167,6 +196,35 @@ export default function CoursesPage() {
   // Obtenir les dates uniques pour le filtre
   const uniqueDates = Array.from(new Set(races.map(race => race.date))).sort();
 
+  // Villes principales avec coordonnées
+  const majorCities = [
+    { name: 'Paris', coordinates: { lat: 48.8566, lng: 2.3522 } },
+    { name: 'Lyon', coordinates: { lat: 45.7640, lng: 4.8357 } },
+    { name: 'Marseille', coordinates: { lat: 43.2965, lng: 5.3698 } },
+    { name: 'Toulouse', coordinates: { lat: 43.6047, lng: 1.4442 } },
+    { name: 'Nice', coordinates: { lat: 43.7102, lng: 7.2620 } },
+    { name: 'Nantes', coordinates: { lat: 47.2184, lng: -1.5536 } },
+    { name: 'Strasbourg', coordinates: { lat: 48.5734, lng: 7.7521 } },
+    { name: 'Montpellier', coordinates: { lat: 43.6110, lng: 3.8767 } },
+    { name: 'Bordeaux', coordinates: { lat: 44.8378, lng: -0.5792 } },
+    { name: 'Lille', coordinates: { lat: 50.6292, lng: 3.0573 } },
+    { name: 'Genève', coordinates: { lat: 46.2044, lng: 6.1432 } },
+    { name: 'Chamonix', coordinates: { lat: 45.9237, lng: 6.8694 } },
+    { name: 'Fontainebleau', coordinates: { lat: 48.4047, lng: 2.7012 } }
+  ];
+
+  // Fonction pour calculer la distance entre deux points (formule de Haversine)
+  const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+    const R = 6371; // Rayon de la Terre en km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLng = (lng2 - lng1) * Math.PI / 180;
+    const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+              Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+              Math.sin(dLng/2) * Math.sin(dLng/2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    return R * c;
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -186,6 +244,72 @@ export default function CoursesPage() {
       {/* Filters */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+          {/* Filtre géographique */}
+          <div className="mb-6 p-4 bg-gradient-to-r from-blue-50 to-orange-50 rounded-lg border border-blue-200">
+            <div className="flex items-center mb-3">
+              <input
+                type="checkbox"
+                id="geoFilter"
+                checked={useGeoFilter}
+                onChange={(e) => setUseGeoFilter(e.target.checked)}
+                className="mr-2 h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+              />
+              <label htmlFor="geoFilter" className="text-sm font-medium text-gray-700">
+                🗺️ Recherche géographique
+              </label>
+            </div>
+            
+            {useGeoFilter && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Ville de référence</label>
+                  <select
+                    value={selectedCity}
+                    onChange={(e) => setSelectedCity(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                  >
+                    <option value="">Sélectionner une ville</option>
+                    {majorCities.map(city => (
+                      <option key={city.name} value={city.name}>{city.name}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Rayon: {radiusKm} km
+                  </label>
+                  <input
+                    type="range"
+                    min="10"
+                    max="200"
+                    step="10"
+                    value={radiusKm}
+                    onChange={(e) => setRadiusKm(Number(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider"
+                  />
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>10km</span>
+                    <span>200km</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setUseGeoFilter(false);
+                      setSelectedCity('');
+                      setRadiusKm(50);
+                    }}
+                    className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
+                  >
+                    Désactiver
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Search */}
             <div>
@@ -285,6 +409,9 @@ export default function CoursesPage() {
                 setLocationFilter('');
                 setDateFilter('');
                 setFilter('all');
+                setUseGeoFilter(false);
+                setSelectedCity('');
+                setRadiusKm(50);
               }}
               className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
             >
