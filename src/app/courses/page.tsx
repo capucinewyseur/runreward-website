@@ -6,6 +6,7 @@ interface Race {
   id: number;
   name: string;
   location: string;
+  department: string;
   date: string;
   distance: string;
   reward: string;
@@ -26,6 +27,7 @@ const races: Race[] = [
     id: 1,
     name: "Course du Printemps",
     location: "Parc de la Villette, Paris",
+    department: "Paris (75)",
     date: "2024-04-15",
     distance: "10 km",
     reward: "100€ + équipement de course",
@@ -41,6 +43,7 @@ const races: Race[] = [
     id: 2,
     name: "Trail des Alpes",
     location: "Chamonix, Haute-Savoie",
+    department: "Haute-Savoie (74)",
     date: "2024-05-20",
     distance: "21 km",
     reward: "150€ + équipement technique",
@@ -56,6 +59,7 @@ const races: Race[] = [
     id: 3,
     name: "Course de la Solidarité",
     location: "Parc des Buttes-Chaumont, Paris",
+    department: "Paris (75)",
     date: "2024-06-10",
     distance: "5 km",
     reward: "50€ + tee-shirt",
@@ -71,6 +75,7 @@ const races: Race[] = [
     id: 4,
     name: "Marathon de Lyon",
     location: "Lyon, Rhône",
+    department: "Rhône (69)",
     date: "2024-09-15",
     distance: "42.2 km",
     reward: "200€ + médaille + équipement",
@@ -86,6 +91,7 @@ const races: Race[] = [
     id: 5,
     name: "Trail de Fontainebleau",
     location: "Forêt de Fontainebleau, Seine-et-Marne",
+    department: "Seine-et-Marne (77)",
     date: "2024-07-22",
     distance: "15 km",
     reward: "120€ + casquette + gourde",
@@ -101,6 +107,7 @@ const races: Race[] = [
     id: 6,
     name: "Course Nocturne de Nice",
     location: "Promenade des Anglais, Nice",
+    department: "Alpes-Maritimes (06)",
     date: "2024-08-05",
     distance: "10 km",
     reward: "80€ + maillot technique",
@@ -116,6 +123,7 @@ const races: Race[] = [
     id: 7,
     name: "Generali Genève Marathon",
     location: "Genève, Suisse",
+    department: "Suisse",
     date: "2024-12-15",
     distance: "42.2 km",
     reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
@@ -132,6 +140,7 @@ const races: Race[] = [
 export default function CoursesPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState<string>('');
+  const [departmentFilter, setDepartmentFilter] = useState<string>('');
   const [dateFilter, setDateFilter] = useState<string>('');
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
@@ -143,9 +152,12 @@ export default function CoursesPage() {
     const matchesLocation = !locationFilter || 
                            race.location.toLowerCase().includes(locationFilter.toLowerCase());
     
+    const matchesDepartment = !departmentFilter || 
+                             race.department.toLowerCase().includes(departmentFilter.toLowerCase());
+    
     const matchesDate = !dateFilter || race.date === dateFilter;
     
-    return matchesSearch && matchesLocation && matchesDate;
+    return matchesSearch && matchesLocation && matchesDepartment && matchesDate;
   });
 
   const getDifficultyColor = (difficulty: string) => {
@@ -179,6 +191,9 @@ export default function CoursesPage() {
   // Obtenir les lieux uniques pour le filtre
   const uniqueLocations = Array.from(new Set(races.map(race => race.location.split(',')[0])));
 
+  // Obtenir les départements uniques pour le filtre
+  const uniqueDepartments = Array.from(new Set(races.map(race => race.department))).sort();
+
   // Obtenir les dates uniques pour le filtre
   const uniqueDates = Array.from(new Set(races.map(race => race.date))).sort();
 
@@ -201,7 +216,7 @@ export default function CoursesPage() {
       {/* Filters */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {/* Search */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
@@ -225,6 +240,21 @@ export default function CoursesPage() {
                 <option value="">Tous les lieux</option>
                 {uniqueLocations.map(location => (
                   <option key={location} value={location}>{location}</option>
+                ))}
+              </select>
+            </div>
+
+            {/* Department Filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Département</label>
+              <select
+                value={departmentFilter}
+                onChange={(e) => setDepartmentFilter(e.target.value)}
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              >
+                <option value="">Tous les départements</option>
+                {uniqueDepartments.map(department => (
+                  <option key={department} value={department}>{department}</option>
                 ))}
               </select>
             </div>
@@ -274,6 +304,7 @@ export default function CoursesPage() {
               onClick={() => {
                 setSearchTerm('');
                 setLocationFilter('');
+                setDepartmentFilter('');
                 setDateFilter('');
                 setIsSearching(false);
               }}
