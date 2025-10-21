@@ -146,6 +146,14 @@ function InscriptionCompleteContent() {
   });
 
   useEffect(() => {
+    // Vérifier si l'utilisateur est connecté
+    const currentUser = userDB.getCurrentUser();
+    if (!currentUser) {
+      // Rediriger vers l'authentification si pas connecté
+      router.push('/auth');
+      return;
+    }
+
     const raceId = searchParams.get('raceId');
     if (raceId) {
       const foundRace = races.find(r => r.id === parseInt(raceId));
@@ -153,7 +161,7 @@ function InscriptionCompleteContent() {
         setRace(foundRace);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
