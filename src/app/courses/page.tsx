@@ -253,9 +253,9 @@ export default function CoursesPage() {
                 
                 <p className="text-gray-600 text-sm mb-4">{race.description}</p>
                 
-                <div className="bg-orange-50 p-3 rounded-lg mb-4">
-                  <div className="text-sm font-medium text-orange-800 mb-1">Récompense :</div>
-                  <div className="text-orange-600 font-semibold">{race.reward}</div>
+                <div className="bg-orange-50 p-4 rounded-lg mb-4">
+                  <div className="text-base md:text-lg font-semibold text-orange-800 mb-1">Récompense</div>
+                  <div className="text-2xl md:text-3xl text-orange-600 font-extrabold tracking-tight">{race.reward}</div>
                 </div>
                 
                 <div className="flex justify-between items-center mb-4">
