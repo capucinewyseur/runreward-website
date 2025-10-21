@@ -139,6 +139,7 @@ export default function CoursesPage() {
   const [useGeoFilter, setUseGeoFilter] = useState<boolean>(false);
   const [userLocation, setUserLocation] = useState<{lat: number, lng: number} | null>(null);
   const [isLoadingLocation, setIsLoadingLocation] = useState<boolean>(false);
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const filteredRaces = races.filter(race => {
     const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -232,6 +233,15 @@ export default function CoursesPage() {
     { name: 'Chamonix', coordinates: { lat: 45.9237, lng: 6.8694 } },
     { name: 'Fontainebleau', coordinates: { lat: 48.4047, lng: 2.7012 } }
   ];
+
+  // Fonction pour déclencher la recherche
+  const handleSearch = () => {
+    setIsSearching(true);
+    // Simuler un délai de recherche pour l'effet visuel
+    setTimeout(() => {
+      setIsSearching(false);
+    }, 500);
+  };
 
   // Fonction pour obtenir la géolocalisation de l'utilisateur
   const getUserLocation = () => {
@@ -509,8 +519,31 @@ export default function CoursesPage() {
             </div>
           </div>
           
+          {/* Search Button */}
+          <div className="flex justify-center mt-6">
+            <button
+              onClick={handleSearch}
+              disabled={isSearching}
+              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+            >
+              {isSearching ? (
+                <>
+                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                  </svg>
+                  Recherche en cours...
+                </>
+              ) : (
+                <>
+                  🔍 Rechercher les courses
+                </>
+              )}
+            </button>
+          </div>
+          
           {/* Reset Filters */}
-          <div className="flex justify-end">
+          <div className="flex justify-end mt-4">
             <button
               onClick={() => {
                 setSearchTerm('');
@@ -521,6 +554,7 @@ export default function CoursesPage() {
                 setSelectedCity('');
                 setUserLocation(null);
                 setRadiusKm(50);
+                setIsSearching(false);
               }}
               className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
             >
