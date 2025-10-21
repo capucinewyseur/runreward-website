@@ -1,4 +1,4 @@
-// Système de gestion des utilisateurs pour éviter les doublons
+// Système de gestion des utilisateurs et inscriptions par course
 export interface User {
   id: string;
   firstName: string;
@@ -24,13 +24,45 @@ export interface User {
   };
 }
 
+export interface CourseRegistration {
+  id: string;
+  userId: string;
+  courseId: number;
+  courseName: string;
+  registrationDate: string;
+  userInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    address: string;
+    city: string;
+    postalCode: string;
+    birthDate: string;
+    gender: string;
+    shoeSize: string;
+  };
+  status: 'pending' | 'confirmed' | 'cancelled';
+}
+
+export interface CourseStats {
+  courseId: number;
+  courseName: string;
+  totalRegistrations: number;
+  confirmedRegistrations: number;
+  pendingRegistrations: number;
+  cancelledRegistrations: number;
+  registrations: CourseRegistration[];
+}
+
 class UserDatabase {
   private users: User[] = [];
   private currentUser: User | null = null;
+  private courseRegistrations: CourseRegistration[] = [];
 
   constructor() {
-    // Charger les utilisateurs depuis localStorage au démarrage
+    // Charger les utilisateurs et inscriptions depuis localStorage au démarrage
     this.loadUsers();
+    this.loadCourseRegistrations();
   }
 
   private loadUsers() {
@@ -42,9 +74,24 @@ class UserDatabase {
     }
   }
 
+  private loadCourseRegistrations() {
+    if (typeof window !== 'undefined') {
+      const storedRegistrations = localStorage.getItem('runreward-course-registrations');
+      if (storedRegistrations) {
+        this.courseRegistrations = JSON.parse(storedRegistrations);
+      }
+    }
+  }
+
   private saveUsers() {
     if (typeof window !== 'undefined') {
       localStorage.setItem('runreward-users', JSON.stringify(this.users));
+    }
+  }
+
+  private saveCourseRegistrations() {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('runreward-course-registrations', JSON.stringify(this.courseRegistrations));
     }
   }
 
@@ -133,10 +180,107 @@ class UserDatabase {
 
   // Finaliser l'inscription d'un utilisateur
   completeRegistration(userId: string, raceData: {id: number; name: string; location: string; date: string; distance: string; reward: string; type: string}): User | null {
-    return this.updateUser(userId, {
+    const user = this.updateUser(userId, {
       status: 'completed',
       selectedRace: raceData
     });
+
+    if (user) {
+      // Créer une inscription pour cette course
+      const registration: CourseRegistration = {
+        id: Date.now().toString(),
+        userId: userId,
+        courseId: raceData.id,
+        courseName: raceData.name,
+        registrationDate: new Date().toISOString(),
+        userInfo: {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+          address: user.address,
+          city: user.city,
+          postalCode: user.postalCode,
+          birthDate: user.birthDate,
+          gender: user.gender,
+          shoeSize: user.shoeSize
+        },
+        status: 'pending'
+      };
+
+      this.courseRegistrations.push(registration);
+      this.saveCourseRegistrations();
+    }
+
+    return user;
+  }
+
+  // Obtenir toutes les inscriptions par course
+  getCourseRegistrations(courseId?: number): CourseRegistration[] {
+    if (courseId) {
+      return this.courseRegistrations.filter(reg => reg.courseId === courseId);
+    }
+    return [...this.courseRegistrations];
+  }
+
+  // Obtenir les statistiques par course
+  getCourseStats(): CourseStats[] {
+    const courseMap = new Map<number, CourseStats>();
+
+    this.courseRegistrations.forEach(registration => {
+      const courseId = registration.courseId;
+      
+      if (!courseMap.has(courseId)) {
+        courseMap.set(courseId, {
+          courseId: courseId,
+          courseName: registration.courseName,
+          totalRegistrations: 0,
+          confirmedRegistrations: 0,
+          pendingRegistrations: 0,
+          cancelledRegistrations: 0,
+          registrations: []
+        });
+      }
+
+      const stats = courseMap.get(courseId)!;
+      stats.totalRegistrations++;
+      stats.registrations.push(registration);
+
+      switch (registration.status) {
+        case 'confirmed':
+          stats.confirmedRegistrations++;
+          break;
+        case 'pending':
+          stats.pendingRegistrations++;
+          break;
+        case 'cancelled':
+          stats.cancelledRegistrations++;
+          break;
+      }
+    });
+
+    return Array.from(courseMap.values());
+  }
+
+  // Confirmer une inscription
+  confirmRegistration(registrationId: string): boolean {
+    const registration = this.courseRegistrations.find(reg => reg.id === registrationId);
+    if (registration) {
+      registration.status = 'confirmed';
+      this.saveCourseRegistrations();
+      return true;
+    }
+    return false;
+  }
+
+  // Annuler une inscription
+  cancelRegistration(registrationId: string): boolean {
+    const registration = this.courseRegistrations.find(reg => reg.id === registrationId);
+    if (registration) {
+      registration.status = 'cancelled';
+      this.saveCourseRegistrations();
+      return true;
+    }
+    return false;
   }
 }
 

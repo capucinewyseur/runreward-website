@@ -1,11 +1,12 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { userDB, User } from '@/lib/userDatabase';
+import { userDB, User, CourseStats } from '@/lib/userDatabase';
 
 
 export default function AdminPage() {
   const [allUsers, setAllUsers] = useState<User[]>([]);
+  const [courseStats, setCourseStats] = useState<CourseStats[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -14,9 +15,11 @@ export default function AdminPage() {
   const ADMIN_PASSWORD = 'runreward2024';
 
   useEffect(() => {
-    // Charger les utilisateurs depuis la base de données
+    // Charger les utilisateurs et statistiques depuis la base de données
     const users = userDB.getAllUsers();
+    const stats = userDB.getCourseStats();
     setAllUsers(users);
+    setCourseStats(stats);
   }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -286,6 +289,36 @@ Plateforme de bénévolat pour coureurs récompensés
           </div>
         </div>
 
+        {/* Course Statistics */}
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Statistiques par course</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {courseStats.map((course) => (
+              <div key={course.courseId} className="border border-gray-200 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900 mb-2">{course.courseName}</h3>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Total:</span>
+                    <span className="font-medium">{course.totalRegistrations}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-green-600">Confirmées:</span>
+                    <span className="font-medium text-green-600">{course.confirmedRegistrations}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-yellow-600">En attente:</span>
+                    <span className="font-medium text-yellow-600">{course.pendingRegistrations}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-red-600">Annulées:</span>
+                    <span className="font-medium text-red-600">{course.cancelledRegistrations}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Actions */}
         <div className="bg-white shadow rounded-lg p-6 mb-8">
           <h2 className="text-lg font-medium text-gray-900 mb-4">Actions d&apos;export</h2>
@@ -322,6 +355,86 @@ Plateforme de bénévolat pour coureurs récompensés
               </svg>
               Exporter en CSV
             </button>
+          </div>
+        </div>
+
+        {/* Course Registrations Details */}
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">Détails des inscriptions par course</h2>
+          <div className="space-y-6">
+            {courseStats.map((course) => (
+              <div key={course.courseId} className="border border-gray-200 rounded-lg p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{course.courseName}</h3>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                      <tr>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Nom</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Ville</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Pointure</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Statut</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                      {course.registrations.map((registration) => (
+                        <tr key={registration.id}>
+                          <td className="px-4 py-2 text-sm text-gray-900">
+                            {registration.userInfo.firstName} {registration.userInfo.lastName}
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{registration.userInfo.email}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{registration.userInfo.city}</td>
+                          <td className="px-4 py-2 text-sm text-gray-900">{registration.userInfo.shoeSize}</td>
+                          <td className="px-4 py-2 text-sm">
+                            <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                              registration.status === 'confirmed' ? 'bg-green-100 text-green-800' :
+                              registration.status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                              'bg-red-100 text-red-800'
+                            }`}>
+                              {registration.status === 'confirmed' ? 'Confirmée' :
+                               registration.status === 'pending' ? 'En attente' : 'Annulée'}
+                            </span>
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-500">
+                            {new Date(registration.registrationDate).toLocaleDateString('fr-FR')}
+                          </td>
+                          <td className="px-4 py-2 text-sm">
+                            {registration.status === 'pending' && (
+                              <button
+                                onClick={() => {
+                                  userDB.confirmRegistration(registration.id);
+                                  // Recharger les données
+                                  const stats = userDB.getCourseStats();
+                                  setCourseStats(stats);
+                                }}
+                                className="text-green-600 hover:text-green-900 mr-2"
+                              >
+                                Confirmer
+                              </button>
+                            )}
+                            {registration.status !== 'cancelled' && (
+                              <button
+                                onClick={() => {
+                                  userDB.cancelRegistration(registration.id);
+                                  // Recharger les données
+                                  const stats = userDB.getCourseStats();
+                                  setCourseStats(stats);
+                                }}
+                                className="text-red-600 hover:text-red-900"
+                              >
+                                Annuler
+                              </button>
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
