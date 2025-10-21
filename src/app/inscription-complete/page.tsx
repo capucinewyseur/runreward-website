@@ -146,21 +146,34 @@ function InscriptionCompleteContent() {
   });
 
   useEffect(() => {
-    // Vérifier si l'utilisateur est connecté
-    const currentUser = userDB.getCurrentUser();
-    if (!currentUser) {
-      // Rediriger vers l'authentification si pas connecté
-      router.push('/auth');
-      return;
-    }
-
     const raceId = searchParams.get('raceId');
-    if (raceId) {
-      const foundRace = races.find(r => r.id === parseInt(raceId));
-      if (foundRace) {
-        setRace(foundRace);
+    
+    // Attendre un peu pour que la base de données se charge
+    const checkUser = () => {
+      const currentUser = userDB.getCurrentUser();
+      if (!currentUser) {
+        // Rediriger vers l'authentification en préservant le raceId
+        if (raceId) {
+          router.push(`/auth?raceId=${raceId}`);
+        } else {
+          router.push('/auth');
+        }
+        return;
       }
-    }
+
+      if (raceId) {
+        const foundRace = races.find(r => r.id === parseInt(raceId));
+        if (foundRace) {
+          setRace(foundRace);
+        }
+      }
+    };
+
+    // Vérifier immédiatement et après un court délai
+    checkUser();
+    const timeout = setTimeout(checkUser, 100);
+    
+    return () => clearTimeout(timeout);
   }, [searchParams, router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
