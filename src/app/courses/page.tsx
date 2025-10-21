@@ -174,18 +174,24 @@ export default function CoursesPage() {
           }
         }
         
-        if (race.coordinates && referenceLat !== undefined && referenceLng !== undefined) {
+        // Si on a des coordonnées de référence ET des coordonnées de course
+        if (referenceLat !== undefined && referenceLng !== undefined && race.coordinates) {
           const distance = calculateDistance(
             referenceLat,
             referenceLng,
             race.coordinates.lat,
             race.coordinates.lng
           );
+          console.log(`Course: ${race.name}, Distance: ${distance.toFixed(2)}km, Rayon: ${radiusKm}km, Match: ${distance <= radiusKm}`);
           matchesGeo = distance <= radiusKm && distance !== Infinity;
+        } else {
+          // Si pas de coordonnées de référence, on n'affiche aucune course
+          console.log(`Course: ${race.name}, Pas de coordonnées de référence`);
+          matchesGeo = false;
         }
       } catch (error) {
         console.error('Erreur dans le filtre géographique:', error);
-        matchesGeo = true; // En cas d'erreur, on affiche toutes les courses
+        matchesGeo = false; // En cas d'erreur, on n'affiche aucune course
       }
     }
     
