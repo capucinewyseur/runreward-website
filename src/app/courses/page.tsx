@@ -99,7 +99,7 @@ const races: Race[] = [
     id: 7,
     name: "Generali Genève Marathon",
     location: "Genève, Suisse",
-    date: "2025-05-11",
+    date: "2024-12-15",
     distance: "42.2 km",
     reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
     description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
@@ -283,9 +283,20 @@ export default function CoursesPage() {
                   </div>
                 </div>
                 
-                <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
-                  S&apos;inscrire
-                </button>
+                {race.id === 7 ? (
+                  <a 
+                    href="https://2d86d697.sibforms.com/serve/MUIFAF4cUc_1flMsDuEl6Sj4mwD-cSNPvCEyzG9GMbP4KE3BIZGL-S2ipfqv0ISuZ3jN162O6I5faEpqEBWxZuu9XqV8OnOYTDLilOpnvqBsJoTAlK_3pbV7pcqEyEsf-XNb97S9r_pTdaFXthaRS62GzG9Gp4rL1A7vAQiPopU2FqzKLOqJGI_q4CwQsyDrcglkOEQCtzDkD-Q=?utm_source=brevo&utm_campaign=GGM25%20-%20Bnvoles%20-%20Remerciementssurvey&utm_medium=email"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-medium transition-colors text-center block"
+                  >
+                    S&apos;inscrire
+                  </a>
+                ) : (
+                  <button className="w-full bg-orange-500 hover:bg-orange-600 text-white py-2 px-4 rounded-lg font-medium transition-colors">
+                    S&apos;inscrire
+                  </button>
+                )}
               </div>
             </div>
           ))}
