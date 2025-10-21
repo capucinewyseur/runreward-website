@@ -377,23 +377,12 @@ export default function CoursesPage() {
                 </div>
                 
                 <div className="flex gap-2">
-                  {race.id === 7 ? (
-                    <a
-                      href="https://2d86d697.sibforms.com/serve/MUIFAF4cUc_1flMsDuEl6Sj4mwD-cSNPvCEyzG9GMbP4KE3BIZGL-S2ipfqv0ISuZ3jN162O6I5faEpqEBWxZuu9XqV8OnOYTDLilOpnvqBsJoTAlK_3pbV7pcqEyEsf-XNb97S9r_pTdaFXthaRS62GzG9Gp4rL1A7vAQiPopU2FqzKLOqJGI_q4CwQsyDrcglkOEQCtzDkD-Q=?utm_source=brevo&utm_campaign=GGM25%20-%20Bnvoles%20-%20Remerciementssurvey&utm_medium=email"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
-                    >
-                      S&apos;inscrire
-                    </a>
-                  ) : (
-                    <a
-                      href="/auth"
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
-                    >
-                      S&apos;inscrire
-                    </a>
-                  )}
+                  <a
+                    href="/auth"
+                    className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
+                  >
+                    S&apos;inscrire
+                  </a>
                   <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
                     Détails
                   </button>
