@@ -1,14 +1,39 @@
 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- R orange (arrière-plan) -->
-  <path d="M6 4C6 2.89543 6.89543 2 8 2H12C15.3137 2 18 4.68629 18 8C18 9.5913 17.3679 11.1174 16.2426 12.2426C17.3679 13.3679 18 14.8939 18 16.4852C18 19.799 15.3137 22.4852 12 22.4852H8C6.89543 22.4852 6 21.5898 6 20.4852V4Z" fill="#F08040"/>
+  <!-- R orange (arrière-plan) avec effet de lueur -->
+  <defs>
+    <filter id="glow-orange">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="glow-blue">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="1" dy="2" stdDeviation="1" flood-color="rgba(0,0,0,0.3)"/>
+    </filter>
+  </defs>
+  
+  <!-- R orange (arrière-plan) décalé -->
+  <path d="M8 3C8 2.44772 8.44772 2 9 2H13C16.3137 2 19 4.68629 19 8C19 9.5913 18.3679 11.1174 17.2426 12.2426C18.3679 13.3679 19 14.8939 19 16.4852C19 19.799 16.3137 22.4852 13 22.4852H9C8.44772 22.4852 8 21.5898 8 20.4852V3Z" 
+        fill="#F08040" 
+        filter="url(#glow-orange)" 
+        transform="translate(1, 1)"/>
   
   <!-- R bleu (premier plan) -->
-  <path d="M8 4C8 3.44772 8.44772 3 9 3H11C13.7614 3 16 5.23858 16 8C16 10.7614 13.7614 13 11 13H9C8.44772 13 8 12.5523 8 12V4Z" fill="#6A70F0"/>
-  <path d="M8 15C8 14.4477 8.44772 14 9 14H11C13.7614 14 16 16.2386 16 19C16 21.7614 13.7614 24 11 24H9C8.44772 24 8 23.5523 8 23V15Z" fill="#6A70F0"/>
+  <path d="M6 4C6 2.89543 6.89543 2 8 2H12C15.3137 2 18 4.68629 18 8C18 9.5913 17.3679 11.1174 16.2426 12.2426C17.3679 13.3679 18 14.8939 18 16.4852C18 19.799 15.3137 22.4852 12 22.4852H8C6.89543 22.4852 6 21.5898 6 20.4852V4Z" 
+        fill="#6A70F0" 
+        filter="url(#glow-blue) url(#shadow)"/>
   
-  <!-- Barre horizontale du R -->
-  <rect x="8" y="8" width="8" height="2" fill="#6A70F0"/>
+  <!-- Barre horizontale du R bleu -->
+  <rect x="6" y="8" width="12" height="2" fill="#6A70F0" filter="url(#glow-blue)"/>
   
-  <!-- Barre diagonale du R -->
-  <path d="M12 10L16 20" stroke="#6A70F0" stroke-width="2" stroke-linecap="round"/>
+  <!-- Barre diagonale du R bleu -->
+  <path d="M10 10L14 20" stroke="#6A70F0" stroke-width="2" stroke-linecap="round" filter="url(#glow-blue)"/>
 </svg>

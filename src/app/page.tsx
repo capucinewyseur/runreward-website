@@ -12,7 +12,7 @@ export default function Home() {
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 
-              Participez à des courses et gagnez des récompenses tout en contribuant à la communauté.
+              Participez à des courses et gagnez des récompenses et réduction sur vos prochains dossards tout en contribuant à la communauté.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
