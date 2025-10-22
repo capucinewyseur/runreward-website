@@ -1,157 +1,67 @@
 'use client';
 
-import { useState } from 'react';
-
-interface Race {
-  id: number;
-  name: string;
-  location: string;
-  department: string;
-  date: string;
-  distance: string;
-  reward: string;
-  description: string;
-  maxParticipants: number;
-  currentParticipants: number;
-  type: 'Route' | 'Trail';
-  image: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-}
-
-const races: Race[] = [
-  {
-    id: 1,
-    name: "Course du Printemps",
-    location: "Parc de la Villette, Paris",
-    department: "Paris (75)",
-    date: "2024-04-15",
-    distance: "10 km",
-    reward: "100€ + équipement de course",
-    description: "Course matinale dans le magnifique parc de la Villette. Parfait pour débuter la saison de course.",
-    maxParticipants: 200,
-    currentParticipants: 156,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8966, lng: 2.3833 } // Parc de la Villette, Paris
-  },
-  {
-    id: 2,
-    name: "Trail des Alpes",
-    location: "Chamonix, Haute-Savoie",
-    department: "Haute-Savoie (74)",
-    date: "2024-05-20",
-    distance: "21 km",
-    reward: "150€ + équipement technique",
-    description: "Trail en montagne avec vue panoramique sur le Mont-Blanc. Défi pour les coureurs expérimentés.",
-    maxParticipants: 100,
-    currentParticipants: 89,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.9237, lng: 6.8694 } // Chamonix
-  },
-  {
-    id: 3,
-    name: "Course de la Solidarité",
-    location: "Parc des Buttes-Chaumont, Paris",
-    department: "Paris (75)",
-    date: "2024-06-10",
-    distance: "5 km",
-    reward: "50€ + tee-shirt",
-    description: "Course caritative pour soutenir les associations locales. Ouverte à tous les niveaux.",
-    maxParticipants: 300,
-    currentParticipants: 234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8833, lng: 2.3833 } // Buttes-Chaumont, Paris
-  },
-  {
-    id: 4,
-    name: "Marathon de Lyon",
-    location: "Lyon, Rhône",
-    department: "Rhône (69)",
-    date: "2024-09-15",
-    distance: "42.2 km",
-    reward: "200€ + médaille + équipement",
-    description: "Marathon urbain traversant les plus beaux quartiers de Lyon. Événement majeur de la région.",
-    maxParticipants: 5000,
-    currentParticipants: 4234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.7640, lng: 4.8357 } // Lyon
-  },
-  {
-    id: 5,
-    name: "Trail de Fontainebleau",
-    location: "Forêt de Fontainebleau, Seine-et-Marne",
-    department: "Seine-et-Marne (77)",
-    date: "2024-07-22",
-    distance: "15 km",
-    reward: "120€ + casquette + gourde",
-    description: "Trail dans la magnifique forêt de Fontainebleau. Parcours varié entre rochers et sentiers forestiers.",
-    maxParticipants: 150,
-    currentParticipants: 98,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.4047, lng: 2.7012 } // Fontainebleau
-  },
-  {
-    id: 6,
-    name: "Course Nocturne de Nice",
-    location: "Promenade des Anglais, Nice",
-    department: "Alpes-Maritimes (06)",
-    date: "2024-08-05",
-    distance: "10 km",
-    reward: "80€ + maillot technique",
-    description: "Course nocturne le long de la célèbre Promenade des Anglais. Ambiance festive garantie.",
-    maxParticipants: 800,
-    currentParticipants: 567,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 43.7102, lng: 7.2620 } // Nice
-  },
-  {
-    id: 7,
-    name: "Generali Genève Marathon",
-    location: "Genève, Suisse",
-    department: "Suisse",
-    date: "2024-12-15",
-    distance: "42.2 km",
-    reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
-    description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
-    maxParticipants: 1200,
-    currentParticipants: 856,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 46.2044, lng: 6.1432 } // Genève, Suisse
-  }
-];
+import { useState, useEffect } from 'react';
+import { courseDB, Course } from '@/lib/courseDatabase';
 
 export default function CoursesPage() {
+  const [races, setRaces] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const [locationFilter, setLocationFilter] = useState<string>('');
-  const [departmentFilter, setDepartmentFilter] = useState<string>('');
-  const [dateFilter, setDateFilter] = useState<string>('');
-  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [locationFilter, setLocationFilter] = useState('');
+  const [dateFilter, setDateFilter] = useState('');
+  const [departmentFilter, setDepartmentFilter] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
 
-  const filteredRaces = races.filter(race => {
-    const matchesSearch = race.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         race.location.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         race.description.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesLocation = !locationFilter || 
-                           race.location.toLowerCase().includes(locationFilter.toLowerCase());
-    
-    const matchesDepartment = !departmentFilter || 
-                             race.department.toLowerCase().includes(departmentFilter.toLowerCase());
-    
-    const matchesDate = !dateFilter || race.date === dateFilter;
-    
-    return matchesSearch && matchesLocation && matchesDepartment && matchesDate;
-  });
+  useEffect(() => {
+    // Charger les courses depuis la base de données
+    const allCourses = courseDB.getAllCourses();
+    setRaces(allCourses);
+  }, []);
 
+  const handleSearch = () => {
+    setIsSearching(true);
+    
+    let filteredRaces = courseDB.getAllCourses();
+
+    // Filtre par terme de recherche
+    if (searchTerm) {
+      filteredRaces = courseDB.searchCourses(searchTerm);
+    }
+
+    // Filtre par lieu
+    if (locationFilter) {
+      filteredRaces = filteredRaces.filter(race => 
+        race.location.toLowerCase().includes(locationFilter.toLowerCase())
+      );
+    }
+
+    // Filtre par département
+    if (departmentFilter) {
+      filteredRaces = filteredRaces.filter(race => 
+        race.department === departmentFilter
+      );
+    }
+
+    // Filtre par date
+    if (dateFilter) {
+      filteredRaces = filteredRaces.filter(race => 
+        race.date >= dateFilter
+      );
+    }
+
+    setRaces(filteredRaces);
+    setIsSearching(false);
+  };
+
+  const resetFilters = () => {
+    setSearchTerm('');
+    setLocationFilter('');
+    setDateFilter('');
+    setDepartmentFilter('');
+    setRaces(courseDB.getAllCourses());
+  };
+
+  // Obtenir la liste unique des départements
+  const departments = [...new Set(courseDB.getAllCourses().map(race => race.department))].sort();
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -159,226 +69,209 @@ export default function CoursesPage() {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
-  // Fonction pour déclencher la recherche
-  const handleSearch = () => {
-    setIsSearching(true);
-    // Simuler un délai de recherche pour l'effet visuel
-    setTimeout(() => {
-      setIsSearching(false);
-    }, 500);
-  };
-
-  // Obtenir les lieux uniques pour le filtre
-  const uniqueLocations = Array.from(new Set(races.map(race => race.location.split(',')[0])));
-
-  // Obtenir les départements uniques pour le filtre
-  const uniqueDepartments = Array.from(new Set(races.map(race => race.department))).sort();
-
-  // Obtenir les dates uniques pour le filtre
-  const uniqueDates = Array.from(new Set(races.map(race => race.date))).sort();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-blue-600 py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-white">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Courses à venir
-            </h1>
-            <p className="text-xl md:text-2xl text-orange-100 max-w-3xl mx-auto">
-              Découvrez toutes les courses bénévoles disponibles et commencez à gagner des récompenses
-            </p>
-          </div>
+    <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+            🏃‍♂️ Courses à venir
+          </h1>
+          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+            Découvrez toutes les courses disponibles et trouvez celle qui vous correspond. 
+            Participez en tant que bénévole et gagnez des récompenses !
+          </p>
         </div>
-      </div>
 
-      {/* Filters */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            {/* Search */}
+        {/* Filtres */}
+        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">🔍 Rechercher une course</h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+            {/* Recherche générale */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Recherche</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Recherche
+              </label>
               <input
                 type="text"
                 placeholder="Nom, lieu, description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
             </div>
-            
-            {/* Location Filter */}
+
+            {/* Filtre par lieu */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Lieu</label>
-              <select
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Lieu
+              </label>
+              <input
+                type="text"
+                placeholder="Ville, région..."
                 value={locationFilter}
                 onChange={(e) => setLocationFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              >
-                <option value="">Tous les lieux</option>
-                {uniqueLocations.map(location => (
-                  <option key={location} value={location}>{location}</option>
-                ))}
-              </select>
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
             </div>
 
-            {/* Department Filter */}
+            {/* Filtre par département */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Département</label>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Département
+              </label>
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
               >
                 <option value="">Tous les départements</option>
-                {uniqueDepartments.map(department => (
-                  <option key={department} value={department}>{department}</option>
+                {departments.map(dept => (
+                  <option key={dept} value={dept}>{dept}</option>
                 ))}
               </select>
             </div>
 
-            {/* Date Filter */}
+            {/* Filtre par date */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
-              <select
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Date minimum
+              </label>
+              <input
+                type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              >
-                <option value="">Toutes les dates</option>
-                {uniqueDates.map(date => (
-                  <option key={date} value={date}>{formatDate(date)}</option>
-                ))}
-              </select>
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
             </div>
           </div>
-          
-          {/* Search Button */}
-          <div className="flex justify-center">
+
+          {/* Boutons d'action */}
+          <div className="flex flex-col sm:flex-row gap-4">
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="px-8 py-3 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transition-all duration-200 flex items-center gap-2"
+              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {isSearching ? (
-                <>
-                  <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                  </svg>
-                  Recherche en cours...
-                </>
-              ) : (
-                <>
-                  🔍 Rechercher les courses
-                </>
-              )}
+              {isSearching ? 'Recherche en cours...' : '🔍 Rechercher les courses'}
             </button>
-          </div>
-          
-          {/* Reset Filters */}
-          <div className="flex justify-end mt-4">
             <button
-              onClick={() => {
-                setSearchTerm('');
-                setLocationFilter('');
-                setDepartmentFilter('');
-                setDateFilter('');
-                setIsSearching(false);
-              }}
-              className="px-4 py-2 text-sm text-gray-600 hover:text-orange-500 transition-colors"
+              onClick={resetFilters}
+              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
-              Réinitialiser les filtres
+              🔄 Réinitialiser les filtres
             </button>
           </div>
         </div>
 
-        {/* Results Count */}
-        <div className="mb-6">
-          <p className="text-gray-600 text-center">
-            {filteredRaces.length} course{filteredRaces.length > 1 ? 's' : ''} trouvée{filteredRaces.length > 1 ? 's' : ''}
-          </p>
-        </div>
+        {/* Liste des courses */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {races.map((race) => {
+            const progress = (race.currentParticipants / race.maxParticipants) * 100;
+            
+            return (
+              <div key={race.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                {/* Image de la course */}
+                <div className="h-48 bg-gradient-to-br from-orange-100 to-blue-100 flex items-center justify-center">
+                  <div className="text-6xl">🏃‍♂️</div>
+                </div>
 
-        {/* Races Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredRaces.map((race) => (
-            <div key={race.id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
-                </div>
-                
-                <div className="space-y-3 mb-4">
-                  <div className="flex items-center text-gray-600">
-                    <span className="mr-2">📍</span>
-                    <span>{race.location}</span>
+                {/* Contenu de la course */}
+                <div className="p-6">
+                  <div className="flex items-start justify-between mb-4">
+                    <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                      race.type === 'Route' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                    }`}>
+                      {race.type}
+                    </span>
                   </div>
-                  
-                  <div className="flex items-center text-gray-600">
-                    <span className="mr-2">📅</span>
-                    <span>{formatDate(race.date)}</span>
+
+                  <div className="space-y-2 mb-4">
+                    <p className="text-gray-600 flex items-center">
+                      <span className="mr-2">📍</span>
+                      {race.location}
+                    </p>
+                    <p className="text-gray-600 flex items-center">
+                      <span className="mr-2">📅</span>
+                      {formatDate(race.date)}
+                    </p>
+                    <p className="text-gray-600 flex items-center">
+                      <span className="mr-2">🏁</span>
+                      {race.distance}
+                    </p>
+                    <p className="text-gray-600 flex items-center">
+                      <span className="mr-2">🏃</span>
+                      {race.department}
+                    </p>
                   </div>
-                  
-                  <div className="flex items-center text-gray-600">
-                    <span className="mr-2">🏁</span>
-                    <span>{race.distance}</span>
-                  </div>
-                  
-                  <div className="flex items-center text-gray-600">
-                    <span className="mr-2">🏃</span>
-                    <span>{race.type}</span>
-                  </div>
-                </div>
-                
-                <p className="text-gray-700 text-sm mb-4 line-clamp-3">
-                  {race.description}
-                </p>
-                
-                <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-4 rounded-lg mb-4">
-                  <div className="flex items-center text-orange-700 font-semibold">
-                    <span className="mr-2">🎁</span>
-                    <span className="text-lg">Récompense</span>
-                  </div>
-                  <p className="text-orange-800 font-medium mt-1">
-                    {race.reward}
+
+                  <p className="text-gray-700 text-sm mb-4 line-clamp-3">
+                    {race.description}
                   </p>
-                </div>
-                
-                <div className="flex justify-between items-center mb-4">
-                  <div className="text-sm text-gray-500">
-                    {race.currentParticipants}/{race.maxParticipants} participants
+
+                  {/* Récompense */}
+                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
+                    <h4 className="text-sm font-semibold text-orange-800 mb-1">🎁 Récompense</h4>
+                    <p className="text-sm text-orange-700 font-medium">{race.reward}</p>
                   </div>
-                </div>
-                
-                <div className="flex gap-2">
-                  <a
-                    href={`/auth?raceId=${race.id}`}
-                    className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
-                  >
-                    S&apos;inscrire
-                  </a>
-                  <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                    Détails
-                  </button>
+
+                  {/* Barre de progression */}
+                  <div className="mb-4">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="text-sm font-medium text-gray-700">Progression des inscriptions</span>
+                      <span className="text-sm text-gray-500">{Math.round(progress)}%</span>
+                    </div>
+                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                      <div 
+                        className="bg-orange-600 h-2.5 rounded-full transition-all duration-300" 
+                        style={{ width: `${progress}%` }}
+                      ></div>
+                    </div>
+                    <p className="text-xs text-gray-500 mt-1">
+                      {race.currentParticipants} / {race.maxParticipants} participants
+                    </p>
+                  </div>
+
+                  {/* Boutons d'action */}
+                  <div className="flex gap-2">
+                    <a
+                      href={`/auth?raceId=${race.id}`}
+                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
+                    >
+                      S&apos;inscrire
+                    </a>
+                    <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
+                      Détails
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* No Results */}
-        {filteredRaces.length === 0 && (
+        {/* Message si aucune course trouvée */}
+        {races.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-gray-400 text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucune course trouvée</h3>
-            <p className="text-gray-500">Essayez de modifier vos critères de recherche</p>
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              Aucune course trouvée
+            </h3>
+            <p className="text-gray-600 mb-4">
+              Essayez de modifier vos critères de recherche ou réinitialisez les filtres.
+            </p>
+            <button
+              onClick={resetFilters}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            >
+              Voir toutes les courses
+            </button>
           </div>
         )}
       </div>
