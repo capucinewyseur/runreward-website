@@ -14,7 +14,7 @@ export default function Footer() {
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 
-              Participez à des courses et gagnez des récompenses tout en contribuant à la communauté.
+              Encadrez des courses et gagnez des récompenses tout en vivant l&apos;émotion unique de l&apos;ambiance course.
             </p>
             <div className="flex space-x-4">
               <a href="https://www.instagram.com/run.reward/" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-[#F08040] transition-colors">

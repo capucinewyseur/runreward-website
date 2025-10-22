@@ -135,6 +135,7 @@ function CourseDetailsContent() {
   const searchParams = useSearchParams();
   const [race, setRace] = useState<Race | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     const raceId = searchParams.get('raceId');
@@ -148,10 +149,16 @@ function CourseDetailsContent() {
   }, [searchParams]);
 
   const handleInscription = () => {
+    // Afficher la description avant de rediriger
+    setShowDescription(true);
+    
     // Sauvegarder l'ID de la course pour l'inscription
     if (race) {
       localStorage.setItem('selected-race', JSON.stringify(race));
-      router.push('/inscription/etape-1');
+      // Délai pour permettre à l'utilisateur de voir la description
+      setTimeout(() => {
+        router.push('/inscription/etape-1');
+      }, 2000);
     }
   };
 
@@ -204,7 +211,7 @@ function CourseDetailsContent() {
               {race.name}
             </h1>
             <p className="text-xl md:text-2xl text-orange-100">
-              Détails de la course et inscription bénévole
+              Détails de la course et inscription pour l&apos;encadrement
             </p>
           </div>
         </div>
@@ -264,9 +271,15 @@ function CourseDetailsContent() {
 
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                <p className="text-gray-700 leading-relaxed">
-                  {race.description}
-                </p>
+                {showDescription ? (
+                  <p className="text-gray-700 leading-relaxed">
+                    {race.description}
+                  </p>
+                ) : (
+                  <p className="text-gray-500 italic">
+                    Cliquez sur &quot;Je m&apos;inscris pour l&apos;encadrement&quot; pour voir la description de la course.
+                  </p>
+                )}
               </div>
             </div>
 
@@ -274,7 +287,7 @@ function CourseDetailsContent() {
             <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-6 rounded-lg mb-6">
               <div className="flex items-center text-orange-700 font-semibold mb-3">
                 <span className="mr-2 text-2xl">🎁</span>
-                <span className="text-xl">Récompenses pour les bénévoles</span>
+                <span className="text-xl">Récompenses pour l&apos;encadrement</span>
               </div>
               <p className="text-orange-800 font-medium text-lg">
                 {race.reward}
@@ -284,7 +297,7 @@ function CourseDetailsContent() {
             {/* Progress Bar */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">Inscriptions bénévoles</span>
+                <span className="text-sm font-medium text-gray-700">Inscriptions pour l&apos;encadrement</span>
                 <span className="text-sm text-gray-500">{race.currentParticipants}/{race.maxParticipants}</span>
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3">
@@ -301,7 +314,7 @@ function CourseDetailsContent() {
                 onClick={handleInscription}
                 className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg text-center transition-all duration-200 text-lg"
               >
-                Je m&apos;inscris en tant que bénévole
+                Je m&apos;inscris pour l&apos;encadrement
               </button>
               <button
                 onClick={() => router.push('/courses')}

@@ -47,7 +47,7 @@ export default function ConfirmationPage() {
     setTimeout(() => {
       // Créer le contenu du document
       const documentContent = `
-INSCRIPTION RUNREWARD - CONFIRMATION
+INSCRIPTION RUNREWARD - CONFIRMATION POUR L'ENCADREMENT
 
 Date d'inscription: ${new Date(userData.inscriptionDate).toLocaleDateString('fr-FR')}
 
@@ -66,11 +66,11 @@ INFORMATIONS COMPLÉMENTAIRES:
 - Sexe: ${userData.gender}
 - Pointure: ${userData.shoeSize}
 
-STATUT: ${userData.status === 'completed' ? 'Inscription validée' : 'En attente'}
+STATUT: ${userData.status === 'completed' ? 'Inscription pour l&apos;encadrement validée' : 'En attente'}
 
 ---
 Ce document a été généré automatiquement par RunReward
-Plateforme de bénévolat pour coureurs récompensés
+Plateforme d'encadrement pour coureurs récompensés
       `;
 
       // Créer et télécharger le fichier
@@ -110,10 +110,10 @@ Plateforme de bénévolat pour coureurs récompensés
             </svg>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mt-4 mb-2">
-            Merci pour ton inscription ! 🎉
+            Merci pour ton inscription pour l&apos;encadrement ! 🎉
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto">
-            L&apos;organisateur de la course vous recontactera directement afin de valider votre inscription avec toutes les informations nécessaires.
+            L&apos;organisateur de la course vous recontactera directement afin de valider votre inscription pour l&apos;encadrement avec toutes les informations nécessaires.
           </p>
         </div>
 
@@ -132,8 +132,8 @@ Plateforme de bénévolat pour coureurs récompensés
               <div className="mt-2 text-sm text-blue-700">
                 <ul className="list-disc list-inside space-y-1">
                   <li>Vérifiez votre boîte email pour recevoir un accusé de réception</li>
-                  <li>L&apos;organisateur vous contactera sous peu pour finaliser votre inscription</li>
-                  <li>Préparez-vous à vivre une expérience unique de bénévolat sportif !</li>
+                  <li>L&apos;organisateur vous contactera sous peu pour finaliser votre inscription pour l&apos;encadrement</li>
+                  <li>Préparez-vous à vivre une expérience unique d&apos;encadrement sportif !</li>
                 </ul>
               </div>
             </div>

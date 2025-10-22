@@ -10,6 +10,7 @@ export default function CoursesPage() {
   const [dateFilter, setDateFilter] = useState('');
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     // Charger les courses depuis la base de données
@@ -60,6 +61,18 @@ export default function CoursesPage() {
     setRaces(courseDB.getAllCourses());
   };
 
+  const toggleDescription = (raceId: number) => {
+    setExpandedDescriptions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(raceId)) {
+        newSet.delete(raceId);
+      } else {
+        newSet.add(raceId);
+      }
+      return newSet;
+    });
+  };
+
   // Obtenir la liste unique des départements
   const departments = [...new Set(courseDB.getAllCourses().map(race => race.department))].sort();
 
@@ -83,7 +96,7 @@ export default function CoursesPage() {
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Découvrez toutes les courses disponibles et trouvez celle qui vous correspond. 
-            Participez en tant que bénévole et gagnez des récompenses !
+            Inscrivez-vous pour l&apos;encadrement de la course en tant que bénévole et gagnez des récompenses !
           </p>
         </div>
 
@@ -209,9 +222,15 @@ export default function CoursesPage() {
                     </p>
                   </div>
 
-                  <p className="text-gray-700 text-sm mb-4 line-clamp-3">
-                    {race.description}
-                  </p>
+                  {/* Description - Affichée seulement après clic sur S'inscrire */}
+                  {expandedDescriptions.has(race.id) && (
+                    <div className="mb-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                      <h4 className="text-sm font-semibold text-blue-800 mb-2">Description</h4>
+                      <p className="text-gray-700 text-sm leading-relaxed">
+                        {race.description}
+                      </p>
+                    </div>
+                  )}
 
                   {/* Récompense - Version améliorée */}
                   <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
@@ -224,14 +243,31 @@ export default function CoursesPage() {
                     </p>
                   </div>
 
-                  {/* Bouton d'inscription uniquement */}
+                  {/* Bouton d'inscription */}
                   <div className="w-full">
-                    <a
-                      href={`/auth?raceId=${race.id}`}
-                      className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
-                    >
-                      S&apos;inscrire
-                    </a>
+                    {!expandedDescriptions.has(race.id) ? (
+                      <button
+                        onClick={() => toggleDescription(race.id)}
+                        className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+                      >
+                        S&apos;inscrire comme bénévole
+                      </button>
+                    ) : (
+                      <div className="space-y-3">
+                        <a
+                          href={`/auth?raceId=${race.id}`}
+                          className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg block"
+                        >
+                          Confirmer l&apos;inscription
+                        </a>
+                        <button
+                          onClick={() => toggleDescription(race.id)}
+                          className="w-full bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                        >
+                          Masquer la description
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

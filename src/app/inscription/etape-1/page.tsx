@@ -38,7 +38,7 @@ export default function InscriptionEtape1() {
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <div className="text-center">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Inscription - Étape 1
+            Inscription pour l&apos;encadrement - Étape 1
           </h1>
           <p className="text-gray-600">
             Informations personnelles de base
