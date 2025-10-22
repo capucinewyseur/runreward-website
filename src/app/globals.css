@@ -3,8 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary-orange: #f97316;
-  --primary-blue: #1e40af; /* Bleu plus foncé */
+  --primary-orange: #F08040; /* Orange vibrant du logo */
+  --primary-blue: #6A70F0; /* Bleu du logo */
   --secondary-orange: #fed7aa;
   --secondary-blue: #dbeafe;
 }
@@ -26,10 +26,10 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-family: var(--font-poppins), 'Poppins', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
-  font-weight: 600; /* Police encore plus grasse */
-  letter-spacing: -0.02em; /* Espacement encore plus serré pour un look plus arrondi */
+  font-weight: 500; /* Police plus épaisse */
+  letter-spacing: -0.01em; /* Espacement des lettres plus serré pour un look moderne */
 }
 
 /* Custom scrollbar */
@@ -47,7 +47,7 @@ body {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #ea580c, #1d4ed8);
+  background: linear-gradient(to bottom, #e06d2a, #5a60d4);
 }
 
 /* Smooth transitions */
@@ -97,23 +97,28 @@ body {
   background: linear-gradient(135deg, var(--primary-orange), var(--primary-blue));
   color: white;
   padding: 12px 24px;
-  border-radius: 8px;
+  border-radius: 12px; /* Plus arrondi */
   font-weight: 600;
   border: none;
   cursor: pointer;
-  box-shadow: 0 4px 15px rgba(249, 115, 22, 0.3);
+  box-shadow: 0 4px 15px rgba(240, 128, 64, 0.3);
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+  box-shadow: 0 6px 20px rgba(240, 128, 64, 0.4);
 }
 
 /* RunReward brand styling */
 .runreward-title {
   font-weight: 800; /* Très gras */
-  letter-spacing: -0.03em; /* Très serré pour un look arrondi */
-  font-family: var(--font-inter), 'Inter', sans-serif;
+  letter-spacing: -0.02em; /* Très serré pour un look arrondi */
+  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  background: linear-gradient(135deg, var(--primary-blue), var(--primary-orange));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Card hover effects */
