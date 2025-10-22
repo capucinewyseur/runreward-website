@@ -239,8 +239,6 @@ Plateforme de bénévolat pour coureurs récompensés
       distance: course?.distance || '',
       reward: course?.reward || '',
       description: course?.description || '',
-      maxParticipants: course?.maxParticipants || 1000,
-      currentParticipants: course?.currentParticipants || 0,
       type: course?.type || 'Route' as 'Route' | 'Trail',
       image: course?.image || '/images/default-course.jpg',
       coordinates: {
@@ -269,11 +267,6 @@ Plateforme de bénévolat pour coureurs récompensés
             ...prev.coordinates,
             [name]: parseFloat(value) || 0
           }
-        }));
-      } else if (name === 'maxParticipants' || name === 'currentParticipants') {
-        setFormData(prev => ({
-          ...prev,
-          [name]: parseInt(value) || 0
         }));
       } else {
         setFormData(prev => ({
@@ -386,37 +379,6 @@ Plateforme de bénévolat pour coureurs récompensés
                   </select>
                 </div>
 
-                {/* Participants max */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Participants maximum *
-                  </label>
-                  <input
-                    type="number"
-                    name="maxParticipants"
-                    value={formData.maxParticipants}
-                    onChange={handleChange}
-                    required
-                    min="1"
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
-
-                {/* Participants actuels */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Participants actuels
-                  </label>
-                  <input
-                    type="number"
-                    name="currentParticipants"
-                    value={formData.currentParticipants}
-                    onChange={handleChange}
-                    min="0"
-                    max={formData.maxParticipants}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
-                </div>
 
                 {/* Image */}
                 <div className="md:col-span-2">
@@ -746,7 +708,6 @@ Plateforme de bénévolat pour coureurs récompensés
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Lieu</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Participants</th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
@@ -772,9 +733,6 @@ Plateforme de bénévolat pour coureurs récompensés
                       }`}>
                         {course.type}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                      {course.currentParticipants} / {course.maxParticipants}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                       <div className="flex space-x-2">
