@@ -3,138 +3,12 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { userDB } from '@/lib/userDatabase';
-
-interface Race {
-  id: number;
-  name: string;
-  location: string;
-  department: string;
-  date: string;
-  distance: string;
-  reward: string;
-  description: string;
-  maxParticipants: number;
-  currentParticipants: number;
-  type: 'Route' | 'Trail';
-  image: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-}
-
-const races: Race[] = [
-  {
-    id: 1,
-    name: "Course du Printemps",
-    location: "Parc de la Villette, Paris",
-    department: "Paris (75)",
-    date: "2024-04-15",
-    distance: "10 km",
-    reward: "100€ + équipement de course",
-    description: "Course matinale dans le magnifique parc de la Villette. Parfait pour débuter la saison de course.",
-    maxParticipants: 200,
-    currentParticipants: 156,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8966, lng: 2.3833 }
-  },
-  {
-    id: 2,
-    name: "Trail des Alpes",
-    location: "Chamonix, Haute-Savoie",
-    department: "Haute-Savoie (74)",
-    date: "2024-05-20",
-    distance: "21 km",
-    reward: "150€ + équipement technique",
-    description: "Trail en montagne avec vue panoramique sur le Mont-Blanc. Défi pour les coureurs expérimentés.",
-    maxParticipants: 100,
-    currentParticipants: 89,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.9237, lng: 6.8694 }
-  },
-  {
-    id: 3,
-    name: "Course de la Solidarité",
-    location: "Parc des Buttes-Chaumont, Paris",
-    department: "Paris (75)",
-    date: "2024-06-10",
-    distance: "5 km",
-    reward: "50€ + tee-shirt",
-    description: "Course caritative pour soutenir les associations locales. Ouverte à tous les niveaux.",
-    maxParticipants: 300,
-    currentParticipants: 234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8833, lng: 2.3833 }
-  },
-  {
-    id: 4,
-    name: "Marathon de Lyon",
-    location: "Lyon, Rhône",
-    department: "Rhône (69)",
-    date: "2024-09-15",
-    distance: "42.2 km",
-    reward: "200€ + médaille + équipement",
-    description: "Marathon urbain traversant les plus beaux quartiers de Lyon. Événement majeur de la région.",
-    maxParticipants: 5000,
-    currentParticipants: 4234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.7640, lng: 4.8357 }
-  },
-  {
-    id: 5,
-    name: "Trail de Fontainebleau",
-    location: "Forêt de Fontainebleau, Seine-et-Marne",
-    department: "Seine-et-Marne (77)",
-    date: "2024-07-22",
-    distance: "15 km",
-    reward: "120€ + casquette + gourde",
-    description: "Trail dans la magnifique forêt de Fontainebleau. Parcours varié entre rochers et sentiers forestiers.",
-    maxParticipants: 150,
-    currentParticipants: 98,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.4047, lng: 2.7012 }
-  },
-  {
-    id: 6,
-    name: "Course Nocturne de Nice",
-    location: "Promenade des Anglais, Nice",
-    department: "Alpes-Maritimes (06)",
-    date: "2024-08-05",
-    distance: "10 km",
-    reward: "80€ + maillot technique",
-    description: "Course nocturne le long de la célèbre Promenade des Anglais. Ambiance festive garantie.",
-    maxParticipants: 800,
-    currentParticipants: 567,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 43.7102, lng: 7.2620 }
-  },
-  {
-    id: 7,
-    name: "Generali Genève Marathon",
-    location: "Genève, Suisse",
-    department: "Suisse",
-    date: "2024-12-15",
-    distance: "42.2 km",
-    reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
-    description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
-    maxParticipants: 1200,
-    currentParticipants: 856,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 46.2044, lng: 6.1432 }
-  }
-];
+import { courseDB, Course } from '@/lib/courseDatabase';
 
 function InscriptionCompleteContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [race, setRace] = useState<Race | null>(null);
+  const [race, setRace] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     address: '',
@@ -147,7 +21,7 @@ function InscriptionCompleteContent() {
 
   useEffect(() => {
     const raceId = searchParams.get('raceId');
-    
+
     // Attendre un peu pour que la base de données se charge
     const checkUser = () => {
       const currentUser = userDB.getCurrentUser();
@@ -162,7 +36,7 @@ function InscriptionCompleteContent() {
       }
 
       if (raceId) {
-        const foundRace = races.find(r => r.id === parseInt(raceId));
+        const foundRace = courseDB.getCourseById(parseInt(raceId));
         if (foundRace) {
           setRace(foundRace);
         }
@@ -172,7 +46,7 @@ function InscriptionCompleteContent() {
     // Vérifier immédiatement et après un court délai
     checkUser();
     const timeout = setTimeout(checkUser, 100);
-    
+
     return () => clearTimeout(timeout);
   }, [searchParams, router]);
 
@@ -184,7 +58,6 @@ function InscriptionCompleteContent() {
     e.preventDefault();
     setIsLoading(true);
 
-    // Récupérer l'utilisateur actuel
     const currentUser = userDB.getCurrentUser();
     if (!currentUser) {
       alert('Erreur: Utilisateur non connecté. Redirection vers la page de connexion...');
@@ -193,7 +66,6 @@ function InscriptionCompleteContent() {
       return;
     }
 
-    // Mettre à jour les informations de l'utilisateur
     const updatedUser = userDB.updateUser(currentUser.id, {
       address: formData.address,
       city: formData.city,
@@ -204,23 +76,13 @@ function InscriptionCompleteContent() {
     });
 
     if (updatedUser && race) {
-      // Finaliser l'inscription avec la course
-      userDB.completeRegistration(currentUser.id, {
-        id: race.id,
-        name: race.name,
-        location: race.location,
-        date: race.date,
-        distance: race.distance,
-        reward: race.reward,
-        type: race.type
-      });
-
+      userDB.completeRegistration(currentUser.id, race);
       setTimeout(() => {
         setIsLoading(false);
         router.push('/inscription/confirmation');
       }, 500);
     } else {
-      alert('Erreur lors de la mise à jour des informations.');
+      alert('Erreur lors de la mise à jour des informations ou course non sélectionnée.');
       setIsLoading(false);
     }
   };
@@ -231,9 +93,20 @@ function InscriptionCompleteContent() {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F08040] mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement des détails de la course...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!race) {
     return (
@@ -294,34 +167,22 @@ function InscriptionCompleteContent() {
                 </div>
               </div>
               <div className="flex items-center text-gray-700">
-                <span className="mr-3 text-[#F08040]">🏃</span>
+                <span className="mr-3 text-[#F08040]">🗺️</span>
                 <div>
-                  <span className="font-medium">Type :</span> {race.type}
+                  <span className="font-medium">Département :</span> {race.department}
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-[#F08040]/5 to-[#6A70F0]/5 p-4 rounded-lg mb-6">
-              <div className="flex items-center text-[#F08040]/80 font-semibold mb-3">
-                <span className="mr-2 text-2xl">🎁</span>
-                <span className="text-xl">Récompenses pour les bénévoles</span>
+            {/* Récompense - Version améliorée */}
+            <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+              <div className="flex items-center mb-2">
+                <span className="text-2xl mr-3">🎁</span>
+                <h3 className="text-lg font-bold text-white">Récompense</h3>
               </div>
-              <p className="text-[#F08040] font-medium text-lg">
+              <p className="text-white font-semibold text-base leading-relaxed">
                 {race.reward}
               </p>
-            </div>
-
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">Inscriptions bénévoles</span>
-                <span className="text-sm text-gray-500">{race.currentParticipants}/{race.maxParticipants}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded-full h-3">
-                <div 
-                  className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] h-3 rounded-full transition-all duration-300"
-                  style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
-                ></div>
-              </div>
             </div>
 
             <p className="text-gray-700 leading-relaxed">
@@ -331,42 +192,39 @@ function InscriptionCompleteContent() {
 
           {/* Registration Form */}
           <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-6">Informations personnelles</h2>
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Vos informations</h2>
             
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Adresse */}
+              {/* Address */}
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-                  Adresse
+                  Adresse complète
                 </label>
                 <input
-                  id="address"
-                  name="address"
                   type="text"
-                  autoComplete="street-address"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
-                  placeholder="123 Rue de la Paix"
+                  name="address"
+                  id="address"
                   value={formData.address}
                   onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* City and Postal Code */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
                     Ville
                   </label>
                   <input
-                    id="city"
-                    name="city"
                     type="text"
-                    autoComplete="address-level2"
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
-                    placeholder="Paris"
+                    name="city"
+                    id="city"
                     value={formData.city}
                     onChange={handleChange}
+                    required
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
                   />
                 </div>
                 <div>
@@ -374,47 +232,45 @@ function InscriptionCompleteContent() {
                     Code postal
                   </label>
                   <input
-                    id="postalCode"
-                    name="postalCode"
                     type="text"
-                    autoComplete="postal-code"
-                    required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
-                    placeholder="75001"
+                    name="postalCode"
+                    id="postalCode"
                     value={formData.postalCode}
                     onChange={handleChange}
+                    required
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
                   />
                 </div>
               </div>
 
-              {/* Date de naissance */}
+              {/* Birth Date */}
               <div>
                 <label htmlFor="birthDate" className="block text-sm font-medium text-gray-700 mb-2">
                   Date de naissance
                 </label>
                 <input
-                  id="birthDate"
-                  name="birthDate"
                   type="date"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
+                  name="birthDate"
+                  id="birthDate"
                   value={formData.birthDate}
                   onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
                 />
               </div>
 
-              {/* Sexe */}
+              {/* Gender */}
               <div>
                 <label htmlFor="gender" className="block text-sm font-medium text-gray-700 mb-2">
                   Sexe
                 </label>
                 <select
-                  id="gender"
                   name="gender"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
+                  id="gender"
                   value={formData.gender}
                   onChange={handleChange}
+                  required
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
                 >
                   <option value="">Sélectionner</option>
                   <option value="homme">Homme</option>
@@ -423,24 +279,22 @@ function InscriptionCompleteContent() {
                 </select>
               </div>
 
-              {/* Pointure */}
+              {/* Shoe Size */}
               <div>
                 <label htmlFor="shoeSize" className="block text-sm font-medium text-gray-700 mb-2">
                   Pointure
                 </label>
-                <select
-                  id="shoeSize"
+                <input
+                  type="number"
                   name="shoeSize"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
+                  id="shoeSize"
                   value={formData.shoeSize}
                   onChange={handleChange}
-                >
-                  <option value="">Sélectionner</option>
-                  {Array.from({ length: 20 }, (_, i) => 35 + i).map((size) => (
-                    <option key={size} value={`Taille ${size}`}>Taille {size}</option>
-                  ))}
-                </select>
+                  required
+                  min="20"
+                  max="50"
+                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040] focus:border-[#F08040]"
+                />
               </div>
 
               {/* Submit Button */}
@@ -448,19 +302,9 @@ function InscriptionCompleteContent() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-semibold py-3 px-6 rounded-lg text-center transition-all duration-200 text-lg disabled:bg-gray-400"
+                  className="w-full bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none"
                 >
-                  {isLoading ? (
-                    <div className="flex items-center justify-center">
-                      <svg className="animate-spin h-5 w-5 text-white mr-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      Traitement...
-                    </div>
-                  ) : (
-                    'Je m\'inscris en tant que bénévole'
-                  )}
+                  {isLoading ? 'Inscription en cours...' : 'Je m\'inscris en tant que bénévole'}
                 </button>
               </div>
             </form>

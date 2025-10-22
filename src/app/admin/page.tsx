@@ -419,17 +419,36 @@ Plateforme de bénévolat pour coureurs récompensés
                 </div>
 
                 {/* Image */}
-                <div>
+                <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    URL de l&apos;image
+                    📸 Image de la course
                   </label>
-                  <input
-                    type="url"
-                    name="image"
-                    value={formData.image}
-                    onChange={handleChange}
-                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
-                  />
+                  <div className="space-y-3">
+                    <input
+                      type="url"
+                      name="image"
+                      value={formData.image}
+                      onChange={handleChange}
+                      placeholder="https://exemple.com/image.jpg"
+                      className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
+                    />
+                    <div className="text-xs text-gray-500">
+                      💡 <strong>Conseil :</strong> Utilisez des URLs d&apos;images (ex: Unsplash, Pexels) ou hébergez votre image sur un service comme Imgur
+                    </div>
+                    {formData.image && (
+                      <div className="mt-2">
+                        <p className="text-sm text-gray-600 mb-2">Aperçu :</p>
+                        <img 
+                          src={formData.image} 
+                          alt="Aperçu de l'image" 
+                          className="w-full h-32 object-cover rounded-lg border"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 {/* Coordonnées */}

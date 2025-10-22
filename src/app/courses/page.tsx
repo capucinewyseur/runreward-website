@@ -172,8 +172,6 @@ export default function CoursesPage() {
         {/* Liste des courses */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {races.map((race) => {
-            const progress = (race.currentParticipants / race.maxParticipants) * 100;
-            
             return (
               <div key={race.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 {/* Image de la course */}
@@ -206,7 +204,7 @@ export default function CoursesPage() {
                       {race.distance}
                     </p>
                     <p className="text-gray-600 flex items-center">
-                      <span className="mr-2">🏃</span>
+                      <span className="mr-2">🗺️</span>
                       {race.department}
                     </p>
                   </div>
@@ -215,40 +213,25 @@ export default function CoursesPage() {
                     {race.description}
                   </p>
 
-                  {/* Récompense */}
-                  <div className="bg-[#F08040]/5 border-[#F08040]/20 rounded-lg p-3 mb-4">
-                    <h4 className="text-sm font-semibold text-[#F08040] mb-1">🎁 Récompense</h4>
-                    <p className="text-sm text-[#F08040]/80 font-medium">{race.reward}</p>
-                  </div>
-
-                  {/* Barre de progression */}
-                  <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="text-sm font-medium text-gray-700">Progression des inscriptions</span>
-                      <span className="text-sm text-gray-500">{Math.round(progress)}%</span>
+                  {/* Récompense - Version améliorée */}
+                  <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+                    <div className="flex items-center mb-2">
+                      <span className="text-2xl mr-3">🎁</span>
+                      <h4 className="text-lg font-bold text-white">Récompense</h4>
                     </div>
-                    <div className="w-full bg-gray-200 rounded-full h-2.5">
-                      <div 
-                        className="bg-[#F08040] h-2.5 rounded-full transition-all duration-300" 
-                        style={{ width: `${progress}%` }}
-                      ></div>
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {race.currentParticipants} / {race.maxParticipants} participants
+                    <p className="text-white font-semibold text-base leading-relaxed">
+                      {race.reward}
                     </p>
                   </div>
 
-                  {/* Boutons d'action */}
-                  <div className="flex gap-2">
+                  {/* Bouton d'inscription uniquement */}
+                  <div className="w-full">
                     <a
                       href={`/auth?raceId=${race.id}`}
-                      className="flex-1 bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
+                      className="w-full bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-bold py-3 px-6 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                     >
                       S&apos;inscrire
                     </a>
-                    <button className="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition-colors duration-200">
-                      Détails
-                    </button>
                   </div>
                 </div>
               </div>
