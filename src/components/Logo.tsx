@@ -15,13 +15,13 @@ export default function Logo({ size = 'md', className = '' }: LogoProps) {
 
   return (
     <div className={`font-black ${sizeClasses[size]} ${className} flex items-center relative`}>
-      {/* R orange (arrière-plan) avec décalage */}
+      {/* R orange (arrière-plan) */}
       <span 
         className="text-[#F08040] transform hover:scale-110 transition-transform duration-200 relative"
         style={{ 
           fontStyle: 'italic',
-          transform: 'skew(-8deg) translateX(4px) translateY(2px)',
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'
+          transform: 'skew(-5deg) translateX(3px) translateY(2px)',
+          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)'
         }}
       >
         R
@@ -31,8 +31,8 @@ export default function Logo({ size = 'md', className = '' }: LogoProps) {
         className="text-[#6A70F0] transform hover:scale-110 transition-transform duration-200 relative z-10"
         style={{ 
           fontStyle: 'italic',
-          transform: 'skew(-8deg) translateX(-4px)',
-          textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)'
+          transform: 'skew(-5deg) translateX(-3px)',
+          textShadow: '1px 1px 2px rgba(0, 0, 0, 0.1)'
         }}
       >
         R
