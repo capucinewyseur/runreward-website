@@ -100,7 +100,7 @@ export default function AuthPage() {
             RunReward
           </h1>
           <p className="text-gray-600">
-            Plateforme de bénévolat pour coureurs récompensés
+            Encadrez des courses en tant que bénévole et gagnez des récompenses
           </p>
         </div>
       </div>
