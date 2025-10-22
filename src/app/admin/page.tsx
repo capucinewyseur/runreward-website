@@ -661,7 +661,7 @@ Plateforme de bénévolat pour coureurs récompensés
         {/* Liste de tous les utilisateurs inscrits */}
         <div className="bg-white shadow rounded-lg p-6 mb-8">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-lg font-medium text-gray-900">Tous les utilisateurs inscrits</h2>
+            <h2 className="text-lg font-medium text-gray-900">Tous les utilisateurs inscrits pour l&apos;encadrement</h2>
             <div className="flex space-x-3">
               <button
                 onClick={generateAllUsersDocument}
