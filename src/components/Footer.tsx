@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Logo from './Logo';
 
 export default function Footer() {
   return (
@@ -8,8 +9,8 @@ export default function Footer() {
           {/* Logo et description */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <span className="text-2xl font-bold text-orange-500">Run</span>
-              <span className="text-2xl font-bold text-blue-400">Reward</span>
+              <Logo size="md" className="mr-3" />
+              <span className="text-xl runreward-title text-white">RunReward</span>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 

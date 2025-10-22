@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import Logo from '@/components/Logo';
 
 export default function Home() {
   return (
@@ -8,12 +7,9 @@ export default function Home() {
       <section className="bg-gradient-to-br from-orange-50 to-blue-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <div className="flex items-center justify-center mb-6">
-              <Logo size="xl" className="mr-4" />
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
-                RunReward
-              </h1>
-            </div>
+            <h1 className="text-4xl md:text-6xl runreward-title text-gray-900 mb-6">
+              RunReward
+            </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 
               Participez à des courses et gagnez des récompenses tout en contribuant à la communauté.

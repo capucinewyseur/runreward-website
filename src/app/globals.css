@@ -28,8 +28,8 @@ body {
   color: var(--foreground);
   font-family: var(--font-inter), 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
-  font-weight: 500; /* Police plus épaisse */
-  letter-spacing: -0.01em; /* Espacement des lettres plus serré pour un look moderne */
+  font-weight: 600; /* Police encore plus grasse */
+  letter-spacing: -0.02em; /* Espacement encore plus serré pour un look plus arrondi */
 }
 
 /* Custom scrollbar */
@@ -107,6 +107,13 @@ body {
 .btn-primary:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(249, 115, 22, 0.4);
+}
+
+/* RunReward brand styling */
+.runreward-title {
+  font-weight: 800; /* Très gras */
+  letter-spacing: -0.03em; /* Très serré pour un look arrondi */
+  font-family: var(--font-inter), 'Inter', sans-serif;
 }
 
 /* Card hover effects */

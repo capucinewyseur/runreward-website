@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import Logo from './Logo';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,8 +12,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <Logo size="md" className="mr-2" />
-              <span className="text-xl font-semibold text-gray-800">RunReward</span>
+              <span className="text-2xl runreward-title text-gray-800">RunReward</span>
             </Link>
           </div>
           
