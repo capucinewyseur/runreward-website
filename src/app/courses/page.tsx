@@ -228,7 +228,7 @@ export default function CoursesPage() {
                   <div className="w-full">
                     <a
                       href={`/auth?raceId=${race.id}`}
-                      className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-4 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+                      className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
                     >
                       S&apos;inscrire
                     </a>

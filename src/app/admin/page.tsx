@@ -658,6 +658,106 @@ Plateforme de bénévolat pour coureurs récompensés
           </div>
         </div>
 
+        {/* Liste de tous les utilisateurs inscrits */}
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-medium text-gray-900">Tous les utilisateurs inscrits</h2>
+            <div className="flex space-x-3">
+              <button
+                onClick={generateReport}
+                disabled={isGenerating}
+                className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:bg-gray-400"
+              >
+                {isGenerating ? 'Génération...' : '📄 Rapport complet'}
+              </button>
+              <button
+                onClick={generateCSV}
+                className="bg-[#6A70F0] hover:bg-[#5a60d4] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+              >
+                📊 Export CSV
+              </button>
+            </div>
+          </div>
+          
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Utilisateur</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Adresse</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date inscription</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statut</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Course sélectionnée</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {allUsers.map((user) => (
+                  <tr key={user.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-10 w-10">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-r from-[#F08040] to-[#6A70F0] flex items-center justify-center">
+                            <span className="text-white font-bold text-sm">
+                              {user.firstName.charAt(0)}{user.lastName.charAt(0)}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">
+                            {user.firstName} {user.lastName}
+                          </div>
+                          <div className="text-sm text-gray-500">
+                            {user.gender} • Pointure {user.shoeSize}
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      {user.email}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {user.address ? (
+                        <div>
+                          <div>{user.address}</div>
+                          <div>{user.postalCode} {user.city}</div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Non renseignée</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(user.inscriptionDate).toLocaleDateString('fr-FR')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                        user.status === 'completed' 
+                          ? 'bg-green-100 text-green-800' 
+                          : user.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-800'
+                          : 'bg-gray-100 text-gray-800'
+                      }`}>
+                        {user.status === 'completed' ? 'Complété' : 
+                         user.status === 'pending' ? 'En cours' : 'Actif'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {user.selectedRace ? (
+                        <div>
+                          <div className="font-medium text-gray-900">{user.selectedRace.name}</div>
+                          <div className="text-xs text-gray-500">{user.selectedRace.location}</div>
+                        </div>
+                      ) : (
+                        <span className="text-gray-400">Aucune course</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
         {/* Course Statistics */}
         <div className="bg-white shadow rounded-lg p-6 mb-8">
           <h2 className="text-lg font-medium text-gray-900 mb-4">Statistiques par course</h2>

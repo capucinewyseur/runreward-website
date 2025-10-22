@@ -22,9 +22,9 @@ export default function ProfilePage() {
   }, [router]);
 
   const handleLogout = () => {
-    // Supprimer l'utilisateur de la session
-    localStorage.removeItem('currentUser');
-    router.push('/');
+    // Utiliser la méthode logout de la base de données
+    userDB.logout();
+    router.push('/auth');
   };
 
   const formatDate = (dateString: string) => {
