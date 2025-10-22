@@ -4,7 +4,7 @@
   --background: #ffffff;
   --foreground: #171717;
   --primary-orange: #f97316;
-  --primary-blue: #2563eb;
+  --primary-blue: #1e40af; /* Bleu plus foncé */
   --secondary-orange: #fed7aa;
   --secondary-blue: #dbeafe;
 }
@@ -26,8 +26,10 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter), 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
+  font-weight: 500; /* Police plus épaisse */
+  letter-spacing: -0.01em; /* Espacement des lettres plus serré pour un look moderne */
 }
 
 /* Custom scrollbar */
