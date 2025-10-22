@@ -49,10 +49,10 @@ export default function ContactPage() {
                 Pour toutes vos questions, envoyez-nous un email
               </p>
               <a 
-                href="mailto:contact@runreward.fr"
+                href="mailto:capucine.runreward@gmail.com"
                 className="inline-block bg-[#F08040] hover:bg-[#e06d2a] text-white font-semibold py-3 px-6 rounded-lg transition-colors"
               >
-                contact@runreward.fr
+                capucine.runreward@gmail.com
               </a>
             </div>
 
