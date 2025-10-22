@@ -17,13 +17,13 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/courses" 
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+                className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
               >
                 Voir les courses
               </Link>
               <Link 
                 href="/about" 
-                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+                className="bg-[#6A70F0] hover:bg-[#5a60d4] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
               >
                 En savoir plus
               </Link>
@@ -46,8 +46,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="text-center p-6">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#F08040]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
               </div>
@@ -58,8 +58,8 @@ export default function Home() {
             </div>
 
             <div className="text-center p-6">
-              <div className="bg-blue-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#6A70F0]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#6A70F0]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
@@ -70,8 +70,8 @@ export default function Home() {
             </div>
 
             <div className="text-center p-6">
-              <div className="bg-orange-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
-                <svg className="w-8 h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div className="bg-[#F08040]/10 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                 </svg>
               </div>
@@ -85,24 +85,24 @@ export default function Home() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-20 bg-gradient-to-r from-orange-500 to-blue-600">
+      <section className="py-20 bg-gradient-to-r from-[#F08040] to-[#6A70F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
             <div>
               <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-orange-100">Coureurs actifs</div>
+              <div className="text-white/90">Coureurs actifs</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">50+</div>
-              <div className="text-orange-100">Courses organisées</div>
+              <div className="text-white/90">Courses organisées</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">1000+</div>
-              <div className="text-orange-100">Récompenses distribuées</div>
+              <div className="text-white/90">Récompenses distribuées</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">25</div>
-              <div className="text-orange-100">Villes partenaires</div>
+              <div className="text-white/90">Villes partenaires</div>
             </div>
           </div>
         </div>
@@ -119,7 +119,7 @@ export default function Home() {
           </p>
           <Link 
             href="/courses" 
-            className="inline-block bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+            className="inline-block bg-[#F08040] hover:bg-[#e06d2a] text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
           >
             Découvrir les courses disponibles
           </Link>

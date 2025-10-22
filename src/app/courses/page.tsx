@@ -102,7 +102,7 @@ export default function CoursesPage() {
                 placeholder="Nom, lieu, description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
 
@@ -116,7 +116,7 @@ export default function CoursesPage() {
                 placeholder="Ville, région..."
                 value={locationFilter}
                 onChange={(e) => setLocationFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
 
@@ -128,7 +128,7 @@ export default function CoursesPage() {
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               >
                 <option value="">Tous les départements</option>
                 {departments.map(dept => (
@@ -146,7 +146,7 @@ export default function CoursesPage() {
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function CoursesPage() {
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="flex-1 bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isSearching ? 'Recherche en cours...' : '🔍 Rechercher les courses'}
             </button>
@@ -177,7 +177,7 @@ export default function CoursesPage() {
             return (
               <div key={race.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 {/* Image de la course */}
-                <div className="h-48 bg-gradient-to-br from-orange-100 to-blue-100 flex items-center justify-center">
+                <div className="h-48 bg-gradient-to-br from-[#F08040]/10 to-[#6A70F0]/10 flex items-center justify-center">
                   <div className="text-6xl">🏃‍♂️</div>
                 </div>
 
@@ -186,7 +186,7 @@ export default function CoursesPage() {
                   <div className="flex items-start justify-between mb-4">
                     <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      race.type === 'Route' ? 'bg-blue-100 text-blue-800' : 'bg-green-100 text-green-800'
+                      race.type === 'Route' ? 'bg-[#6A70F0]/10 text-[#6A70F0]' : 'bg-green-100 text-green-800'
                     }`}>
                       {race.type}
                     </span>
@@ -216,9 +216,9 @@ export default function CoursesPage() {
                   </p>
 
                   {/* Récompense */}
-                  <div className="bg-orange-50 border border-orange-200 rounded-lg p-3 mb-4">
-                    <h4 className="text-sm font-semibold text-orange-800 mb-1">🎁 Récompense</h4>
-                    <p className="text-sm text-orange-700 font-medium">{race.reward}</p>
+                  <div className="bg-[#F08040]/5 border-[#F08040]/20 rounded-lg p-3 mb-4">
+                    <h4 className="text-sm font-semibold text-[#F08040] mb-1">🎁 Récompense</h4>
+                    <p className="text-sm text-[#F08040]/80 font-medium">{race.reward}</p>
                   </div>
 
                   {/* Barre de progression */}
@@ -229,7 +229,7 @@ export default function CoursesPage() {
                     </div>
                     <div className="w-full bg-gray-200 rounded-full h-2.5">
                       <div 
-                        className="bg-orange-600 h-2.5 rounded-full transition-all duration-300" 
+                        className="bg-[#F08040] h-2.5 rounded-full transition-all duration-300" 
                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
@@ -242,7 +242,7 @@ export default function CoursesPage() {
                   <div className="flex gap-2">
                     <a
                       href={`/auth?raceId=${race.id}`}
-                      className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
+                      className="flex-1 bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-semibold py-2 px-4 rounded-lg text-center transition-all duration-200"
                     >
                       S&apos;inscrire
                     </a>
@@ -268,7 +268,7 @@ export default function CoursesPage() {
             </p>
             <button
               onClick={resetFilters}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Voir toutes les courses
             </button>

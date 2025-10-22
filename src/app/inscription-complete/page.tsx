@@ -243,7 +243,7 @@ function InscriptionCompleteContent() {
           <p className="text-gray-600 mb-6">La course demandée n&apos;existe pas.</p>
           <button
             onClick={() => router.push('/courses')}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            className="bg-[#F08040] hover:bg-[#e06d2a] text-white font-semibold py-2 px-4 rounded-lg transition-colors"
           >
             Retour aux courses
           </button>
@@ -255,13 +255,13 @@ function InscriptionCompleteContent() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-gradient-to-r from-orange-500 to-blue-600 py-16">
+      <div className="bg-gradient-to-r from-[#F08040] to-[#6A70F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-white">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Inscription bénévole
             </h1>
-            <p className="text-xl md:text-2xl text-orange-100">
+            <p className="text-xl md:text-2xl text-white/90">
               {race.name}
             </p>
           </div>
@@ -276,37 +276,37 @@ function InscriptionCompleteContent() {
             
             <div className="space-y-4 mb-6">
               <div className="flex items-center text-gray-700">
-                <span className="mr-3 text-orange-500">📍</span>
+                <span className="mr-3 text-[#F08040]">📍</span>
                 <div>
                   <span className="font-medium">Lieu :</span> {race.location}
                 </div>
               </div>
               <div className="flex items-center text-gray-700">
-                <span className="mr-3 text-orange-500">📅</span>
+                <span className="mr-3 text-[#F08040]">📅</span>
                 <div>
                   <span className="font-medium">Date :</span> {formatDate(race.date)}
                 </div>
               </div>
               <div className="flex items-center text-gray-700">
-                <span className="mr-3 text-orange-500">🏁</span>
+                <span className="mr-3 text-[#F08040]">🏁</span>
                 <div>
                   <span className="font-medium">Distance :</span> {race.distance}
                 </div>
               </div>
               <div className="flex items-center text-gray-700">
-                <span className="mr-3 text-orange-500">🏃</span>
+                <span className="mr-3 text-[#F08040]">🏃</span>
                 <div>
                   <span className="font-medium">Type :</span> {race.type}
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-4 rounded-lg mb-6">
-              <div className="flex items-center text-orange-700 font-semibold mb-3">
+            <div className="bg-gradient-to-r from-[#F08040]/5 to-[#6A70F0]/5 p-4 rounded-lg mb-6">
+              <div className="flex items-center text-[#F08040]/80 font-semibold mb-3">
                 <span className="mr-2 text-2xl">🎁</span>
                 <span className="text-xl">Récompenses pour les bénévoles</span>
               </div>
-              <p className="text-orange-800 font-medium text-lg">
+              <p className="text-[#F08040] font-medium text-lg">
                 {race.reward}
               </p>
             </div>
@@ -318,7 +318,7 @@ function InscriptionCompleteContent() {
               </div>
               <div className="w-full bg-gray-200 rounded-full h-3">
                 <div 
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-300"
+                  className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] h-3 rounded-full transition-all duration-300"
                   style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
                 ></div>
               </div>
@@ -345,7 +345,7 @@ function InscriptionCompleteContent() {
                   type="text"
                   autoComplete="street-address"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                   placeholder="123 Rue de la Paix"
                   value={formData.address}
                   onChange={handleChange}
@@ -363,7 +363,7 @@ function InscriptionCompleteContent() {
                     type="text"
                     autoComplete="address-level2"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                     placeholder="Paris"
                     value={formData.city}
                     onChange={handleChange}
@@ -379,7 +379,7 @@ function InscriptionCompleteContent() {
                     type="text"
                     autoComplete="postal-code"
                     required
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                     placeholder="75001"
                     value={formData.postalCode}
                     onChange={handleChange}
@@ -397,7 +397,7 @@ function InscriptionCompleteContent() {
                   name="birthDate"
                   type="date"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                   value={formData.birthDate}
                   onChange={handleChange}
                 />
@@ -412,7 +412,7 @@ function InscriptionCompleteContent() {
                   id="gender"
                   name="gender"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                   value={formData.gender}
                   onChange={handleChange}
                 >
@@ -432,7 +432,7 @@ function InscriptionCompleteContent() {
                   id="shoeSize"
                   name="shoeSize"
                   required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-orange-500 focus:border-orange-500"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-[#F08040] focus:border-[#F08040]"
                   value={formData.shoeSize}
                   onChange={handleChange}
                 >
@@ -448,7 +448,7 @@ function InscriptionCompleteContent() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded-lg text-center transition-all duration-200 text-lg disabled:bg-gray-400"
+                  className="w-full bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-semibold py-3 px-6 rounded-lg text-center transition-all duration-200 text-lg disabled:bg-gray-400"
                 >
                   {isLoading ? (
                     <div className="flex items-center justify-center">
@@ -476,7 +476,7 @@ export default function InscriptionCompletePage() {
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#F08040] mx-auto"></div>
           <p className="mt-4 text-gray-600">Chargement...</p>
         </div>
       </div>

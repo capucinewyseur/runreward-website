@@ -18,19 +18,19 @@ export default function Navbar() {
           
           {/* Desktop menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/" className="text-gray-700 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            <Link href="/" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               Accueil
             </Link>
-            <Link href="/courses" className="text-gray-700 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            <Link href="/courses" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               Courses
             </Link>
-            <Link href="/about" className="text-gray-700 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            <Link href="/about" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               À propos
             </Link>
-            <Link href="/contact" className="text-gray-700 hover:text-orange-500 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+            <Link href="/contact" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               Contact
             </Link>
-            <button className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <button className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
               Se connecter
             </button>
           </div>
@@ -39,7 +39,7 @@ export default function Navbar() {
           <div className="md:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-gray-700 hover:text-orange-500 focus:outline-none focus:text-orange-500"
+              className="text-gray-700 hover:text-[#F08040] focus:outline-none focus:text-[#F08040]"
             >
               <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 {isMenuOpen ? (
@@ -56,19 +56,19 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t">
-              <Link href="/" className="text-gray-700 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">
+              <Link href="/" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 Accueil
               </Link>
-              <Link href="/courses" className="text-gray-700 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">
+              <Link href="/courses" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 Courses
               </Link>
-              <Link href="/about" className="text-gray-700 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">
+              <Link href="/about" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 À propos
               </Link>
-              <Link href="/contact" className="text-gray-700 hover:text-orange-500 block px-3 py-2 rounded-md text-base font-medium">
+              <Link href="/contact" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 Contact
               </Link>
-              <button className="bg-orange-500 hover:bg-orange-600 text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium">
+              <button className="bg-[#F08040] hover:bg-[#e06d2a] text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium">
                 Se connecter
               </button>
             </div>
