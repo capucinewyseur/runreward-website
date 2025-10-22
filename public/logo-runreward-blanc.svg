@@ -1,0 +1,19 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fond blanc -->
+  <rect width="200" height="200" fill="white"/>
+  
+  <!-- R orange (arrière-plan) décalé -->
+  <path d="M100 40C100 31.1634 107.163 24 116 24H164C190.51 24 212 45.4903 212 72C212 98.5097 190.51 120 164 120H116C107.163 120 100 112.837 100 104V40Z" 
+        fill="#F08040" 
+        transform="translate(12, 8)"/>
+  
+  <!-- R bleu (premier plan) -->
+  <path d="M80 50C80 41.1634 87.1634 34 96 34H144C170.51 34 192 55.4903 192 82C192 108.51 170.51 130 144 130H96C87.1634 130 80 122.837 80 114V50Z" 
+        fill="#6A70F0"/>
+  
+  <!-- Barre horizontale du R bleu -->
+  <rect x="80" y="100" width="112" height="24" fill="#6A70F0"/>
+  
+  <!-- Barre diagonale du R bleu -->
+  <path d="M124 124L172 244" stroke="#6A70F0" stroke-width="16" stroke-linecap="round"/>
+</svg>
