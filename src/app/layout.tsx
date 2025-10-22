@@ -19,6 +19,11 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   title: "RunReward - Plateforme de bénévolat pour coureurs",
   description: "Participez à des courses et gagnez des récompenses tout en contribuant à la communauté. La plateforme qui récompense les coureurs pour leur engagement bénévole.",
+  icons: {
+    icon: '/favicon.svg',
+    shortcut: '/favicon.svg',
+    apple: '/favicon.svg',
+  },
 };
 
 export default function RootLayout({
