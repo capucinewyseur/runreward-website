@@ -1,10 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { userDB } from '@/lib/userDatabase';
 
 export default function AuthPage() {
+  const router = useRouter();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -13,6 +15,15 @@ export default function AuthPage() {
   const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // Vérifier si l'utilisateur est déjà connecté
+  useEffect(() => {
+    const currentUser = userDB.getCurrentUser();
+    if (currentUser) {
+      // Rediriger vers la page de profil si déjà connecté
+      router.push('/profile');
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

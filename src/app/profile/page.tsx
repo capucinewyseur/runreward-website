@@ -24,7 +24,8 @@ export default function ProfilePage() {
   const handleLogout = () => {
     // Utiliser la méthode logout de la base de données
     userDB.logout();
-    router.push('/auth');
+    // Forcer le rechargement de la page pour s'assurer que l'état est mis à jour
+    window.location.href = '/auth';
   };
 
   const formatDate = (dateString: string) => {

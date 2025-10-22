@@ -162,6 +162,9 @@ class UserDatabase {
   // Déconnexion
   logout() {
     this.currentUser = null;
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('runreward-current-user');
+    }
   }
 
   // Mettre à jour les informations d'un utilisateur
