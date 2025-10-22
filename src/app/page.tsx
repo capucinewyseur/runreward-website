@@ -99,18 +99,14 @@ export default function Home() {
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-r from-[#F08040] to-[#6A70F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 text-center text-white">
-            <div>
-              <div className="text-4xl font-bold mb-2">500+</div>
-              <div className="text-white/90">Coureurs actifs</div>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
             <div>
               <div className="text-4xl font-bold mb-2">50+</div>
               <div className="text-white/90">Courses organisées</div>
             </div>
             <div>
-              <div className="text-4xl font-bold mb-2">1000+</div>
-              <div className="text-white/90">Récompenses distribuées</div>
+              <div className="text-4xl font-bold mb-2">100+</div>
+              <div className="text-white/90">Récompenses et remises disponibles</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">25</div>
