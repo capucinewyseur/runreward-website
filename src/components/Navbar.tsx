@@ -30,9 +30,9 @@ export default function Navbar() {
             <Link href="/contact" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               Contact
             </Link>
-            <button className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+            <Link href="/profile" className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
               Se connecter
-            </button>
+            </Link>
           </div>
 
           {/* Mobile menu button */}
@@ -68,9 +68,9 @@ export default function Navbar() {
               <Link href="/contact" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 Contact
               </Link>
-              <button className="bg-[#F08040] hover:bg-[#e06d2a] text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium">
+              <Link href="/profile" className="bg-[#F08040] hover:bg-[#e06d2a] text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium">
                 Se connecter
-              </button>
+              </Link>
             </div>
           </div>
         )}
