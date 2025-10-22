@@ -664,7 +664,7 @@ Plateforme de bénévolat pour coureurs récompensés
             <h2 className="text-lg font-medium text-gray-900">Tous les utilisateurs inscrits</h2>
             <div className="flex space-x-3">
               <button
-                onClick={generateReport}
+                onClick={generateAllUsersDocument}
                 disabled={isGenerating}
                 className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors disabled:bg-gray-400"
               >
