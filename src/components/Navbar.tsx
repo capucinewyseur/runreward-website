@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { userDB } from '@/lib/userDatabase';
 
@@ -25,7 +26,14 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="logo-navbar">RR</span>
+              <Image
+                src="/logo-rr.svg"
+                alt="RunReward Logo"
+                width={60}
+                height={32}
+                className="h-8 w-auto"
+                priority
+              />
             </Link>
           </div>
           
