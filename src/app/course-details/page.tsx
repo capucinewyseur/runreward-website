@@ -135,7 +135,6 @@ function CourseDetailsContent() {
   const searchParams = useSearchParams();
   const [race, setRace] = useState<Race | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     const raceId = searchParams.get('raceId');
@@ -149,16 +148,10 @@ function CourseDetailsContent() {
   }, [searchParams]);
 
   const handleInscription = () => {
-    // Afficher la description avant de rediriger
-    setShowDescription(true);
-    
     // Sauvegarder l'ID de la course pour l'inscription
     if (race) {
       localStorage.setItem('selected-race', JSON.stringify(race));
-      // Délai pour permettre à l'utilisateur de voir la description
-      setTimeout(() => {
-        router.push('/inscription/etape-1');
-      }, 2000);
+      router.push('/auth');
     }
   };
 
@@ -271,15 +264,9 @@ function CourseDetailsContent() {
 
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Description</h3>
-                {showDescription ? (
-                  <p className="text-gray-700 leading-relaxed">
-                    {race.description}
-                  </p>
-                ) : (
-                  <p className="text-gray-500 italic">
-                    Cliquez sur &quot;Je m&apos;inscris pour l&apos;encadrement&quot; pour voir la description de la course.
-                  </p>
-                )}
+                <p className="text-gray-700 leading-relaxed">
+                  {race.description}
+                </p>
               </div>
             </div>
 
