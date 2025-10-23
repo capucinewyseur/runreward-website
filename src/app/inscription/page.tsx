@@ -30,29 +30,6 @@ function InscriptionContent() {
       return;
     }
     
-    // Vérifier si le profil est complet
-    console.log('🔍 Checking profile completeness:');
-    console.log('address:', user.address);
-    console.log('city:', user.city);
-    console.log('postalCode:', user.postalCode);
-    console.log('birthDate:', user.birthDate);
-    console.log('gender:', user.gender);
-    console.log('shoeSize:', user.shoeSize);
-    
-    if (!user.address || !user.city || !user.postalCode || !user.birthDate || !user.gender || !user.shoeSize) {
-      console.log('❌ Profile incomplete, redirecting to inscription-complete');
-      // Rediriger vers inscription-complete pour compléter le profil
-      const raceId = searchParams.get('raceId');
-      if (raceId) {
-        router.push(`/inscription-complete?raceId=${raceId}`);
-      } else {
-        router.push('/inscription-complete');
-      }
-      return;
-    }
-    
-    console.log('✅ Profile complete, proceeding to inscription page');
-    
     setIsAuthenticated(true);
     setCurrentUser(user);
     
@@ -82,6 +59,28 @@ function InscriptionContent() {
       const foundRace = courseDB.getCourseById(parseInt(raceId));
       if (foundRace) {
         setRace(foundRace);
+        
+        // Vérifier si le profil est complet selon les champs requis de cette course
+        console.log('🔍 Checking profile completeness for course:', foundRace.name);
+        console.log('Required fields for this course:', foundRace.requiredFields);
+        
+        // Vérifier les champs requis spécifiques à cette course
+        const missingFields: string[] = [];
+        for (const field of foundRace.requiredFields) {
+          if (field.required && (!user[field.id as keyof User] || user[field.id as keyof User] === '')) {
+            missingFields.push(field.label);
+          }
+        }
+        
+        console.log('Missing required fields:', missingFields);
+        
+        if (missingFields.length > 0) {
+          console.log('❌ Profile incomplete for this course, redirecting to inscription-complete');
+          router.push(`/inscription-complete?raceId=${raceId}`);
+          return;
+        }
+        
+        console.log('✅ Profile complete for this course, proceeding to inscription page');
       } else {
         router.push('/courses');
       }
