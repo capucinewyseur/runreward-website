@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 
 export default function Home() {
   return (
@@ -8,8 +9,24 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl runreward-title text-gray-900 mb-6">
+              {/* Image à gauche */}
+              <Image
+                src="/images/runner-left.svg"
+                alt="Coureur à gauche"
+                width={80}
+                height={80}
+                className="rounded-full object-cover mr-6 shadow-lg"
+              />
               <span className="logo-rr">RR</span>
               RunReward
+              {/* Image à droite */}
+              <Image
+                src="/images/runner-right.svg"
+                alt="Coureur à droite"
+                width={80}
+                height={80}
+                className="rounded-full object-cover ml-6 shadow-lg"
+              />
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 
