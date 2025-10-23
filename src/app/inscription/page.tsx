@@ -12,6 +12,8 @@ function InscriptionContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [customFields, setCustomFields] = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
@@ -59,9 +61,37 @@ function InscriptionContent() {
     setIsLoading(false);
   }, [searchParams, router]);
 
-  const handleConfirmInscription = () => {
-    if (race && currentUser) {
-      // Enregistrer l'inscription
+  const handleFieldChange = (fieldId: string, value: string) => {
+    setCustomFields(prev => ({
+      ...prev,
+      [fieldId]: value
+    }));
+  };
+
+  const validateCustomFields = () => {
+    if (!race) return false;
+    
+    for (const field of race.requiredFields) {
+      if (field.required && (!customFields[field.id] || customFields[field.id].trim() === '')) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const handleConfirmInscription = async () => {
+    if (!race || !currentUser) return;
+    
+    // Valider les champs requis
+    if (!validateCustomFields()) {
+      alert('Veuillez remplir tous les champs obligatoires.');
+      return;
+    }
+    
+    setIsSubmitting(true);
+    
+    try {
+      // Enregistrer l'inscription avec les champs personnalisés
       userDB.completeRegistration(currentUser.id, {
         id: race.id,
         name: race.name,
@@ -69,10 +99,17 @@ function InscriptionContent() {
         date: race.date,
         distance: race.distance,
         reward: race.reward,
-        type: race.type
+        type: race.type,
+        customFields: customFields // Ajouter les champs personnalisés
       });
+      
       // Rediriger vers la page de confirmation
       router.push('/inscription/confirmation');
+    } catch (error) {
+      console.error('Erreur lors de l\'inscription:', error);
+      alert('Une erreur est survenue lors de l\'inscription.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -217,6 +254,66 @@ function InscriptionContent() {
               </div>
             </div>
 
+            {/* Champs personnalisés */}
+            {race.requiredFields && race.requiredFields.length > 0 && (
+              <div className="bg-white border border-gray-200 rounded p-6 mb-6">
+                <h4 className="text-lg font-semibold text-gray-900 mb-4">Informations complémentaires</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {race.requiredFields.map((field) => (
+                    <div key={field.id} className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        {field.label}
+                        {field.required && <span className="text-red-500 ml-1">*</span>}
+                      </label>
+                      
+                      {field.type === 'select' ? (
+                        <select
+                          value={customFields[field.id] || ''}
+                          onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          required={field.required}
+                        >
+                          <option value="">Sélectionnez...</option>
+                          {field.options?.map((option) => (
+                            <option key={option} value={option}>{option}</option>
+                          ))}
+                        </select>
+                      ) : field.type === 'textarea' ? (
+                        <textarea
+                          value={customFields[field.id] || ''}
+                          onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                          placeholder={field.placeholder}
+                          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          rows={3}
+                          required={field.required}
+                        />
+                      ) : field.type === 'date' ? (
+                        <input
+                          type="date"
+                          value={customFields[field.id] || ''}
+                          onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          required={field.required}
+                        />
+                      ) : (
+                        <input
+                          type={field.type}
+                          value={customFields[field.id] || ''}
+                          onChange={(e) => handleFieldChange(field.id, e.target.value)}
+                          placeholder={field.placeholder}
+                          className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+                          required={field.required}
+                        />
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-3">
+                  <span className="text-red-500">*</span> Champs obligatoires
+                </p>
+              </div>
+            )}
+
             {/* Informations importantes */}
             <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
               <h4 className="text-lg font-semibold text-blue-800 mb-2">Informations importantes</h4>
@@ -232,9 +329,10 @@ function InscriptionContent() {
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={handleConfirmInscription}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded text-center transition-all duration-200 text-lg"
+                disabled={isSubmitting}
+                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded text-center transition-all duration-200 text-lg"
               >
-                Confirmer mon inscription
+                {isSubmitting ? 'Inscription en cours...' : 'Confirmer mon inscription'}
               </button>
               <button
                 onClick={() => router.push('/courses')}

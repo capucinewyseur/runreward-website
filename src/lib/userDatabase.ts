@@ -43,6 +43,7 @@ export interface CourseRegistration {
     gender: string;
     shoeSize: string;
   };
+  customFields?: Record<string, string>; // Champs personnalisés spécifiques à la course
   status: 'pending' | 'confirmed' | 'cancelled';
 }
 
@@ -225,7 +226,7 @@ class UserDatabase {
   }
 
   // Finaliser l'inscription d'un utilisateur
-  completeRegistration(userId: string, raceData: {id: number; name: string; location: string; date: string; distance: string; reward: string; type: string}): User | null {
+  completeRegistration(userId: string, raceData: {id: number; name: string; location: string; date: string; distance: string; reward: string; type: string; customFields?: Record<string, string>}): User | null {
     const user = this.updateUser(userId, {
       status: 'completed',
       selectedRace: raceData
@@ -250,6 +251,7 @@ class UserDatabase {
           gender: user.gender,
           shoeSize: user.shoeSize
         },
+        customFields: raceData.customFields, // Ajouter les champs personnalisés
         status: 'pending'
       };
 
