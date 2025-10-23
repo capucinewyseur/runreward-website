@@ -31,7 +31,16 @@ function InscriptionContent() {
     }
     
     // Vérifier si le profil est complet
+    console.log('🔍 Checking profile completeness:');
+    console.log('address:', user.address);
+    console.log('city:', user.city);
+    console.log('postalCode:', user.postalCode);
+    console.log('birthDate:', user.birthDate);
+    console.log('gender:', user.gender);
+    console.log('shoeSize:', user.shoeSize);
+    
     if (!user.address || !user.city || !user.postalCode || !user.birthDate || !user.gender || !user.shoeSize) {
+      console.log('❌ Profile incomplete, redirecting to inscription-complete');
       // Rediriger vers inscription-complete pour compléter le profil
       const raceId = searchParams.get('raceId');
       if (raceId) {
@@ -41,6 +50,8 @@ function InscriptionContent() {
       }
       return;
     }
+    
+    console.log('✅ Profile complete, proceeding to inscription page');
     
     setIsAuthenticated(true);
     setCurrentUser(user);
