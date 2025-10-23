@@ -94,7 +94,7 @@ class CourseDatabase {
       },
       {
         id: 'emergencyContact',
-        label: 'Contact d\'urgence',
+        label: 'Contact d'urgence',
         type: 'tel',
         required: true,
         placeholder: 'Numéro de téléphone'
