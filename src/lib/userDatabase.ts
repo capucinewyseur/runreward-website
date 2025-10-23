@@ -1,4 +1,5 @@
 // Système de gestion des utilisateurs et inscriptions par course
+import { externalDataService } from './externalDataService';
 export interface User {
   id: string;
   firstName: string;
@@ -81,6 +82,9 @@ class UserDatabase {
     this.loadCourseRegistrations();
     this.loadCourseFavorites();
     this.loadCurrentUser();
+    
+    // Migrer les données vers le service externe
+    this.migrateToExternalService();
   }
 
   private loadUsers() {
@@ -463,6 +467,49 @@ class UserDatabase {
       courseName: data.courseName,
       totalFavorites: data.totalFavorites
     }));
+  }
+
+  // Méthode pour migrer les données vers le service externe
+  private async migrateToExternalService() {
+    try {
+      // Migrer les utilisateurs
+      this.users.forEach(user => {
+        externalDataService.addUser(user);
+      });
+
+      // Migrer les inscriptions
+      this.courseRegistrations.forEach(registration => {
+        externalDataService.addCourseRegistration(registration);
+      });
+
+      // Migrer les favoris
+      this.courseFavorites.forEach(favorite => {
+        externalDataService.addCourseFavorite(favorite);
+      });
+
+      // Migrer l'utilisateur actuel
+      if (this.currentUser) {
+        externalDataService.setCurrentUser(this.currentUser);
+      }
+
+      console.log('✅ Migration vers le service externe terminée');
+    } catch (error) {
+      console.error('❌ Erreur lors de la migration:', error);
+    }
+  }
+
+  // Méthode pour obtenir les données depuis le service externe
+  async loadFromExternalService() {
+    try {
+      this.users = externalDataService.getUsers();
+      this.courseRegistrations = externalDataService.getCourseRegistrations();
+      this.courseFavorites = externalDataService.getCourseFavorites();
+      this.currentUser = externalDataService.getCurrentUser();
+      
+      console.log('✅ Données chargées depuis le service externe');
+    } catch (error) {
+      console.error('❌ Erreur lors du chargement depuis le service externe:', error);
+    }
   }
 }
 

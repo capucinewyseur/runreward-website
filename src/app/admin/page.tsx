@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { userDB, User, CourseStats } from '@/lib/userDatabase';
 import { courseDB, Course } from '@/lib/courseDatabase';
 import { emailService, EmailData } from '@/lib/emailService';
+import DataManagementPanel from '@/components/DataManagementPanel';
 
 
 export default function AdminPage() {
@@ -659,6 +660,11 @@ Plateforme de bénévolat pour coureurs récompensés
               </div>
             </div>
           </div>
+        </div>
+
+        {/* Panneau de gestion des données */}
+        <div className="mb-8">
+          <DataManagementPanel />
         </div>
 
         {/* Liste de tous les utilisateurs inscrits */}
