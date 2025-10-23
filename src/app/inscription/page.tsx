@@ -37,6 +37,17 @@ function InscriptionContent() {
     
     setIsAuthenticated(true);
     setCurrentUser(user);
+    
+    // Pré-remplir les champs personnalisés avec les informations de l'utilisateur
+    const prefillFields: Record<string, string> = {
+      address: user.address || '',
+      city: user.city || '',
+      postalCode: user.postalCode || '',
+      birthDate: user.birthDate || '',
+      gender: user.gender || '',
+      shoeSize: user.shoeSize || ''
+    };
+    setCustomFields(prefillFields);
 
     // Récupérer l'ID de la course depuis l'URL ou localStorage
     const raceId = searchParams.get('raceId') || (() => {
@@ -59,7 +70,7 @@ function InscriptionContent() {
       router.push('/courses');
     }
     setIsLoading(false);
-  }, [searchParams, router]);
+  }, [searchParams, router, user]);
 
   const handleFieldChange = (fieldId: string, value: string) => {
     setCustomFields(prev => ({
@@ -69,22 +80,24 @@ function InscriptionContent() {
   };
 
   const validateCustomFields = () => {
-    if (!race) return false;
+    if (!race) return { isValid: false, missingFields: [] };
     
+    const missingFields: string[] = [];
     for (const field of race.requiredFields) {
       if (field.required && (!customFields[field.id] || customFields[field.id].trim() === '')) {
-        return false;
+        missingFields.push(field.label);
       }
     }
-    return true;
+    return { isValid: missingFields.length === 0, missingFields };
   };
 
   const handleConfirmInscription = async () => {
     if (!race || !currentUser) return;
     
     // Valider les champs requis
-    if (!validateCustomFields()) {
-      alert('Veuillez remplir tous les champs obligatoires.');
+    const validation = validateCustomFields();
+    if (!validation.isValid) {
+      alert(`Veuillez remplir tous les champs obligatoires :\n${validation.missingFields.join(', ')}`);
       return;
     }
     
