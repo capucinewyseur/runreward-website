@@ -145,3 +145,14 @@ body {
   transform: translateY(-5px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
+
+/* Cercles parfaits pour les images */
+.perfect-circle {
+  width: 200px !important;
+  height: 200px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  border: 4px solid white;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  flex-shrink: 0;
+}

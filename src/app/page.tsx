@@ -13,9 +13,9 @@ export default function Home() {
               <Image
                 src="/images/runner-left.jpg"
                 alt="Coureur bénévole"
-                width={180}
-                height={180}
-                className="rounded-full object-cover mr-8 shadow-lg"
+                width={200}
+                height={200}
+                className="perfect-circle mr-8"
               />
               
               {/* Titre central */}
@@ -27,9 +27,9 @@ export default function Home() {
               <Image
                 src="/images/runner-right.jpg"
                 alt="Médaille de course"
-                width={180}
-                height={180}
-                className="rounded-full object-cover ml-8 shadow-lg"
+                width={200}
+                height={200}
+                className="perfect-circle ml-8"
               />
             </div>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
