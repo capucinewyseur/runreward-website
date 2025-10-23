@@ -196,7 +196,7 @@ function InscriptionContent() {
 
           {/* Informations détaillées */}
           <div className="p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
               <div className="space-y-4">
                 <div className="flex items-center text-gray-700">
                   <svg className="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -212,14 +212,6 @@ function InscriptionContent() {
                   </svg>
                   <div>
                     <span className="font-medium">Type :</span> {race.type}
-                  </div>
-                </div>
-                <div className="flex items-center text-gray-700">
-                  <svg className="w-5 h-5 mr-3 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
-                  </svg>
-                  <div>
-                    <span className="font-medium">Participants :</span> {race.currentParticipants}/{race.maxParticipants}
                   </div>
                 </div>
                 <div className="flex items-center text-gray-700">
@@ -240,6 +232,16 @@ function InscriptionContent() {
               </div>
             </div>
 
+            {/* Section description améliorée */}
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 border-2 border-blue-200 rounded-xl p-8 mb-8 text-center">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6">Description de la course</h3>
+              <div className="max-w-4xl mx-auto">
+                <p className="text-lg text-gray-800 leading-relaxed">
+                  {race.description}
+                </p>
+              </div>
+            </div>
+
             {/* Section récompense */}
             <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-6 rounded mb-6">
               <div className="flex items-center text-orange-700 font-semibold mb-3">
@@ -253,19 +255,6 @@ function InscriptionContent() {
               </p>
             </div>
 
-            {/* Barre de progression */}
-            <div className="mb-6">
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-sm font-medium text-gray-700">Inscriptions pour l&apos;encadrement</span>
-                <span className="text-sm text-gray-500">{race.currentParticipants}/{race.maxParticipants}</span>
-              </div>
-              <div className="w-full bg-gray-200 rounded h-3">
-                <div 
-                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded transition-all duration-300"
-                  style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
-                ></div>
-              </div>
-            </div>
 
             {/* Champs personnalisés */}
             {race.requiredFields && race.requiredFields.length > 0 && (
