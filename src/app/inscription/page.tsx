@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { courseDB, Course } from '@/lib/courseDatabase';
-import { userDB } from '@/lib/userDatabase';
+import { userDB, User } from '@/lib/userDatabase';
 
 function InscriptionContent() {
   const router = useRouter();
@@ -11,15 +11,17 @@ function InscriptionContent() {
   const [race, setRace] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     // Vérifier si l'utilisateur est connecté
-    const currentUser = userDB.getCurrentUser();
-    if (!currentUser) {
+    const user = userDB.getCurrentUser();
+    if (!user) {
       router.push('/auth');
       return;
     }
     setIsAuthenticated(true);
+    setCurrentUser(user);
 
     // Récupérer l'ID de la course depuis l'URL ou localStorage
     const raceId = searchParams.get('raceId') || localStorage.getItem('selected-race-id');
@@ -36,12 +38,20 @@ function InscriptionContent() {
     setIsLoading(false);
   }, [searchParams, router]);
 
-  const handleInscription = () => {
-    if (race) {
-      // Sauvegarder la course sélectionnée
-      localStorage.setItem('selected-race', JSON.stringify(race));
-      // Rediriger vers la page d'inscription complète
-      router.push('/inscription/etape-1');
+  const handleConfirmInscription = () => {
+    if (race && currentUser) {
+      // Enregistrer l'inscription
+      userDB.completeRegistration(currentUser.id, {
+        id: race.id,
+        name: race.name,
+        location: race.location,
+        date: race.date,
+        distance: race.distance,
+        reward: race.reward,
+        type: race.type
+      });
+      // Rediriger vers la page de confirmation
+      router.push('/inscription/confirmation');
     }
   };
 
@@ -200,10 +210,10 @@ function InscriptionContent() {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={handleInscription}
+                onClick={handleConfirmInscription}
                 className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 px-6 rounded text-center transition-all duration-200 text-lg"
               >
-                Je m&apos;inscris pour l&apos;encadrement
+                Confirmer mon inscription
               </button>
               <button
                 onClick={() => router.push('/courses')}
