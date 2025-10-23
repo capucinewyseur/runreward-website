@@ -18,7 +18,6 @@ export default function Home() {
                 className="rounded-full object-cover mr-6 shadow-lg"
               />
               <span className="logo-rr">RR</span>
-              RunReward
               {/* Image à droite */}
               <Image
                 src="/images/runner-right.jpg"
