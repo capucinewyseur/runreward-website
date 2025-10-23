@@ -55,13 +55,13 @@ export class SecurityUtils {
   }
 
   // Validation des champs de course
-  static validateCourseField(field: Record<string, unknown>): boolean {
+  static validateCourseField(field: { id?: string; label?: string; type?: string }): boolean {
     if (!field || typeof field !== 'object') return false;
     
     const validTypes = ['text', 'email', 'tel', 'number', 'select', 'textarea', 'date'];
-    const validId = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(String(field.id || ''));
-    const validLabel = field.label && String(field.label).length <= 100;
-    const validType = validTypes.includes(String(field.type || ''));
+    const validId = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(field.id || '');
+    const validLabel = Boolean(field.label && field.label.length <= 100);
+    const validType = validTypes.includes(field.type || '');
     
     return validId && validLabel && validType;
   }
