@@ -1,5 +1,6 @@
 // Système de gestion des utilisateurs et inscriptions par course
 import { externalDataService } from './externalDataService';
+import { SecurityUtils } from './security';
 export interface User {
   id: string;
   firstName: string;
@@ -132,14 +133,39 @@ class UserDatabase {
     return this.users.some(user => user.email.toLowerCase() === email.toLowerCase());
   }
 
-  // Créer un nouvel utilisateur
+  // Créer un nouvel utilisateur avec validation de sécurité
   createUser(userData: Omit<User, 'id' | 'inscriptionDate' | 'status'>): User {
-    if (this.emailExists(userData.email)) {
+    // Validation des données
+    const validation = SecurityUtils.validateRegistrationData(userData);
+    if (!validation.isValid) {
+      throw new Error(`Données invalides: ${validation.errors.join(', ')}`);
+    }
+
+    // Vérifier le rate limiting
+    if (!SecurityUtils.checkRateLimit('user_creation', 3, 300000)) { // 3 tentatives par 5 minutes
+      throw new Error('Trop de tentatives de création d\'utilisateur');
+    }
+
+    // Sanitisation des données
+    const sanitizedData = {
+      firstName: SecurityUtils.sanitizeInput(userData.firstName),
+      lastName: SecurityUtils.sanitizeInput(userData.lastName),
+      email: SecurityUtils.sanitizeInput(userData.email).toLowerCase(),
+      password: userData.password, // Le mot de passe sera hashé côté serveur
+      address: SecurityUtils.sanitizeInput(userData.address || ''),
+      city: SecurityUtils.sanitizeInput(userData.city || ''),
+      postalCode: SecurityUtils.sanitizeInput(userData.postalCode || ''),
+      birthDate: userData.birthDate,
+      gender: SecurityUtils.sanitizeInput(userData.gender || ''),
+      shoeSize: SecurityUtils.sanitizeInput(userData.shoeSize || '')
+    };
+
+    if (this.emailExists(sanitizedData.email)) {
       throw new Error('Un compte avec cet email existe déjà');
     }
 
     const newUser: User = {
-      ...userData,
+      ...sanitizedData,
       id: Date.now().toString(),
       inscriptionDate: new Date().toISOString(),
       status: 'pending',

@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { userDB } from '@/lib/userDatabase';
+import { SecurityUtils } from '@/lib/security';
 
 export default function AuthPage() {
   const router = useRouter();
@@ -29,10 +30,26 @@ export default function AuthPage() {
     setIsLoading(true);
     setError('');
     
+    // Vérifier le rate limiting
+    if (!SecurityUtils.checkRateLimit('auth_attempt', 5, 300000)) { // 5 tentatives par 5 minutes
+      setError('Trop de tentatives. Veuillez attendre avant de réessayer.');
+      setIsLoading(false);
+      return;
+    }
+    
     try {
       if (isLogin) {
+        // Sanitisation des données de connexion
+        const sanitizedEmail = SecurityUtils.sanitizeInput(email).toLowerCase();
+        
+        if (!SecurityUtils.isValidEmail(sanitizedEmail)) {
+          setError('Format d\'email invalide');
+          setIsLoading(false);
+          return;
+        }
+        
         // Connexion
-        const user = userDB.authenticate(email, password);
+        const user = userDB.authenticate(sanitizedEmail, password);
         if (user) {
           // Redirection vers la page d'inscription après connexion
           const urlParams = new URLSearchParams(window.location.search);
@@ -46,7 +63,21 @@ export default function AuthPage() {
           setError('Email ou mot de passe incorrect');
         }
       } else {
-        // Inscription
+        // Validation des données d'inscription
+        const validation = SecurityUtils.validateRegistrationData({
+          firstName: SecurityUtils.sanitizeInput(firstName),
+          lastName: SecurityUtils.sanitizeInput(lastName),
+          email: SecurityUtils.sanitizeInput(email).toLowerCase(),
+          password,
+          confirmPassword: password
+        });
+        
+        if (!validation.isValid) {
+          setError(`Erreurs de validation:\n${validation.errors.join('\n')}`);
+          setIsLoading(false);
+          return;
+        }
+        
         if (password !== confirmPassword) {
           setError('Les mots de passe ne correspondent pas');
           setIsLoading(false);

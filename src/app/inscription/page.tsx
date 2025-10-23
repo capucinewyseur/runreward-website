@@ -4,6 +4,7 @@ import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { courseDB, Course } from '@/lib/courseDatabase';
 import { userDB, User } from '@/lib/userDatabase';
+import { SecurityUtils } from '@/lib/security';
 
 function InscriptionContent() {
   console.log('🚀 InscriptionContent component loaded');
@@ -91,9 +92,12 @@ function InscriptionContent() {
   }, [searchParams, router]); // Dépendances du useEffect
 
   const handleFieldChange = (fieldId: string, value: string) => {
+    // Sanitisation des données saisies
+    const sanitizedValue = SecurityUtils.sanitizeInput(value);
+    
     setCustomFields(prev => ({
       ...prev,
-      [fieldId]: value
+      [fieldId]: sanitizedValue
     }));
   };
 
