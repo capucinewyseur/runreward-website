@@ -47,6 +47,7 @@ function InscriptionContent() {
       gender: user.gender || '',
       shoeSize: user.shoeSize || ''
     };
+    console.log('Prefilling fields:', prefillFields);
     setCustomFields(prefillFields);
 
     // Récupérer l'ID de la course depuis l'URL ou localStorage
@@ -92,10 +93,18 @@ function InscriptionContent() {
   };
 
   const handleConfirmInscription = async () => {
-    if (!race || !currentUser) return;
+    if (!race || !currentUser) {
+      console.log('Missing race or currentUser:', { race: !!race, currentUser: !!currentUser });
+      return;
+    }
+    
+    console.log('Custom fields:', customFields);
+    console.log('Race required fields:', race.requiredFields);
     
     // Valider les champs requis
     const validation = validateCustomFields();
+    console.log('Validation result:', validation);
+    
     if (!validation.isValid) {
       alert(`Veuillez remplir tous les champs obligatoires :\n${validation.missingFields.join(', ')}`);
       return;
