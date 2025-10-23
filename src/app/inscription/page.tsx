@@ -93,22 +93,28 @@ function InscriptionContent() {
   };
 
   const handleConfirmInscription = async () => {
+    console.log('=== DEBUG INSCRIPTION ===');
+    console.log('Race:', race);
+    console.log('Current user:', currentUser);
+    console.log('Custom fields:', customFields);
+    
     if (!race || !currentUser) {
-      console.log('Missing race or currentUser:', { race: !!race, currentUser: !!currentUser });
+      console.log('❌ Missing race or currentUser');
+      alert('Erreur: Course ou utilisateur manquant');
       return;
     }
-    
-    console.log('Custom fields:', customFields);
-    console.log('Race required fields:', race.requiredFields);
     
     // Valider les champs requis
     const validation = validateCustomFields();
     console.log('Validation result:', validation);
     
     if (!validation.isValid) {
+      console.log('❌ Validation failed:', validation.missingFields);
       alert(`Veuillez remplir tous les champs obligatoires :\n${validation.missingFields.join(', ')}`);
       return;
     }
+    
+    console.log('✅ Validation passed, proceeding with inscription...');
     
     setIsSubmitting(true);
     
@@ -332,7 +338,10 @@ function InscriptionContent() {
             {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
-                onClick={handleConfirmInscription}
+                onClick={() => {
+                  console.log('🔴 BOUTON CLIQUÉ !');
+                  handleConfirmInscription();
+                }}
                 disabled={isSubmitting}
                 className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:from-gray-400 disabled:to-gray-500 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded text-center transition-all duration-200 text-lg"
               >
