@@ -33,8 +33,8 @@ export default function Home() {
               />
             </div>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              La plateforme qui récompense les coureurs pour leur engagement bénévole. 
-              Encadrez des courses en tant que bénévole et gagnez <span className="font-semibold text-gray-800">des récompenses et réductions sur vos prochains dossards</span> tout en passant un moment convivial dans l&apos;ambiance festive de la course.
+              Soyez récompensés pour votre engagement bénévole ! 
+              Aidez dans l&apos;encadrement et l&apos;organisation des courses et gagnez <span className="font-semibold text-gray-800">des récompenses et réductions sur vos prochains dossards</span> tout en profitant de l&apos;ambiance festive de la course.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
