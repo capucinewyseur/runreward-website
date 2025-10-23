@@ -55,13 +55,13 @@ export class SecurityUtils {
   }
 
   // Validation des champs de course
-  static validateCourseField(field: any): boolean {
+  static validateCourseField(field: Record<string, unknown>): boolean {
     if (!field || typeof field !== 'object') return false;
     
     const validTypes = ['text', 'email', 'tel', 'number', 'select', 'textarea', 'date'];
-    const validId = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(field.id);
-    const validLabel = field.label && field.label.length <= 100;
-    const validType = validTypes.includes(field.type);
+    const validId = /^[a-zA-Z][a-zA-Z0-9_]*$/.test(String(field.id || ''));
+    const validLabel = field.label && String(field.label).length <= 100;
+    const validType = validTypes.includes(String(field.type || ''));
     
     return validId && validLabel && validType;
   }
@@ -89,7 +89,7 @@ export class SecurityUtils {
   }
 
   // Validation des données d'inscription
-  static validateRegistrationData(data: any): { isValid: boolean; errors: string[] } {
+  static validateRegistrationData(data: Record<string, string>): { isValid: boolean; errors: string[] } {
     const errors: string[] = [];
     
     if (!data.firstName || data.firstName.length < 2) {
