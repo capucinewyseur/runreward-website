@@ -12,7 +12,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
 }
 
@@ -26,10 +26,11 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-poppins), 'Poppins', 'Inter', 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
-  line-height: 1.6;
-  font-weight: 500; /* Police plus épaisse */
-  letter-spacing: -0.01em; /* Espacement des lettres plus serré pour un look moderne */
+  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  letter-spacing: -0.011em;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
 }
 
 /* Custom scrollbar */
@@ -102,7 +103,7 @@ body {
   border: none;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(240, 128, 64, 0.3);
-  font-family: var(--font-poppins), 'Poppins', sans-serif;
+  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 .btn-primary:hover {
@@ -112,13 +113,10 @@ body {
 
 /* RunReward brand styling */
 .runreward-title {
-  font-weight: 800; /* Très gras */
-  letter-spacing: -0.02em; /* Très serré pour un look arrondi */
-  font-family: var(--font-poppins), 'Poppins', sans-serif;
-  background: linear-gradient(135deg, var(--primary-blue), var(--primary-orange));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  color: var(--foreground);
 }
 
 /* Card hover effects */
