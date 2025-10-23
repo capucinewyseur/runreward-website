@@ -1,5 +1,6 @@
 'use client';
 
+// Admin page for RunReward management
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { userDB, User, CourseStats } from '@/lib/userDatabase';
