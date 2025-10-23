@@ -136,26 +136,6 @@ body {
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Logo RR pour la page d'accueil */
-.logo-homepage {
-  font-size: 4rem;
-  font-weight: 900;
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8, #c084fc, #a855f7, #8b5cf6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.02em;
-  font-family: var(--font-inter), 'Inter', sans-serif;
-  text-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
-}
-
-@media (max-width: 768px) {
-  .logo-homepage {
-    font-size: 3rem;
-  }
-}
-
 /* Card hover effects */
 .card-hover {
   transition: all 0.3s ease;
