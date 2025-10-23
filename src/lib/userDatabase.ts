@@ -135,8 +135,14 @@ class UserDatabase {
 
   // Créer un nouvel utilisateur avec validation de sécurité
   createUser(userData: Omit<User, 'id' | 'inscriptionDate' | 'status'>): User {
-    // Validation des données
-    const validation = SecurityUtils.validateRegistrationData(userData);
+    // Validation des données de base (seulement les champs requis pour l'inscription)
+    const validation = SecurityUtils.validateRegistrationData({
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      password: userData.password,
+      confirmPassword: userData.password
+    });
     if (!validation.isValid) {
       throw new Error(`Données invalides: ${validation.errors.join(', ')}`);
     }
