@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { courseDB, Course } from '@/lib/courseDatabase';
 import { userDB } from '@/lib/userDatabase';
 import { useRouter } from 'next/navigation';
@@ -201,10 +202,14 @@ export default function CoursesPage() {
             return (
               <div key={race.id} className="bg-white rounded shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 {/* Image de la course */}
-                <div className="h-48 bg-gradient-to-br from-[#F08040]/10 to-[#6A70F0]/10 flex items-center justify-center">
-                  <svg className="w-16 h-16 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
+                <div className="h-48 relative overflow-hidden">
+                  <Image
+                    src={race.image}
+                    alt={race.name}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
 
                 {/* Contenu de la course */}
