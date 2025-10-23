@@ -203,7 +203,7 @@ export default function FavoritesPage() {
                         Voir les détails
                       </button>
                       <button
-                        onClick={() => router.push(`/auth?raceId=${course.id}`)}
+                        onClick={() => router.push(`/inscription?raceId=${course.id}`)}
                         className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white font-bold py-3 px-4 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       >
                         S&apos;inscrire

@@ -2,159 +2,48 @@
 
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { courseDB, Course } from '@/lib/courseDatabase';
+import { userDB } from '@/lib/userDatabase';
 
-interface Race {
-  id: number;
-  name: string;
-  location: string;
-  department: string;
-  date: string;
-  distance: string;
-  reward: string;
-  description: string;
-  maxParticipants: number;
-  currentParticipants: number;
-  type: 'Route' | 'Trail';
-  image: string;
-  coordinates: {
-    lat: number;
-    lng: number;
-  };
-}
-
-const races: Race[] = [
-  {
-    id: 1,
-    name: "Course du Printemps",
-    location: "Parc de la Villette, Paris",
-    department: "Paris (75)",
-    date: "2024-04-15",
-    distance: "10 km",
-    reward: "100€ + équipement de course",
-    description: "Course matinale dans le magnifique parc de la Villette. Parfait pour débuter la saison de course.",
-    maxParticipants: 200,
-    currentParticipants: 156,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8966, lng: 2.3833 }
-  },
-  {
-    id: 2,
-    name: "Trail des Alpes",
-    location: "Chamonix, Haute-Savoie",
-    department: "Haute-Savoie (74)",
-    date: "2024-05-20",
-    distance: "21 km",
-    reward: "150€ + équipement technique",
-    description: "Trail en montagne avec vue panoramique sur le Mont-Blanc. Défi pour les coureurs expérimentés.",
-    maxParticipants: 100,
-    currentParticipants: 89,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.9237, lng: 6.8694 }
-  },
-  {
-    id: 3,
-    name: "Course de la Solidarité",
-    location: "Parc des Buttes-Chaumont, Paris",
-    department: "Paris (75)",
-    date: "2024-06-10",
-    distance: "5 km",
-    reward: "50€ + tee-shirt",
-    description: "Course caritative pour soutenir les associations locales. Ouverte à tous les niveaux.",
-    maxParticipants: 300,
-    currentParticipants: 234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.8833, lng: 2.3833 }
-  },
-  {
-    id: 4,
-    name: "Marathon de Lyon",
-    location: "Lyon, Rhône",
-    department: "Rhône (69)",
-    date: "2024-09-15",
-    distance: "42.2 km",
-    reward: "200€ + médaille + équipement",
-    description: "Marathon urbain traversant les plus beaux quartiers de Lyon. Événement majeur de la région.",
-    maxParticipants: 5000,
-    currentParticipants: 4234,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 45.7640, lng: 4.8357 }
-  },
-  {
-    id: 5,
-    name: "Trail de Fontainebleau",
-    location: "Forêt de Fontainebleau, Seine-et-Marne",
-    department: "Seine-et-Marne (77)",
-    date: "2024-07-22",
-    distance: "15 km",
-    reward: "120€ + casquette + gourde",
-    description: "Trail dans la magnifique forêt de Fontainebleau. Parcours varié entre rochers et sentiers forestiers.",
-    maxParticipants: 150,
-    currentParticipants: 98,
-    type: 'Trail',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 48.4047, lng: 2.7012 }
-  },
-  {
-    id: 6,
-    name: "Course Nocturne de Nice",
-    location: "Promenade des Anglais, Nice",
-    department: "Alpes-Maritimes (06)",
-    date: "2024-08-05",
-    distance: "10 km",
-    reward: "80€ + maillot technique",
-    description: "Course nocturne le long de la célèbre Promenade des Anglais. Ambiance festive garantie.",
-    maxParticipants: 800,
-    currentParticipants: 567,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 43.7102, lng: 7.2620 }
-  },
-  {
-    id: 7,
-    name: "Generali Genève Marathon",
-    location: "Genève, Suisse",
-    department: "Suisse",
-    date: "2024-12-15",
-    distance: "42.2 km",
-    reward: "Tee-shirt + casquette + repas + 50% réduction dossard 2026/2027",
-    description: "Rejoignez l'équipe de 1200 bénévoles pour faire courir plus de 25000 personnes dans Genève et sa campagne. 14 missions variées ouvertes à tous.",
-    maxParticipants: 1200,
-    currentParticipants: 856,
-    type: 'Route',
-    image: "/api/placeholder/400/250",
-    coordinates: { lat: 46.2044, lng: 6.1432 }
-  }
-];
-
-function CourseDetailsContent() {
+function InscriptionContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [race, setRace] = useState<Race | null>(null);
+  const [race, setRace] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const raceId = searchParams.get('raceId');
+    // Vérifier si l'utilisateur est connecté
+    const currentUser = userDB.getCurrentUser();
+    if (!currentUser) {
+      router.push('/auth');
+      return;
+    }
+    setIsAuthenticated(true);
+
+    // Récupérer l'ID de la course depuis l'URL ou localStorage
+    const raceId = searchParams.get('raceId') || localStorage.getItem('selected-race-id');
     if (raceId) {
-      const foundRace = races.find(r => r.id === parseInt(raceId));
+      const foundRace = courseDB.getCourseById(parseInt(raceId));
       if (foundRace) {
         setRace(foundRace);
+      } else {
+        router.push('/courses');
       }
+    } else {
+      router.push('/courses');
     }
     setIsLoading(false);
-  }, [searchParams]);
+  }, [searchParams, router]);
 
   const handleInscription = () => {
-    // Sauvegarder l'ID de la course pour l'inscription
     if (race) {
+      // Sauvegarder la course sélectionnée
       localStorage.setItem('selected-race', JSON.stringify(race));
-      router.push('/inscription');
+      // Rediriger vers la page d'inscription complète
+      router.push('/inscription/etape-1');
     }
   };
-
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -162,7 +51,7 @@ function CourseDetailsContent() {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
-      day: 'numeric'
+      day: 'numeric',
     });
   };
 
@@ -177,43 +66,30 @@ function CourseDetailsContent() {
     );
   }
 
-  if (!race) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">Course non trouvée</h1>
-          <p className="text-gray-600 mb-6">La course demandée n&apos;existe pas.</p>
-          <button
-            onClick={() => router.push('/courses')}
-            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
-          >
-            Retour aux courses
-          </button>
-        </div>
-      </div>
-    );
+  if (!isAuthenticated || !race) {
+    return null;
   }
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+      {/* Header avec dégradé */}
       <div className="bg-gradient-to-r from-orange-500 to-blue-600 py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center text-white">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              {race.name}
+              Inscription pour l&apos;encadrement
             </h1>
             <p className="text-xl md:text-2xl text-orange-100">
-              Détails de la course et inscription pour l&apos;encadrement
+              {race.name}
             </p>
           </div>
         </div>
       </div>
 
-      {/* Course Details */}
+      {/* Contenu principal */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="bg-white rounded shadow-lg overflow-hidden">
-          {/* Course Header */}
+          {/* Header de la course */}
           <div className="p-6 border-b border-gray-200">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between">
               <div>
@@ -237,7 +113,7 @@ function CourseDetailsContent() {
             </div>
           </div>
 
-          {/* Course Info Grid */}
+          {/* Informations détaillées */}
           <div className="p-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
               <div className="space-y-4">
@@ -262,7 +138,7 @@ function CourseDetailsContent() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
                   <div>
-                    <span className="font-medium">Participants :</span> {race.currentParticipants}/{race.maxParticipants}
+                    <span className="font-medium">Participants :</span> 15/50
                   </div>
                 </div>
                 <div className="flex items-center text-gray-700">
@@ -283,7 +159,7 @@ function CourseDetailsContent() {
               </div>
             </div>
 
-            {/* Reward Section */}
+            {/* Section récompense */}
             <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-6 rounded mb-6">
               <div className="flex items-center text-orange-700 font-semibold mb-3">
                 <svg className="w-6 h-6 mr-2 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -296,21 +172,32 @@ function CourseDetailsContent() {
               </p>
             </div>
 
-            {/* Progress Bar */}
+            {/* Barre de progression */}
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-medium text-gray-700">Inscriptions pour l&apos;encadrement</span>
-                <span className="text-sm text-gray-500">{race.currentParticipants}/{race.maxParticipants}</span>
+                <span className="text-sm text-gray-500">15/50</span>
               </div>
               <div className="w-full bg-gray-200 rounded h-3">
                 <div 
                   className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded transition-all duration-300"
-                  style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
+                  style={{ width: `${(15 / 50) * 100}%` }}
                 ></div>
               </div>
             </div>
 
-            {/* Action Buttons */}
+            {/* Informations importantes */}
+            <div className="bg-blue-50 border border-blue-200 rounded p-4 mb-6">
+              <h4 className="text-lg font-semibold text-blue-800 mb-2">Informations importantes</h4>
+              <ul className="text-blue-700 space-y-1">
+                <li>• Vous vous inscrivez pour <strong>l&apos;encadrement</strong> de la course en tant que bénévole</li>
+                <li>• L&apos;organisateur vous contactera pour finaliser votre inscription</li>
+                <li>• Vous recevrez votre récompense après participation à l&apos;encadrement</li>
+                <li>• Votre engagement bénévole contribue au bon déroulement de l&apos;événement</li>
+              </ul>
+            </div>
+
+            {/* Boutons d'action */}
             <div className="flex flex-col sm:flex-row gap-4">
               <button
                 onClick={handleInscription}
@@ -332,7 +219,7 @@ function CourseDetailsContent() {
   );
 }
 
-export default function CourseDetailsPage() {
+export default function InscriptionPage() {
   return (
     <Suspense fallback={
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -342,7 +229,7 @@ export default function CourseDetailsPage() {
         </div>
       </div>
     }>
-      <CourseDetailsContent />
+      <InscriptionContent />
     </Suspense>
   );
 }
