@@ -13,8 +13,8 @@ export default function Home() {
               <Image
                 src="/images/runner-left.jpg"
                 alt="Coureur bénévole"
-                width={120}
-                height={120}
+                width={180}
+                height={180}
                 className="rounded-full object-cover mr-8 shadow-lg"
               />
               
@@ -27,8 +27,8 @@ export default function Home() {
               <Image
                 src="/images/runner-right.jpg"
                 alt="Médaille de course"
-                width={120}
-                height={120}
+                width={180}
+                height={180}
                 className="rounded-full object-cover ml-8 shadow-lg"
               />
             </div>
