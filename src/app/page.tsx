@@ -19,7 +19,7 @@ export default function Home() {
               />
               
               {/* Titre central */}
-              <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+              <h1 className="logo-homepage">
                 RunReward
               </h1>
               
