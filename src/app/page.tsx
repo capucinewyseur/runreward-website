@@ -11,8 +11,8 @@ export default function Home() {
             <h1 className="text-4xl md:text-6xl runreward-title text-gray-900 mb-6">
               {/* Image à gauche */}
               <Image
-                src="/images/runner-left.svg"
-                alt="Coureur à gauche"
+                src="/images/runner-left.jpg"
+                alt="Coureur bénévole"
                 width={80}
                 height={80}
                 className="rounded-full object-cover mr-6 shadow-lg"
@@ -21,8 +21,8 @@ export default function Home() {
               RunReward
               {/* Image à droite */}
               <Image
-                src="/images/runner-right.svg"
-                alt="Coureur à droite"
+                src="/images/runner-right.jpg"
+                alt="Médaille de course"
                 width={80}
                 height={80}
                 className="rounded-full object-cover ml-6 shadow-lg"
