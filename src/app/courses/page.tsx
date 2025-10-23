@@ -118,7 +118,7 @@ export default function CoursesPage() {
         {/* Header */}
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            🏃‍♂️ Courses à venir
+            Courses à venir
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Découvrez toutes les courses disponibles et trouvez celle qui vous correspond. 
@@ -127,8 +127,8 @@ export default function CoursesPage() {
         </div>
 
         {/* Filtres */}
-        <div className="bg-white rounded-lg shadow-lg p-6 mb-8">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">🔍 Rechercher une course</h2>
+        <div className="bg-white rounded shadow-lg p-6 mb-8">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Rechercher une course</h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
             {/* Recherche générale */}
@@ -141,7 +141,7 @@ export default function CoursesPage() {
                 placeholder="Nom, lieu, description..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
 
@@ -155,7 +155,7 @@ export default function CoursesPage() {
                 placeholder="Ville, région..."
                 value={locationFilter}
                 onChange={(e) => setLocationFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
 
@@ -167,7 +167,7 @@ export default function CoursesPage() {
               <select
                 value={departmentFilter}
                 onChange={(e) => setDepartmentFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               >
                 <option value="">Tous les départements</option>
                 {departments.map(dept => (
@@ -185,7 +185,7 @@ export default function CoursesPage() {
                 type="date"
                 value={dateFilter}
                 onChange={(e) => setDateFilter(e.target.value)}
-                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#F08040]"
               />
             </div>
           </div>
@@ -195,15 +195,15 @@ export default function CoursesPage() {
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded-lg font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
-              {isSearching ? 'Recherche en cours...' : '🔍 Rechercher les courses'}
+              {isSearching ? 'Recherche en cours...' : 'Rechercher les courses'}
             </button>
             <button
               onClick={resetFilters}
-              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded font-semibold transition-colors"
             >
-              🔄 Réinitialiser les filtres
+              Réinitialiser les filtres
             </button>
           </div>
         </div>
@@ -212,10 +212,12 @@ export default function CoursesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {races.map((race) => {
             return (
-              <div key={race.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
+              <div key={race.id} className="bg-white rounded shadow-lg overflow-hidden hover:shadow-xl transition-shadow duration-300">
                 {/* Image de la course */}
                 <div className="h-48 bg-gradient-to-br from-[#F08040]/10 to-[#6A70F0]/10 flex items-center justify-center">
-                  <div className="text-6xl">🏃‍♂️</div>
+                  <svg className="w-16 h-16 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
                 </div>
 
                 {/* Contenu de la course */}
@@ -256,19 +258,28 @@ export default function CoursesPage() {
 
                   <div className="space-y-2 mb-4">
                     <p className="text-gray-600 flex items-center">
-                      <span className="mr-2">📍</span>
+                      <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
                       {race.location}
                     </p>
                     <p className="text-gray-600 flex items-center">
-                      <span className="mr-2">📅</span>
+                      <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
                       {formatDate(race.date)}
                     </p>
                     <p className="text-gray-600 flex items-center">
-                      <span className="mr-2">🏁</span>
+                      <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       {race.distance}
                     </p>
                     <p className="text-gray-600 flex items-center">
-                      <span className="mr-2">🗺️</span>
+                      <svg className="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       {race.department}
                     </p>
                   </div>
@@ -284,9 +295,11 @@ export default function CoursesPage() {
                   )}
 
                   {/* Récompense - Version améliorée */}
-                  <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+                  <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
                     <div className="flex items-center mb-2">
-                      <span className="text-2xl mr-3">🎁</span>
+                      <svg className="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
+                      </svg>
                       <h4 className="text-lg font-bold text-white">Récompense</h4>
                     </div>
                     <p className="text-white font-semibold text-base leading-relaxed">
@@ -299,7 +312,7 @@ export default function CoursesPage() {
                     {!expandedDescriptions.has(race.id) ? (
                       <button
                         onClick={() => toggleDescription(race.id)}
-                        className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
+                        className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg"
                       >
                         S&apos;inscrire comme bénévole
                       </button>
@@ -307,13 +320,13 @@ export default function CoursesPage() {
                       <div className="space-y-3">
                         <a
                           href={`/auth?raceId=${race.id}`}
-                          className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded-xl text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg block"
+                          className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg block"
                         >
                           Confirmer l&apos;inscription
                         </a>
                         <button
                           onClick={() => toggleDescription(race.id)}
-                          className="w-full bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm"
+                          className="w-full bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded transition-colors text-sm"
                         >
                           Masquer la description
                         </button>
@@ -329,7 +342,11 @@ export default function CoursesPage() {
         {/* Message si aucune course trouvée */}
         {races.length === 0 && (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">🔍</div>
+            <div className="text-6xl mb-4">
+              <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </div>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
               Aucune course trouvée
             </h3>
