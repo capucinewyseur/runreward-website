@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { userDB, User, CourseStats } from '@/lib/userDatabase';
-import { courseDB, Course, CourseField } from '@/lib/courseDatabase';
+import { courseDB, Course } from '@/lib/courseDatabase';
 import { emailService, EmailData } from '@/lib/emailService';
 import DataManagementPanel from '@/components/DataManagementPanel';
 
@@ -418,9 +419,11 @@ Plateforme de bénévolat pour coureurs récompensés
                     {formData.image && (
                       <div className="mt-2">
                         <p className="text-sm text-gray-600 mb-2">Aperçu :</p>
-                        <img 
+                        <Image 
                           src={formData.image} 
                           alt="Aperçu de l'image" 
+                          width={400}
+                          height={128}
                           className="w-full h-32 object-cover rounded-lg border"
                           onError={(e) => {
                             e.currentTarget.style.display = 'none';
