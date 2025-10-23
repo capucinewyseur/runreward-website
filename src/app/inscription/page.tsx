@@ -24,7 +24,15 @@ function InscriptionContent() {
     setCurrentUser(user);
 
     // Récupérer l'ID de la course depuis l'URL ou localStorage
-    const raceId = searchParams.get('raceId') || localStorage.getItem('selected-race-id');
+    const raceId = searchParams.get('raceId') || (() => {
+      const storedRace = localStorage.getItem('selected-race');
+      if (storedRace) {
+        const raceData = JSON.parse(storedRace);
+        return raceData.id.toString();
+      }
+      return null;
+    })();
+    
     if (raceId) {
       const foundRace = courseDB.getCourseById(parseInt(raceId));
       if (foundRace) {
@@ -148,7 +156,7 @@ function InscriptionContent() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
                   </svg>
                   <div>
-                    <span className="font-medium">Participants :</span> 15/50
+                    <span className="font-medium">Participants :</span> {race.currentParticipants}/{race.maxParticipants}
                   </div>
                 </div>
                 <div className="flex items-center text-gray-700">
@@ -186,12 +194,12 @@ function InscriptionContent() {
             <div className="mb-6">
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm font-medium text-gray-700">Inscriptions pour l&apos;encadrement</span>
-                <span className="text-sm text-gray-500">15/50</span>
+                <span className="text-sm text-gray-500">{race.currentParticipants}/{race.maxParticipants}</span>
               </div>
               <div className="w-full bg-gray-200 rounded h-3">
                 <div 
                   className="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded transition-all duration-300"
-                  style={{ width: `${(15 / 50) * 100}%` }}
+                  style={{ width: `${(race.currentParticipants / race.maxParticipants) * 100}%` }}
                 ></div>
               </div>
             </div>

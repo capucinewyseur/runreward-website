@@ -243,6 +243,8 @@ Plateforme de bénévolat pour coureurs récompensés
       distance: course?.distance || '',
       reward: course?.reward || '',
       description: course?.description || '',
+      maxParticipants: course?.maxParticipants || 100,
+      currentParticipants: course?.currentParticipants || 0,
       type: course?.type || 'Route' as 'Route' | 'Trail',
       image: course?.image || '/images/default-course.jpg',
       coordinates: {
@@ -479,6 +481,39 @@ Plateforme de bénévolat pour coureurs récompensés
                   rows={4}
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
                 />
+              </div>
+
+              {/* Participants */}
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Participants max *
+                  </label>
+                  <input
+                    type="number"
+                    name="maxParticipants"
+                    value={formData.maxParticipants}
+                    onChange={handleChange}
+                    required
+                    min="1"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Participants actuels *
+                  </label>
+                  <input
+                    type="number"
+                    name="currentParticipants"
+                    value={formData.currentParticipants}
+                    onChange={handleChange}
+                    required
+                    min="0"
+                    max={formData.maxParticipants}
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                </div>
               </div>
 
               {/* Boutons */}
