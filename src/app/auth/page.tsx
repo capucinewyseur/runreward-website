@@ -70,7 +70,8 @@ export default function AuthPage() {
           postalCode: '',
           birthDate: '',
           gender: '',
-          shoeSize: ''
+          shoeSize: '',
+          favoriteCourses: []
         });
 
         // Se connecter automatiquement après l'inscription

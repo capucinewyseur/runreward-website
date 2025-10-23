@@ -10,6 +10,7 @@ export default function AdminPage() {
   const [allUsers, setAllUsers] = useState<User[]>([]);
   const [courseStats, setCourseStats] = useState<CourseStats[]>([]);
   const [allCourses, setAllCourses] = useState<Course[]>([]);
+  const [favoritesStats, setFavoritesStats] = useState<{ courseId: number; courseName: string; totalFavorites: number }[]>([]);
   const [isGenerating, setIsGenerating] = useState(false);
   const [sendingEmails, setSendingEmails] = useState<Set<string>>(new Set());
   const [password, setPassword] = useState('');
@@ -25,9 +26,11 @@ export default function AdminPage() {
     const users = userDB.getAllUsers();
     const stats = userDB.getCourseStats();
     const courses = courseDB.getAllCourses();
+    const favorites = userDB.getFavoritesStats();
     setAllUsers(users);
     setCourseStats(stats);
     setAllCourses(courses);
+    setFavoritesStats(favorites);
   }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -785,6 +788,43 @@ Plateforme de bénévolat pour coureurs récompensés
                 </div>
               </div>
             ))}
+          </div>
+        </div>
+
+        {/* Favorites Statistics */}
+        <div className="bg-white shadow rounded-lg p-6 mb-8">
+          <h2 className="text-lg font-medium text-gray-900 mb-4">❤️ Statistiques des favoris par course</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {favoritesStats.map((favorite) => (
+              <div key={favorite.courseId} className="border border-gray-200 rounded-lg p-4">
+                <h3 className="font-semibold text-gray-900 mb-2">{favorite.courseName}</h3>
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Total favoris:</span>
+                    <span className="font-medium text-red-500">{favorite.totalFavorites}</span>
+                  </div>
+                  <div className="mt-3">
+                    <button
+                      onClick={() => {
+                        const courseFavorites = userDB.getCourseFavorites(favorite.courseId);
+                        const favoritesList = courseFavorites.map(fav => 
+                          `${fav.userInfo.firstName} ${fav.userInfo.lastName} (${fav.userInfo.email})`
+                        ).join('\n');
+                        alert(`Liste des favoris pour "${favorite.courseName}":\n\n${favoritesList || 'Aucun favori'}`);
+                      }}
+                      className="text-xs bg-red-50 text-red-600 px-3 py-1 rounded-full hover:bg-red-100 transition-colors"
+                    >
+                      Voir la liste
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+            {favoritesStats.length === 0 && (
+              <div className="col-span-full text-center py-8 text-gray-500">
+                Aucune course n&apos;a encore été mise en favori.
+              </div>
+            )}
           </div>
         </div>
 

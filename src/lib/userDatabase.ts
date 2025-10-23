@@ -22,6 +22,7 @@ export interface User {
     reward: string;
     type: string;
   };
+  favoriteCourses: number[]; // IDs des courses mises en favori
 }
 
 export interface CourseRegistration {
@@ -51,18 +52,34 @@ export interface CourseStats {
   confirmedRegistrations: number;
   pendingRegistrations: number;
   cancelledRegistrations: number;
+  totalFavorites: number; // Nombre total de favoris pour cette course
   registrations: CourseRegistration[];
+}
+
+export interface CourseFavorite {
+  id: string;
+  userId: string;
+  courseId: number;
+  courseName: string;
+  favoriteDate: string;
+  userInfo: {
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
 }
 
 class UserDatabase {
   private users: User[] = [];
   private currentUser: User | null = null;
   private courseRegistrations: CourseRegistration[] = [];
+  private courseFavorites: CourseFavorite[] = [];
 
   constructor() {
     // Charger les utilisateurs et inscriptions depuis localStorage au démarrage
     this.loadUsers();
     this.loadCourseRegistrations();
+    this.loadCourseFavorites();
     this.loadCurrentUser();
   }
 
@@ -120,7 +137,8 @@ class UserDatabase {
       ...userData,
       id: Date.now().toString(),
       inscriptionDate: new Date().toISOString(),
-      status: 'pending'
+      status: 'pending',
+      favoriteCourses: userData.favoriteCourses || []
     };
 
     this.users.push(newUser);
@@ -261,6 +279,7 @@ class UserDatabase {
           confirmedRegistrations: 0,
           pendingRegistrations: 0,
           cancelledRegistrations: 0,
+          totalFavorites: 0,
           registrations: []
         });
       }
@@ -279,6 +298,15 @@ class UserDatabase {
         case 'cancelled':
           stats.cancelledRegistrations++;
           break;
+      }
+    });
+
+    // Ajouter les statistiques des favoris
+    const favoritesStats = this.getFavoritesStats();
+    favoritesStats.forEach(favStat => {
+      const stats = courseMap.get(favStat.courseId);
+      if (stats) {
+        stats.totalFavorites = favStat.totalFavorites;
       }
     });
 
@@ -305,6 +333,136 @@ class UserDatabase {
       return true;
     }
     return false;
+  }
+
+  // === MÉTHODES POUR LES FAVORIS ===
+
+  // Charger les favoris depuis localStorage
+  private loadCourseFavorites(): void {
+    if (typeof window !== 'undefined') {
+      const storedFavorites = localStorage.getItem('runreward-course-favorites');
+      if (storedFavorites) {
+        this.courseFavorites = JSON.parse(storedFavorites);
+      }
+    }
+  }
+
+  // Sauvegarder les favoris dans localStorage
+  private saveCourseFavorites(): void {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('runreward-course-favorites', JSON.stringify(this.courseFavorites));
+    }
+  }
+
+  // Ajouter une course aux favoris
+  addToFavorites(courseId: number, courseName: string): boolean {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      return false;
+    }
+
+    // Vérifier si déjà en favori
+    const existingFavorite = this.courseFavorites.find(
+      fav => fav.userId === currentUser.id && fav.courseId === courseId
+    );
+
+    if (existingFavorite) {
+      return false; // Déjà en favori
+    }
+
+    // Ajouter aux favoris
+    const favorite: CourseFavorite = {
+      id: Date.now().toString(),
+      userId: currentUser.id,
+      courseId: courseId,
+      courseName: courseName,
+      favoriteDate: new Date().toISOString(),
+      userInfo: {
+        firstName: currentUser.firstName,
+        lastName: currentUser.lastName,
+        email: currentUser.email
+      }
+    };
+
+    this.courseFavorites.push(favorite);
+
+    // Mettre à jour l'utilisateur
+    if (!currentUser.favoriteCourses) {
+      currentUser.favoriteCourses = [];
+    }
+    currentUser.favoriteCourses.push(courseId);
+    this.saveUsers();
+    this.saveCourseFavorites();
+
+    return true;
+  }
+
+  // Retirer une course des favoris
+  removeFromFavorites(courseId: number): boolean {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      return false;
+    }
+
+    // Retirer des favoris globaux
+    this.courseFavorites = this.courseFavorites.filter(
+      fav => !(fav.userId === currentUser.id && fav.courseId === courseId)
+    );
+
+    // Mettre à jour l'utilisateur
+    if (currentUser.favoriteCourses) {
+      currentUser.favoriteCourses = currentUser.favoriteCourses.filter(id => id !== courseId);
+    }
+    this.saveUsers();
+    this.saveCourseFavorites();
+
+    return true;
+  }
+
+  // Vérifier si une course est en favori
+  isFavorite(courseId: number): boolean {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser || !currentUser.favoriteCourses) {
+      return false;
+    }
+    return currentUser.favoriteCourses.includes(courseId);
+  }
+
+  // Obtenir les courses favorites de l'utilisateur connecté
+  getUserFavorites(): CourseFavorite[] {
+    const currentUser = this.getCurrentUser();
+    if (!currentUser) {
+      return [];
+    }
+    return this.courseFavorites.filter(fav => fav.userId === currentUser.id);
+  }
+
+  // Obtenir tous les favoris pour une course spécifique (pour l'admin)
+  getCourseFavorites(courseId: number): CourseFavorite[] {
+    return this.courseFavorites.filter(fav => fav.courseId === courseId);
+  }
+
+  // Obtenir les statistiques des favoris par course
+  getFavoritesStats(): { courseId: number; courseName: string; totalFavorites: number }[] {
+    const courseMap = new Map<number, { courseName: string; totalFavorites: number }>();
+
+    this.courseFavorites.forEach(favorite => {
+      const existing = courseMap.get(favorite.courseId);
+      if (existing) {
+        existing.totalFavorites++;
+      } else {
+        courseMap.set(favorite.courseId, {
+          courseName: favorite.courseName,
+          totalFavorites: 1
+        });
+      }
+    });
+
+    return Array.from(courseMap.entries()).map(([courseId, data]) => ({
+      courseId,
+      courseName: data.courseName,
+      totalFavorites: data.totalFavorites
+    }));
   }
 }
 

@@ -1,10 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { userDB } from '@/lib/userDatabase';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [favoritesCount, setFavoritesCount] = useState(0);
+
+  useEffect(() => {
+    const currentUser = userDB.getCurrentUser();
+    setIsAuthenticated(!!currentUser);
+    
+    if (currentUser) {
+      const favorites = userDB.getUserFavorites();
+      setFavoritesCount(favorites.length);
+    }
+  }, []);
 
   return (
     <nav className="bg-white shadow-lg sticky top-0 z-50">
@@ -24,6 +37,17 @@ export default function Navbar() {
             <Link href="/courses" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               Courses
             </Link>
+            {isAuthenticated && (
+              <Link href="/favorites" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors flex items-center">
+                <span className="mr-1">❤️</span>
+                Favoris
+                {favoritesCount > 0 && (
+                  <span className="ml-1 bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                    {favoritesCount}
+                  </span>
+                )}
+              </Link>
+            )}
             <Link href="/about" className="text-gray-700 hover:text-[#F08040] px-3 py-2 rounded-md text-sm font-medium transition-colors">
               À propos
             </Link>
@@ -31,7 +55,7 @@ export default function Navbar() {
               Contact
             </Link>
             <Link href="/profile" className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-              Se connecter
+              {isAuthenticated ? 'Mon profil' : 'Se connecter'}
             </Link>
           </div>
 
@@ -62,6 +86,17 @@ export default function Navbar() {
               <Link href="/courses" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 Courses
               </Link>
+              {isAuthenticated && (
+                <Link href="/favorites" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium flex items-center">
+                  <span className="mr-2">❤️</span>
+                  Favoris
+                  {favoritesCount > 0 && (
+                    <span className="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-1 min-w-[20px] text-center">
+                      {favoritesCount}
+                    </span>
+                  )}
+                </Link>
+              )}
               <Link href="/about" className="text-gray-700 hover:text-[#F08040] block px-3 py-2 rounded-md text-base font-medium">
                 À propos
               </Link>
@@ -69,7 +104,7 @@ export default function Navbar() {
                 Contact
               </Link>
               <Link href="/profile" className="bg-[#F08040] hover:bg-[#e06d2a] text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium">
-                Se connecter
+                {isAuthenticated ? 'Mon profil' : 'Se connecter'}
               </Link>
             </div>
           </div>

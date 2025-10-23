@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import { courseDB, Course } from '@/lib/courseDatabase';
+import { userDB } from '@/lib/userDatabase';
+import { useRouter } from 'next/navigation';
 
 export default function CoursesPage() {
+  const router = useRouter();
   const [races, setRaces] = useState<Course[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [locationFilter, setLocationFilter] = useState('');
@@ -11,11 +14,16 @@ export default function CoursesPage() {
   const [departmentFilter, setDepartmentFilter] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [expandedDescriptions, setExpandedDescriptions] = useState<Set<number>>(new Set());
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     // Charger les courses depuis la base de données
     const allCourses = courseDB.getAllCourses();
     setRaces(allCourses);
+    
+    // Vérifier si l'utilisateur est connecté
+    const currentUser = userDB.getCurrentUser();
+    setIsAuthenticated(!!currentUser);
   }, []);
 
   const handleSearch = () => {
@@ -75,6 +83,24 @@ export default function CoursesPage() {
 
   // Obtenir la liste unique des départements
   const departments = [...new Set(courseDB.getAllCourses().map(race => race.department))].sort();
+
+  // Fonctions pour gérer les favoris
+  const handleFavoriteClick = (courseId: number, courseName: string) => {
+    if (!isAuthenticated) {
+      // Rediriger vers la page d'authentification
+      router.push('/auth');
+      return;
+    }
+
+    if (userDB.isFavorite(courseId)) {
+      userDB.removeFromFavorites(courseId);
+    } else {
+      userDB.addToFavorites(courseId, courseName);
+    }
+    
+    // Forcer le re-render pour mettre à jour l'état des cœurs
+    setRaces([...races]);
+  };
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -195,12 +221,37 @@ export default function CoursesPage() {
                 {/* Contenu de la course */}
                 <div className="p-6">
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-xl font-bold text-gray-900">{race.name}</h3>
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      race.type === 'Route' ? 'bg-[#6A70F0]/10 text-[#6A70F0]' : 'bg-green-100 text-green-800'
-                    }`}>
-                      {race.type}
-                    </span>
+                    <h3 className="text-xl font-bold text-gray-900 flex-1">{race.name}</h3>
+                    <div className="flex items-center space-x-2">
+                      <button
+                        onClick={() => handleFavoriteClick(race.id, race.name)}
+                        className={`p-2 rounded-full transition-all duration-200 hover:scale-110 ${
+                          userDB.isFavorite(race.id) 
+                            ? 'text-red-500 bg-red-50 hover:bg-red-100' 
+                            : 'text-gray-400 hover:text-red-500 hover:bg-red-50'
+                        }`}
+                        title={userDB.isFavorite(race.id) ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                      >
+                        <svg 
+                          className="w-5 h-5" 
+                          fill={userDB.isFavorite(race.id) ? 'currentColor' : 'none'} 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" 
+                          />
+                        </svg>
+                      </button>
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        race.type === 'Route' ? 'bg-[#6A70F0]/10 text-[#6A70F0]' : 'bg-green-100 text-green-800'
+                      }`}>
+                        {race.type}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-2 mb-4">
