@@ -20,6 +20,19 @@ function InscriptionContent() {
       router.push('/auth');
       return;
     }
+    
+    // Vérifier si le profil est complet
+    if (!user.address || !user.city || !user.postalCode || !user.birthDate || !user.gender || !user.shoeSize) {
+      // Rediriger vers inscription-complete pour compléter le profil
+      const raceId = searchParams.get('raceId');
+      if (raceId) {
+        router.push(`/inscription-complete?raceId=${raceId}`);
+      } else {
+        router.push('/inscription-complete');
+      }
+      return;
+    }
+    
     setIsAuthenticated(true);
     setCurrentUser(user);
 

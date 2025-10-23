@@ -75,14 +75,22 @@ function InscriptionCompleteContent() {
       shoeSize: formData.shoeSize
     });
 
-    if (updatedUser && race) {
-      userDB.completeRegistration(currentUser.id, race);
-      setTimeout(() => {
-        setIsLoading(false);
-        router.push('/inscription/confirmation');
-      }, 500);
+    if (updatedUser) {
+      // Rediriger vers la page d'inscription après avoir complété le profil
+      const raceId = searchParams.get('raceId');
+      if (raceId) {
+        setTimeout(() => {
+          setIsLoading(false);
+          router.push(`/inscription?raceId=${raceId}`);
+        }, 500);
+      } else {
+        setTimeout(() => {
+          setIsLoading(false);
+          router.push('/courses');
+        }, 500);
+      }
     } else {
-      alert('Erreur lors de la mise à jour des informations ou course non sélectionnée.');
+      alert('Erreur lors de la mise à jour des informations.');
       setIsLoading(false);
     }
   };

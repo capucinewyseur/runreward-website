@@ -34,11 +34,11 @@ export default function AuthPage() {
         // Connexion
         const user = userDB.authenticate(email, password);
         if (user) {
-          // Redirection vers la page d'inscription complète après connexion
+          // Redirection vers la page d'inscription après connexion
           const urlParams = new URLSearchParams(window.location.search);
           const raceId = urlParams.get('raceId');
           if (raceId) {
-            window.location.href = `/inscription-complete?raceId=${raceId}`;
+            window.location.href = `/inscription?raceId=${raceId}`;
           } else {
             window.location.href = '/courses';
           }
@@ -77,11 +77,11 @@ export default function AuthPage() {
         // Se connecter automatiquement après l'inscription
         userDB.authenticate(email, password);
 
-        // Redirection vers la page d'inscription complète après inscription
+        // Redirection vers la page d'inscription après inscription
         const urlParams = new URLSearchParams(window.location.search);
         const raceId = urlParams.get('raceId');
         if (raceId) {
-          window.location.href = `/inscription-complete?raceId=${raceId}`;
+          window.location.href = `/inscription?raceId=${raceId}`;
         } else {
           window.location.href = '/courses';
         }
