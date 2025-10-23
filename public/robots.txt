@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# Pages publiques autorisées
+Allow: /courses
+Allow: /course-details
+Allow: /auth
+Allow: /inscription
+Allow: /inscription/confirmation
+Allow: /profile
+Allow: /favorites
+
+# Pages interdites aux robots
+Disallow: /admin
+Disallow: /inscription-complete
+Disallow: /api/
+Disallow: /_next/
+Disallow: /data/
+
+# Fichiers sensibles interdits
+Disallow: /*.json$
+Disallow: /database.json
+Disallow: /sample-data.json
+
+# Sitemap
+Sitemap: https://votre-domaine.com/sitemap.xml
+
+# Délai entre les requêtes (en secondes)
+Crawl-delay: 1
