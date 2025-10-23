@@ -2,13 +2,18 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { userDB, User } from '@/lib/userDatabase';
+import { userDB, User, CourseFavorite, CourseRegistration } from '@/lib/userDatabase';
+import { courseDB, Course } from '@/lib/courseDatabase';
 import Link from 'next/link';
 
 export default function ProfilePage() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [, setFavorites] = useState<CourseFavorite[]>([]);
+  const [registrations, setRegistrations] = useState<CourseRegistration[]>([]);
+  const [favoriteCourses, setFavoriteCourses] = useState<Course[]>([]);
+  const [registeredCourses, setRegisteredCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     const currentUser = userDB.getCurrentUser();
@@ -18,6 +23,21 @@ export default function ProfilePage() {
       return;
     }
     setUser(currentUser);
+    
+    // Charger les favoris et inscriptions
+    const userFavorites = userDB.getUserFavorites();
+    const userRegistrations = userDB.getCourseRegistrations().filter(reg => reg.userId === currentUser.id);
+    
+    setFavorites(userFavorites);
+    setRegistrations(userRegistrations);
+    
+    // Charger les détails des courses
+    const favoriteCoursesDetails = userFavorites.map(fav => courseDB.getCourseById(fav.courseId)).filter(Boolean) as Course[];
+    const registeredCoursesDetails = userRegistrations.map(reg => courseDB.getCourseById(reg.courseId)).filter(Boolean) as Course[];
+    
+    setFavoriteCourses(favoriteCoursesDetails);
+    setRegisteredCourses(registeredCoursesDetails);
+    
     setIsLoading(false);
   }, [router]);
 
@@ -199,6 +219,122 @@ export default function ProfilePage() {
                 </div>
               </div>
             )}
+
+            {/* Courses favorites */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">❤️ Mes courses favorites</h3>
+              {favoriteCourses.length > 0 ? (
+                <div className="space-y-3">
+                  {favoriteCourses.map((course) => (
+                    <div key={course.id} className="bg-gradient-to-r from-red-50 to-pink-50 p-4 rounded-lg border border-red-200">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900">{course.name}</h4>
+                          <p className="text-sm text-gray-600">📍 {course.location}</p>
+                          <p className="text-sm text-gray-600">📅 {formatDate(course.date)}</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <button
+                            onClick={() => {
+                              userDB.removeFromFavorites(course.id);
+                              // Recharger les données
+                              const updatedFavorites = userDB.getUserFavorites();
+                              setFavorites(updatedFavorites);
+                              const updatedFavoriteCourses = updatedFavorites.map(fav => courseDB.getCourseById(fav.courseId)).filter(Boolean) as Course[];
+                              setFavoriteCourses(updatedFavoriteCourses);
+                            }}
+                            className="text-red-500 hover:text-red-700 p-1"
+                            title="Retirer des favoris"
+                          >
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                              <path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                          </button>
+                          <Link
+                            href={`/course-details?raceId=${course.id}`}
+                            className="text-[#F08040] hover:text-[#e06d2a] text-sm font-medium"
+                          >
+                            Voir détails
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+                  <p className="text-lg font-medium mb-2">Aucune course favorite</p>
+                  <p className="text-sm">Ajoutez des courses à vos favoris pour les retrouver facilement !</p>
+                  <Link
+                    href="/courses"
+                    className="inline-block mt-4 bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                  >
+                    Découvrir les courses
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Courses inscrites */}
+            <div className="bg-white rounded-xl shadow-lg p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">📝 Mes inscriptions</h3>
+              {registeredCourses.length > 0 ? (
+                <div className="space-y-3">
+                  {registeredCourses.map((course) => {
+                    const registration = registrations.find(reg => reg.courseId === course.id);
+                    return (
+                      <div key={course.id} className="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg border border-green-200">
+                        <div className="flex items-center justify-between">
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">{course.name}</h4>
+                            <p className="text-sm text-gray-600">📍 {course.location}</p>
+                            <p className="text-sm text-gray-600">📅 {formatDate(course.date)}</p>
+                            <div className="mt-2">
+                              <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
+                                registration?.status === 'confirmed' 
+                                  ? 'bg-green-100 text-green-800' 
+                                  : registration?.status === 'pending'
+                                  ? 'bg-yellow-100 text-yellow-800'
+                                  : 'bg-gray-100 text-gray-800'
+                              }`}>
+                                {registration?.status === 'confirmed' ? '✅ Confirmé' : 
+                                 registration?.status === 'pending' ? '⏳ En attente' : 
+                                 '❌ Annulé'}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Link
+                              href={`/course-details?raceId=${course.id}`}
+                              className="text-[#F08040] hover:text-[#e06d2a] text-sm font-medium"
+                            >
+                              Voir détails
+                            </Link>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <p className="text-lg font-medium mb-2">Aucune inscription</p>
+                  <p className="text-sm">Inscrivez-vous à des courses pour commencer à gagner des récompenses !</p>
+                  <Link
+                    href="/courses"
+                    className="inline-block mt-4 bg-[#F08040] hover:bg-[#e06d2a] text-white px-4 py-2 rounded text-sm font-medium transition-colors"
+                  >
+                    Voir les courses
+                  </Link>
+                </div>
+              )}
+            </div>
 
             {/* Actions */}
             <div className="bg-white rounded-xl shadow-lg p-6">
