@@ -128,7 +128,7 @@ export default function Home() {
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">100+</div>
-              <div className="text-white/90">Récompenses et remises disponibles</div>
+              <div className="text-white/90">Avantages et remises disponibles</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">25</div>
