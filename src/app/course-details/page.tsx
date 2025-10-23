@@ -151,7 +151,7 @@ function CourseDetailsContent() {
     // Sauvegarder l'ID de la course pour l'inscription
     if (race) {
       localStorage.setItem('selected-race', JSON.stringify(race));
-      router.push(`/inscription?raceId=${race.id}`);
+      router.push(`/auth?raceId=${race.id}`);
     }
   };
 
