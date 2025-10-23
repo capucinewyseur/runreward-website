@@ -123,9 +123,9 @@ body {
   gap: 1rem;
 }
 
-/* Logo RR avec dégradé */
-.logo-rr {
-  font-size: 0.8em;
+/* Logo RR pour la navbar */
+.logo-navbar {
+  font-size: 1.5rem;
   font-weight: 800;
   background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8, #c084fc, #a855f7, #8b5cf6);
   -webkit-background-clip: text;
@@ -133,6 +133,7 @@ body {
   background-clip: text;
   letter-spacing: -0.05em;
   font-family: var(--font-inter), 'Inter', sans-serif;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 /* Card hover effects */

@@ -25,7 +25,7 @@ export default function Navbar() {
         <div className="flex justify-between h-16">
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center">
-              <span className="text-2xl runreward-title text-gray-800">RunReward</span>
+              <span className="logo-navbar">RR</span>
             </Link>
           </div>
           
