@@ -6,6 +6,8 @@ import { courseDB, Course } from '@/lib/courseDatabase';
 import { userDB, User } from '@/lib/userDatabase';
 
 function InscriptionContent() {
+  console.log('🚀 InscriptionContent component loaded');
+  
   const router = useRouter();
   const searchParams = useSearchParams();
   const [race, setRace] = useState<Course | null>(null);
@@ -16,9 +18,14 @@ function InscriptionContent() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
+    console.log('🔄 useEffect triggered');
+    
     // Vérifier si l'utilisateur est connecté
     const user = userDB.getCurrentUser();
+    console.log('👤 Current user:', user);
+    
     if (!user) {
+      console.log('❌ No user, redirecting to auth');
       router.push('/auth');
       return;
     }
