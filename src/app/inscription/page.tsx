@@ -70,7 +70,7 @@ function InscriptionContent() {
       router.push('/courses');
     }
     setIsLoading(false);
-  }, [searchParams, router, user]);
+  }, [searchParams, router]);
 
   const handleFieldChange = (fieldId: string, value: string) => {
     setCustomFields(prev => ({
