@@ -8,25 +8,30 @@ export default function Home() {
       <section className="bg-purple-50 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl runreward-title text-gray-900 mb-6">
+            <div className="flex items-center justify-center mb-6">
               {/* Image à gauche */}
               <Image
                 src="/images/runner-left.jpg"
                 alt="Coureur bénévole"
-                width={80}
-                height={80}
-                className="rounded-full object-cover mr-6 shadow-lg"
+                width={120}
+                height={120}
+                className="rounded-full object-cover mr-8 shadow-lg"
               />
-              <span className="logo-rr">RR</span>
+              
+              {/* Titre central */}
+              <h1 className="text-4xl md:text-6xl font-bold text-gray-900">
+                RunReward
+              </h1>
+              
               {/* Image à droite */}
               <Image
                 src="/images/runner-right.jpg"
                 alt="Médaille de course"
-                width={80}
-                height={80}
-                className="rounded-full object-cover ml-6 shadow-lg"
+                width={120}
+                height={120}
+                className="rounded-full object-cover ml-8 shadow-lg"
               />
-            </h1>
+            </div>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
               La plateforme qui récompense les coureurs pour leur engagement bénévole. 
               Encadrez des courses en tant que bénévole et gagnez <span className="font-semibold text-gray-800">des récompenses et réductions sur vos prochains dossards</span> tout en passant un moment convivial dans l&apos;ambiance festive de la course.
