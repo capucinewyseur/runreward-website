@@ -1,3 +1,12 @@
+export interface CourseField {
+  id: string;
+  label: string;
+  type: 'text' | 'email' | 'tel' | 'number' | 'select' | 'textarea' | 'date';
+  required: boolean;
+  options?: string[]; // Pour les champs select
+  placeholder?: string;
+}
+
 export interface Course {
   id: number;
   name: string;
@@ -15,6 +24,7 @@ export interface Course {
     lat: number;
     lng: number;
   };
+  requiredFields: CourseField[]; // Nouveaux champs requis pour cette course
 }
 
 class CourseDatabase {
@@ -22,6 +32,81 @@ class CourseDatabase {
 
   constructor() {
     this.loadCourses();
+  }
+
+  // Générer les champs requis par défaut
+  private getDefaultRequiredFields(): CourseField[] {
+    return [
+      {
+        id: 'address',
+        label: 'Adresse complète',
+        type: 'textarea',
+        required: true,
+        placeholder: 'Votre adresse complète'
+      },
+      {
+        id: 'city',
+        label: 'Ville',
+        type: 'text',
+        required: true,
+        placeholder: 'Votre ville'
+      },
+      {
+        id: 'postalCode',
+        label: 'Code postal',
+        type: 'text',
+        required: true,
+        placeholder: 'Code postal'
+      },
+      {
+        id: 'birthDate',
+        label: 'Date de naissance',
+        type: 'date',
+        required: true
+      },
+      {
+        id: 'gender',
+        label: 'Sexe',
+        type: 'select',
+        required: true,
+        options: ['Homme', 'Femme', 'Autre']
+      },
+      {
+        id: 'shoeSize',
+        label: 'Pointure',
+        type: 'select',
+        required: true,
+        options: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48']
+      },
+      {
+        id: 'tshirtSize',
+        label: 'Taille de t-shirt',
+        type: 'select',
+        required: false,
+        options: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
+      },
+      {
+        id: 'dietaryRestrictions',
+        label: 'Régime alimentaire spécifique',
+        type: 'textarea',
+        required: false,
+        placeholder: 'Allergies, végétarien, végan, etc.'
+      },
+      {
+        id: 'emergencyContact',
+        label: 'Contact d\'urgence',
+        type: 'tel',
+        required: true,
+        placeholder: 'Numéro de téléphone'
+      },
+      {
+        id: 'medicalInfo',
+        label: 'Informations médicales importantes',
+        type: 'textarea',
+        required: false,
+        placeholder: 'Médicaments, conditions médicales, etc.'
+      }
+    ];
   }
 
   private loadCourses() {
@@ -45,7 +130,8 @@ class CourseDatabase {
             currentParticipants: 4234,
             type: "Route",
             image: "/images/paris-marathon.jpg",
-            coordinates: { lat: 48.8566, lng: 2.3522 }
+            coordinates: { lat: 48.8566, lng: 2.3522 },
+            requiredFields: this.getDefaultRequiredFields()
           },
           {
             id: 2,
@@ -60,7 +146,8 @@ class CourseDatabase {
             currentParticipants: 98,
             type: "Trail",
             image: "/images/vosges-trail.jpg",
-            coordinates: { lat: 48.1728, lng: 6.4518 }
+            coordinates: { lat: 48.1728, lng: 6.4518 },
+            requiredFields: this.getDefaultRequiredFields()
           },
           {
             id: 3,
@@ -75,7 +162,8 @@ class CourseDatabase {
             currentParticipants: 2156,
             type: "Route",
             image: "/images/lyon-semi.jpg",
-            coordinates: { lat: 45.7640, lng: 4.8357 }
+            coordinates: { lat: 45.7640, lng: 4.8357 },
+            requiredFields: this.getDefaultRequiredFields()
           },
           {
             id: 4,
@@ -90,7 +178,8 @@ class CourseDatabase {
             currentParticipants: 156,
             type: "Trail",
             image: "/images/mont-blanc-trail.jpg",
-            coordinates: { lat: 45.9237, lng: 6.8694 }
+            coordinates: { lat: 45.9237, lng: 6.8694 },
+            requiredFields: this.getDefaultRequiredFields()
           },
           {
             id: 5,
@@ -105,7 +194,8 @@ class CourseDatabase {
             currentParticipants: 734,
             type: "Route",
             image: "/images/nice-10k.jpg",
-            coordinates: { lat: 43.7102, lng: 7.2620 }
+            coordinates: { lat: 43.7102, lng: 7.2620 },
+            requiredFields: this.getDefaultRequiredFields()
           },
           {
             id: 6,
@@ -120,7 +210,8 @@ class CourseDatabase {
             currentParticipants: 856,
             type: "Route",
             image: "/images/geneve-marathon.jpg",
-            coordinates: { lat: 46.2044, lng: 6.1432 }
+            coordinates: { lat: 46.2044, lng: 6.1432 },
+            requiredFields: this.getDefaultRequiredFields()
           }
         ];
         this.saveCourses();

@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { userDB, User, CourseStats } from '@/lib/userDatabase';
-import { courseDB, Course } from '@/lib/courseDatabase';
+import { courseDB, Course, CourseField } from '@/lib/courseDatabase';
 import { emailService, EmailData } from '@/lib/emailService';
 import DataManagementPanel from '@/components/DataManagementPanel';
 
@@ -250,7 +250,19 @@ Plateforme de bénévolat pour coureurs récompensés
       coordinates: {
         lat: course?.coordinates.lat || 0,
         lng: course?.coordinates.lng || 0
-      }
+      },
+      requiredFields: course?.requiredFields || [
+        { id: 'address', label: 'Adresse complète', type: 'textarea', required: true, placeholder: 'Votre adresse complète' },
+        { id: 'city', label: 'Ville', type: 'text', required: true, placeholder: 'Votre ville' },
+        { id: 'postalCode', label: 'Code postal', type: 'text', required: true, placeholder: 'Code postal' },
+        { id: 'birthDate', label: 'Date de naissance', type: 'date', required: true },
+        { id: 'gender', label: 'Sexe', type: 'select', required: true, options: ['Homme', 'Femme', 'Autre'] },
+        { id: 'shoeSize', label: 'Pointure', type: 'select', required: true, options: ['35', '36', '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48'] },
+        { id: 'tshirtSize', label: 'Taille de t-shirt', type: 'select', required: false, options: ['XS', 'S', 'M', 'L', 'XL', 'XXL'] },
+        { id: 'dietaryRestrictions', label: 'Régime alimentaire spécifique', type: 'textarea', required: false, placeholder: 'Allergies, végétarien, végan, etc.' },
+        { id: 'emergencyContact', label: 'Contact d&apos;urgence', type: 'tel', required: true, placeholder: 'Numéro de téléphone' },
+        { id: 'medicalInfo', label: 'Informations médicales importantes', type: 'textarea', required: false, placeholder: 'Médicaments, conditions médicales, etc.' }
+      ]
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -514,6 +526,34 @@ Plateforme de bénévolat pour coureurs récompensés
                     className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500"
                   />
                 </div>
+              </div>
+
+              {/* Configuration des champs requis */}
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Champs requis pour l&apos;inscription</h3>
+                <div className="space-y-3">
+                  {formData.requiredFields?.map((field, index) => (
+                    <div key={field.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded">
+                      <input
+                        type="checkbox"
+                        checked={field.required}
+                        onChange={(e) => {
+                          const newFields = [...(formData.requiredFields || [])];
+                          newFields[index].required = e.target.checked;
+                          setFormData({ ...formData, requiredFields: newFields });
+                        }}
+                        className="h-4 w-4 text-orange-600 focus:ring-orange-500 border-gray-300 rounded"
+                      />
+                      <span className="flex-1 text-sm font-medium text-gray-700">{field.label}</span>
+                      <span className="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded">
+                        {field.type}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                <p className="text-sm text-gray-500 mt-2">
+                  Cochez les champs que les participants devront remplir pour s&apos;inscrire à cette course.
+                </p>
               </div>
 
               {/* Boutons */}
