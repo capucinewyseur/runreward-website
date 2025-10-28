@@ -127,8 +127,23 @@ export default function AuthPage() {
 
         // Redirection vers la page d'inscription après inscription
         const urlParams = new URLSearchParams(window.location.search);
-        const raceId = urlParams.get('raceId');
-        console.log('🔍 Redirection après inscription - raceId:', raceId);
+        let raceId = urlParams.get('raceId');
+        
+        // Si pas de raceId dans l'URL, essayer de le récupérer depuis localStorage
+        if (!raceId) {
+          const storedRace = localStorage.getItem('selected-race');
+          if (storedRace) {
+            try {
+              const raceData = JSON.parse(storedRace);
+              raceId = raceData.id?.toString();
+              console.log('🔍 RaceId récupéré depuis localStorage:', raceId);
+            } catch (e) {
+              console.error('Erreur lors du parsing de la course stockée:', e);
+            }
+          }
+        }
+        
+        console.log('🔍 Redirection après inscription - raceId final:', raceId);
         
         if (raceId) {
           console.log('✅ Redirection vers /inscription?raceId=' + raceId);
