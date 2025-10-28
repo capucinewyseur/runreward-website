@@ -128,9 +128,13 @@ export default function AuthPage() {
         // Redirection vers la page d'inscription après inscription
         const urlParams = new URLSearchParams(window.location.search);
         const raceId = urlParams.get('raceId');
+        console.log('🔍 Redirection après inscription - raceId:', raceId);
+        
         if (raceId) {
+          console.log('✅ Redirection vers /inscription?raceId=' + raceId);
           window.location.href = `/inscription?raceId=${raceId}`;
         } else {
+          console.log('⚠️ Pas de raceId, redirection vers /courses');
           window.location.href = '/courses';
         }
       }
