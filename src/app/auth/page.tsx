@@ -74,9 +74,9 @@ export default function AuthPage() {
       } else {
         // Validation des données d'inscription
         const validation = SecurityUtils.validateRegistrationData({
-          firstName: SecurityUtils.sanitizeInput(firstName),
-          lastName: SecurityUtils.sanitizeInput(lastName),
-          email: SecurityUtils.sanitizeInput(email).toLowerCase(),
+          firstName,
+          lastName,
+          email: email.toLowerCase(),
           password,
           confirmPassword: password
         });
@@ -93,9 +93,9 @@ export default function AuthPage() {
           return;
         }
 
-        const sanitizedEmail = SecurityUtils.sanitizeInput(email).toLowerCase();
+        const lowerEmail = email.toLowerCase();
         
-        if (userDB.emailExists(sanitizedEmail)) {
+        if (userDB.emailExists(lowerEmail)) {
           setError('Un compte avec cet email existe déjà');
           setIsLoading(false);
           return;
@@ -106,7 +106,7 @@ export default function AuthPage() {
           userDB.createUser({
             firstName,
             lastName,
-            email: sanitizedEmail,
+            email: lowerEmail,
             password,
             address: '',
             city: '',
@@ -118,7 +118,7 @@ export default function AuthPage() {
           });
 
           // Se connecter automatiquement après l'inscription
-          userDB.authenticate(sanitizedEmail, password);
+          userDB.authenticate(lowerEmail, password);
         } catch (createError) {
           setError(createError instanceof Error ? createError.message : 'Erreur lors de la création du compte');
           setIsLoading(false);
