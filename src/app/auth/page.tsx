@@ -93,29 +93,37 @@ export default function AuthPage() {
           return;
         }
 
-        if (userDB.emailExists(email)) {
+        const sanitizedEmail = SecurityUtils.sanitizeInput(email).toLowerCase();
+        
+        if (userDB.emailExists(sanitizedEmail)) {
           setError('Un compte avec cet email existe déjà');
           setIsLoading(false);
           return;
         }
 
         // Créer le compte et se connecter automatiquement
-        userDB.createUser({
-          firstName,
-          lastName,
-          email,
-          password,
-          address: '',
-          city: '',
-          postalCode: '',
-          birthDate: '',
-          gender: '',
-          shoeSize: '',
-          favoriteCourses: []
-        });
+        try {
+          userDB.createUser({
+            firstName,
+            lastName,
+            email: sanitizedEmail,
+            password,
+            address: '',
+            city: '',
+            postalCode: '',
+            birthDate: '',
+            gender: '',
+            shoeSize: '',
+            favoriteCourses: []
+          });
 
-        // Se connecter automatiquement après l'inscription
-        userDB.authenticate(email, password);
+          // Se connecter automatiquement après l'inscription
+          userDB.authenticate(sanitizedEmail, password);
+        } catch (createError) {
+          setError(createError instanceof Error ? createError.message : 'Erreur lors de la création du compte');
+          setIsLoading(false);
+          return;
+        }
 
         // Redirection vers la page d'inscription après inscription
         const urlParams = new URLSearchParams(window.location.search);
