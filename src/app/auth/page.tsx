@@ -18,6 +18,9 @@ export default function AuthPage() {
 
   // Vérifier si l'utilisateur est déjà connecté
   useEffect(() => {
+    // Attendre que le composant soit monté côté client
+    if (typeof window === 'undefined') return;
+    
     const currentUser = userDB.getCurrentUser();
     if (currentUser) {
       // Vérifier s'il y a un raceId dans l'URL
