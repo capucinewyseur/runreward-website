@@ -1,12 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { userDB } from '@/lib/userDatabase';
 import { SecurityUtils } from '@/lib/security';
 
-export default function AuthPage() {
+function AuthPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,14 +19,10 @@ export default function AuthPage() {
 
   // Vérifier si l'utilisateur est déjà connecté
   useEffect(() => {
-    // Attendre que le composant soit monté côté client
-    if (typeof window === 'undefined') return;
-    
     const currentUser = userDB.getCurrentUser();
     if (currentUser) {
       // Vérifier s'il y a un raceId dans l'URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const raceId = urlParams.get('raceId');
+      const raceId = searchParams.get('raceId');
       
       if (raceId) {
         // Rediriger vers la page d'inscription pour la course spécifiée
@@ -35,7 +32,7 @@ export default function AuthPage() {
         router.push('/profile');
       }
     }
-  }, [router]);
+  }, [router, searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,12 +61,11 @@ export default function AuthPage() {
         const user = userDB.authenticate(sanitizedEmail, password);
         if (user) {
           // Redirection vers la page d'inscription après connexion
-          const urlParams = new URLSearchParams(window.location.search);
-          const raceId = urlParams.get('raceId');
+          const raceId = searchParams.get('raceId');
           if (raceId) {
-            window.location.href = `/inscription?raceId=${raceId}`;
+            router.push(`/inscription?raceId=${raceId}`);
           } else {
-            window.location.href = '/courses';
+            router.push('/courses');
           }
         } else {
           setError('Email ou mot de passe incorrect');
@@ -129,11 +125,10 @@ export default function AuthPage() {
         }
 
         // Redirection vers la page d'inscription après inscription
-        const urlParams = new URLSearchParams(window.location.search);
-        let raceId = urlParams.get('raceId');
+        let raceId = searchParams.get('raceId');
         
         // Si pas de raceId dans l'URL, essayer de le récupérer depuis localStorage
-        if (!raceId) {
+        if (!raceId && typeof window !== 'undefined') {
           const storedRace = localStorage.getItem('selected-race');
           if (storedRace) {
             try {
@@ -150,10 +145,10 @@ export default function AuthPage() {
         
         if (raceId) {
           console.log('✅ Redirection vers /inscription?raceId=' + raceId);
-          window.location.href = `/inscription?raceId=${raceId}`;
+          router.push(`/inscription?raceId=${raceId}`);
         } else {
           console.log('⚠️ Pas de raceId, redirection vers /courses');
-          window.location.href = '/courses';
+          router.push('/courses');
         }
       }
     } catch (err) {
@@ -345,5 +340,20 @@ export default function AuthPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-purple-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Chargement...</p>
+        </div>
+      </div>
+    }>
+      <AuthPageContent />
+    </Suspense>
   );
 }
