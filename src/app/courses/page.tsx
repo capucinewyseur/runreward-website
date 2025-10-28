@@ -183,13 +183,13 @@ export default function CoursesPage() {
             <button
               onClick={handleSearch}
               disabled={isSearching}
-              className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-black px-6 py-3 rounded font-semibold transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             >
               {isSearching ? 'Recherche en cours...' : 'Rechercher les courses'}
             </button>
             <button
               onClick={resetFilters}
-              className="flex-1 bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded font-semibold transition-colors"
+              className="flex-1 bg-gray-500 hover:bg-gray-600 text-black px-6 py-3 rounded font-semibold transition-colors"
             >
               Réinitialiser les filtres
             </button>
@@ -277,14 +277,14 @@ export default function CoursesPage() {
                   </div>
 
                   {/* Les + - Version améliorée */}
-                  <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+                  <div className="bg-white rounded p-4 mb-6 shadow-lg border-2 border-[#F08040]">
                     <div className="flex items-center mb-2">
-                      <svg className="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg className="w-6 h-6 mr-3 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                       </svg>
-                      <h4 className="text-lg font-bold text-white">Les +</h4>
+                      <h4 className="text-lg font-bold text-black">$ Les +</h4>
                     </div>
-                    <p className="text-white font-semibold text-base leading-relaxed">
+                    <p className="text-black font-semibold text-base leading-relaxed">
                       {race.reward}
                     </p>
                   </div>
@@ -293,7 +293,7 @@ export default function CoursesPage() {
                   <div className="w-full">
                     <a
                       href={`/auth?raceId=${race.id}`}
-                      className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-white font-bold py-4 px-2 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg block"
+                      className="w-full bg-gradient-to-r from-[#6A70F0] to-[#5a60d4] hover:from-[#5a60d4] hover:to-[#4a50c8] text-black font-bold py-4 px-2 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 text-lg block"
                     >
                       S&apos;inscrire comme bénévole
                     </a>
@@ -320,7 +320,7 @@ export default function CoursesPage() {
             </p>
             <button
               onClick={resetFilters}
-              className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+              className="bg-[#F08040] hover:bg-[#e06d2a] text-black px-6 py-3 rounded-lg font-semibold transition-colors"
             >
               Voir toutes les courses
             </button>

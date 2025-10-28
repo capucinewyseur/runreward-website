@@ -88,7 +88,7 @@ export default function FavoritesPage() {
             </p>
             <button
               onClick={() => router.push('/courses')}
-              className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-6 py-3 rounded font-semibold transition-colors"
+              className="bg-[#F08040] hover:bg-[#e06d2a] text-black px-6 py-3 rounded font-semibold transition-colors"
             >
               Découvrir les courses
             </button>
@@ -177,14 +177,14 @@ export default function FavoritesPage() {
                     </div>
 
                     {/* Les + */}
-                    <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+                    <div className="bg-white rounded p-4 mb-6 shadow-lg border-2 border-[#F08040]">
                       <div className="flex items-center mb-2">
-                        <svg className="w-6 h-6 mr-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className="w-6 h-6 mr-3 text-[#F08040]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1" />
                         </svg>
-                        <h4 className="text-lg font-bold text-white">Les +</h4>
+                        <h4 className="text-lg font-bold text-black">$ Les +</h4>
                       </div>
-                      <p className="text-white font-semibold text-base leading-relaxed">
+                      <p className="text-black font-semibold text-base leading-relaxed">
                         {course.reward}
                       </p>
                     </div>
@@ -198,13 +198,13 @@ export default function FavoritesPage() {
                     <div className="flex space-x-3">
                       <button
                         onClick={() => router.push(`/course-details?raceId=${course.id}`)}
-                        className="flex-1 bg-[#6A70F0] hover:bg-[#5a60d4] text-white font-bold py-3 px-4 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        className="flex-1 bg-[#6A70F0] hover:bg-[#5a60d4] text-black font-bold py-3 px-4 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       >
                         Voir les détails
                       </button>
                       <button
                         onClick={() => router.push(`/auth?raceId=${course.id}`)}
-                        className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-white font-bold py-3 px-4 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        className="flex-1 bg-[#F08040] hover:bg-[#e06d2a] text-black font-bold py-3 px-4 rounded text-center transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                       >
                         S&apos;inscrire
                       </button>
@@ -220,7 +220,7 @@ export default function FavoritesPage() {
         <div className="text-center mt-12">
           <button
             onClick={() => router.push('/courses')}
-            className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
+            className="bg-gray-500 hover:bg-gray-600 text-black px-6 py-3 rounded-lg font-semibold transition-colors"
           >
             Retour aux courses
           </button>

@@ -39,13 +39,13 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
                 href="/courses" 
-                className="bg-[#F08040] hover:bg-[#e06d2a] text-white px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+                className="bg-[#F08040] hover:bg-[#e06d2a] text-black px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
               >
                 Voir les courses
               </Link>
               <Link 
                 href="/about" 
-                className="bg-[#6A70F0] hover:bg-[#5a60d4] text-white px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+                className="bg-[#6A70F0] hover:bg-[#5a60d4] text-black px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
               >
                 En savoir plus
               </Link>
@@ -121,18 +121,18 @@ export default function Home() {
       {/* Stats Section */}
       <section className="py-20 bg-gradient-to-r from-[#F08040] to-[#6A70F0]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-white">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center text-black">
             <div>
               <div className="text-4xl font-bold mb-2">50+</div>
-              <div className="text-white/90">Courses organisées</div>
+              <div className="text-black/90">Courses organisées</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">100+</div>
-              <div className="text-white/90">Avantages et remises disponibles</div>
+              <div className="text-black/90">Avantages et remises disponibles</div>
             </div>
             <div>
               <div className="text-4xl font-bold mb-2">25</div>
-              <div className="text-white/90">Villes partenaires</div>
+              <div className="text-black/90">Villes partenaires</div>
             </div>
           </div>
         </div>
@@ -149,7 +149,7 @@ export default function Home() {
           </p>
           <Link 
             href="/courses" 
-            className="inline-block bg-[#F08040] hover:bg-[#e06d2a] text-white px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
+            className="inline-block bg-[#F08040] hover:bg-[#e06d2a] text-black px-8 py-4 rounded text-lg font-semibold transition-colors shadow-lg hover:shadow-xl"
           >
             Découvrir les courses disponibles
           </Link>

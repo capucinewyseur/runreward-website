@@ -124,7 +124,7 @@ function InscriptionCompleteContent() {
           <p className="text-gray-600 mb-6">La course demandée n&apos;existe pas.</p>
           <button
             onClick={() => router.push('/courses')}
-            className="bg-[#F08040] hover:bg-[#e06d2a] text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+            className="bg-[#F08040] hover:bg-[#e06d2a] text-black font-semibold py-2 px-4 rounded-lg transition-colors"
           >
             Retour aux courses
           </button>
@@ -138,11 +138,11 @@ function InscriptionCompleteContent() {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#F08040] to-[#6A70F0] py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center text-white">
+          <div className="text-center text-black">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               Inscription bénévole
             </h1>
-            <p className="text-xl md:text-2xl text-white/90">
+            <p className="text-xl md:text-2xl text-black/90">
               {race.name}
             </p>
           </div>
@@ -183,12 +183,12 @@ function InscriptionCompleteContent() {
             </div>
 
             {/* Récompense - Version améliorée */}
-            <div className="bg-gradient-to-r from-[#F08040] to-[#e06d2a] rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]/30">
+            <div className="bg-white rounded-xl p-4 mb-6 shadow-lg border-2 border-[#F08040]">
               <div className="flex items-center mb-2">
                 <span className="text-2xl mr-3">🎁</span>
-                <h3 className="text-lg font-bold text-white">Récompense</h3>
+                <h3 className="text-lg font-bold text-black">Récompense</h3>
               </div>
-              <p className="text-white font-semibold text-base leading-relaxed">
+              <p className="text-black font-semibold text-base leading-relaxed">
                 {race.reward}
               </p>
             </div>
@@ -310,7 +310,7 @@ function InscriptionCompleteContent() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full bg-gradient-to-r from-[#F08040] to-[#e06d2a] hover:from-[#e06d2a] hover:to-[#d45a1a] text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none"
+                  className="w-full bg-white hover:from-[#e06d2a] hover:to-[#d45a1a] text-black font-bold py-3 px-6 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-1 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   {isLoading ? 'Inscription en cours...' : 'Je m\'inscris en tant que bénévole'}
                 </button>
