@@ -68,8 +68,11 @@ function InscriptionContent() {
         // Vérifier les champs requis spécifiques à cette course
         const missingFields: string[] = [];
         for (const field of foundRace.requiredFields) {
-          if (field.required && (!user[field.id as keyof User] || user[field.id as keyof User] === '')) {
-            missingFields.push(field.label);
+          if (field.required) {
+            const userValue = user[field.id as keyof User];
+            if (!userValue || userValue === '' || userValue === null || userValue === undefined) {
+              missingFields.push(field.label);
+            }
           }
         }
         
@@ -140,8 +143,14 @@ function InscriptionContent() {
     setIsSubmitting(true);
     
     try {
+      // Vérifier que l'utilisateur est toujours connecté
+      const currentUserCheck = userDB.getCurrentUser();
+      if (!currentUserCheck) {
+        throw new Error('Utilisateur non connecté');
+      }
+      
       // Enregistrer l'inscription avec les champs personnalisés
-      userDB.completeRegistration(currentUser.id, {
+      const result = userDB.completeRegistration(currentUserCheck.id, {
         id: race.id,
         name: race.name,
         location: race.location,
@@ -152,11 +161,17 @@ function InscriptionContent() {
         customFields: customFields // Ajouter les champs personnalisés
       });
       
+      if (!result) {
+        throw new Error('Échec de l\'inscription');
+      }
+      
+      console.log('✅ Inscription réussie');
+      
       // Rediriger vers la page de confirmation
       router.push('/inscription/confirmation');
     } catch (error) {
       console.error('Erreur lors de l\'inscription:', error);
-      alert('Une erreur est survenue lors de l\'inscription.');
+      alert(`Une erreur est survenue lors de l'inscription: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     } finally {
       setIsSubmitting(false);
     }

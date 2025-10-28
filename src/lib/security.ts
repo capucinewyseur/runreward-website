@@ -21,12 +21,8 @@ export class SecurityUtils {
 
   // Validation mot de passe
   static isValidPassword(password: string): boolean {
-    return password.length >= 8 && 
-           password.length <= 128 &&
-           /[A-Z]/.test(password) && // Au moins une majuscule
-           /[a-z]/.test(password) && // Au moins une minuscule
-           /[0-9]/.test(password) && // Au moins un chiffre
-           /[^A-Za-z0-9]/.test(password); // Au moins un caractère spécial
+    return password.length >= 4 && 
+           password.length <= 128;
   }
 
   // Validation téléphone
@@ -105,7 +101,7 @@ export class SecurityUtils {
     }
     
     if (!this.isValidPassword(data.password)) {
-      errors.push('Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial');
+      errors.push('Le mot de passe doit contenir au moins 4 caractères');
     }
     
     if (data.password !== data.confirmPassword) {
