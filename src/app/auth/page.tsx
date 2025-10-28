@@ -20,8 +20,17 @@ export default function AuthPage() {
   useEffect(() => {
     const currentUser = userDB.getCurrentUser();
     if (currentUser) {
-      // Rediriger vers la page de profil si déjà connecté
-      router.push('/profile');
+      // Vérifier s'il y a un raceId dans l'URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const raceId = urlParams.get('raceId');
+      
+      if (raceId) {
+        // Rediriger vers la page d'inscription pour la course spécifiée
+        router.push(`/inscription?raceId=${raceId}`);
+      } else {
+        // Rediriger vers la page de profil si déjà connecté
+        router.push('/profile');
+      }
     }
   }, [router]);
 

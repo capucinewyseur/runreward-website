@@ -61,16 +61,16 @@ function DefaultErrorFallback({ error, resetError }: { error?: Error; resetError
           </div>
           
           <h1 className="text-2xl font-bold text-gray-900 mb-4">
-            Une erreur s'est produite
+            Une erreur s&apos;est produite
           </h1>
           
           <p className="text-gray-600 mb-6">
-            Désolé, une erreur inattendue s'est produite. Veuillez réessayer.
+            Désolé, une erreur inattendue s&apos;est produite. Veuillez réessayer.
           </p>
           
           {process.env.NODE_ENV === 'development' && error && (
             <div className="bg-red-50 border border-red-200 rounded p-4 mb-6 text-left">
-              <h3 className="text-sm font-semibold text-red-800 mb-2">Détails de l'erreur (développement):</h3>
+              <h3 className="text-sm font-semibold text-red-800 mb-2">Détails de l&apos;erreur (développement):</h3>
               <pre className="text-xs text-red-700 whitespace-pre-wrap">
                 {error.message}
                 {error.stack && `\n\nStack trace:\n${error.stack}`}
@@ -89,7 +89,7 @@ function DefaultErrorFallback({ error, resetError }: { error?: Error; resetError
               onClick={() => window.location.href = '/'}
               className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded transition-colors"
             >
-              Retour à l'accueil
+              Retour à l&apos;accueil
             </button>
           </div>
         </div>
